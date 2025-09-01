@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { useFormik } from "formik";
 import { validationCustomerRegisterSchema } from "@/features/customer/register/validationCustomerRegisterSchemas";
-import useRegisterHook from "./_hooks/useRegister";
-import { useGoogleAuth } from "./_hooks/useGoogleAuth";
+import useRegisterHook from "../_hooks/useRegister";
+import { useGoogleAuth } from "../_hooks/useGoogleAuth";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function RegisterPage() {
   const { registerCustomerMutation } = useRegisterHook();
@@ -83,6 +84,16 @@ function RegisterPage() {
                   width="356"
                   locale="id"
                 />
+
+                <p className="mt-4 text-center text-sm text-neutral-600">
+  Belum menerima email verifikasi?{" "}
+  <Link
+    href="/customer/verify"
+    className="text-neutral-900 font-medium underline underline-offset-4"
+  >
+    Kirim ulang
+  </Link>
+</p>
               </div>
             </form>
           </CardContent>
