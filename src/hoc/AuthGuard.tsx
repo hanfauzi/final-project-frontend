@@ -1,12 +1,12 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth";
-import { useEffect, useState, type ComponentType, type FC } from "react";
-import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
+import { useAuthStore } from "@/stores/auth";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, type ComponentType, type FC } from "react";
 
-export type EmployeeRole = "super_admin" | "outlet_admin" | "driver" | "worker";
-type PrincipalType = "customer" | "employee" | "any";
+export type EmployeeRole = "SUPER_ADMIN" | "OUTLET_ADMIN" | "DRIVER" | "WORKER";
+type PrincipalType = "CUSTOMER" | "EMPLOYEE" | "any";
 
 interface WithAuthOptions {
   requireAuth?: boolean;
@@ -20,106 +20,143 @@ interface WithAuthOptions {
   superAdminCanAccessCustomer?: boolean;
 }
 
+/** Siap pakai: tunggu rehydrate dari store (pakai flag store & fallback kecil). */
+function useStoreHydrated(): boolean {
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  // fallback kecil kalau isHydrated belum di-set oleh store (optional):
+  const ready = isHydrated ?? false;
+  return ready;
+}
+
 export function withAuthGuard<P extends object>(
   Component: ComponentType<P>,
   opts: WithAuthOptions = {}
 ): ComponentType<P> {
-  const {
-    requireAuth = true,
-    principal = "any",
-    allowedEmployeeRoles = [],
-    allowCustomerWhenAny = true,
-    redirectToLoginCustomer = "/",
-    redirectToLoginEmployee = "/employee/login",
-    unauthorizedTo = "/unauthorized",
-    superAdminBypass = true,
-    superAdminCanAccessCustomer = false,
-  } = opts;
+  // Bekukan opsi di ref supaya tidak jadi dependency useEffect/useMemo (tak berubah sepanjang hidup Wrapper)
+  const cfgStatic = {
+    requireAuth: opts.requireAuth ?? true,
+    principal: opts.principal ?? "any",
+    allowedEmployeeRoles: opts.allowedEmployeeRoles ?? [],
+    allowCustomerWhenAny: opts.allowCustomerWhenAny ?? true,
+    redirectToLoginCustomer: opts.redirectToLoginCustomer ?? "/customer/login",
+    redirectToLoginEmployee: opts.redirectToLoginEmployee ?? "/employee/login",
+    unauthorizedTo: opts.unauthorizedTo ?? "/unauthorized",
+    superAdminBypass: opts.superAdminBypass ?? true,
+    superAdminCanAccessCustomer: opts.superAdminCanAccessCustomer ?? false,
+  };
+  const cfgRef = { current: cfgStatic }; // tanpa any
 
   const Wrapper: FC<P> = (props) => {
     const router = useRouter();
+    const pathname = usePathname();
+
+    // Ambil state reaktif dari store
     const customer = useAuthStore((s) => s.customer);
     const employee = useAuthStore((s) => s.employee);
-    const isHydrated = useAuthStore((s) => s.isHydrated);
-    const componentName =
-      Component.displayName ??
-      (Component as React.ComponentType<P> & { name?: string }).name ??
-      "Component";
+    const hydrated = useStoreHydrated();
 
-    Wrapper.displayName = `withAuthGuard(${componentName})`;
-    const [hydratedFallback, setHydratedFallback] = useState(false);
-    useEffect(() => {
-      if (isHydrated === undefined) {
-        const t = setTimeout(() => setHydratedFallback(true), 120);
-        return () => clearTimeout(t);
-      }
-    }, [isHydrated]);
+    // Hitung status user (reactive) — cuma depend ke store
+    const userFlags = useMemo(() => {
+      const isCustomer = !!customer?.sub;
+      const isEmployee = !!employee?.id;
+      const isSuperAdmin =
+        cfgRef.current.superAdminBypass &&
+        isEmployee &&
+        employee!.role === "SUPER_ADMIN";
+      return { isCustomer, isEmployee, isSuperAdmin };
+    }, [customer, employee]);
 
-    const stillHydrating =
-      (isHydrated !== undefined && !isHydrated) ||
-      (isHydrated === undefined && !hydratedFallback);
+    // Tentukan allowed + target redirect (pure compute, tanpa side-effect)
+    const { allowed, redirectTo } = useMemo(() => {
+      if (!hydrated) return { allowed: false, redirectTo: null as string | null };
 
-    if (stillHydrating) return <Loading />;
+      const {
+        requireAuth,
+        principal,
+        allowedEmployeeRoles,
+        allowCustomerWhenAny,
+        redirectToLoginCustomer,
+        redirectToLoginEmployee,
+        unauthorizedTo,
+        superAdminCanAccessCustomer,
+      } = cfgRef.current;
 
-    const isCustomer = !!customer?.id;
-    const isEmployee = !!employee?.id;
-    const isSuperAdmin =
-      superAdminBypass && isEmployee && employee!.role === "super_admin";
+      const { isCustomer, isEmployee, isSuperAdmin } = userFlags;
 
-    if (requireAuth) {
-      if (principal === "customer") {
-        if (!isCustomer) {
-          if (!(superAdminCanAccessCustomer && isSuperAdmin)) {
-            router.replace(redirectToLoginCustomer);
-            return null;
+      // requireAuth = false → hanya cek role mismatch untuk EMPLOYEE (opsional)
+      if (!requireAuth) {
+        if (principal === "EMPLOYEE" && isEmployee && !isSuperAdmin) {
+          if (
+            allowedEmployeeRoles.length > 0 &&
+            !allowedEmployeeRoles.includes(employee!.role as EmployeeRole)
+          ) {
+            return { allowed: false, redirectTo: unauthorizedTo };
           }
         }
-      } else if (principal === "employee") {
-        if (!isEmployee) {
-          router.replace(redirectToLoginEmployee);
-          return null;
-        }
-        if (!isSuperAdmin && allowedEmployeeRoles.length > 0) {
-          if (!allowedEmployeeRoles.includes(employee!.role as EmployeeRole)) {
-            router.replace(unauthorizedTo);
-            return null;
-          }
-        }
-      } else {
-        const passAsCustomer = allowCustomerWhenAny && isCustomer;
-        const passAsEmployee =
-          isEmployee &&
-          (isSuperAdmin ||
-            allowedEmployeeRoles.length === 0 ||
-            allowedEmployeeRoles.includes(employee!.role as EmployeeRole));
-
-        if (!passAsCustomer && !passAsEmployee) {
-          router.replace(
-            allowedEmployeeRoles.length > 0
-              ? redirectToLoginEmployee
-              : redirectToLoginCustomer
-          );
-          return null;
-        }
+        return { allowed: true, redirectTo: null };
       }
-    } else {
-      if (principal === "employee" && isEmployee && !isSuperAdmin) {
+
+      if (principal === "CUSTOMER") {
+        if (isCustomer) return { allowed: true, redirectTo: null };
+        if (superAdminCanAccessCustomer && isSuperAdmin)
+          return { allowed: true, redirectTo: null };
+        return { allowed: false, redirectTo: redirectToLoginCustomer };
+      }
+
+      if (principal === "EMPLOYEE") {
+        if (!isEmployee) return { allowed: false, redirectTo: redirectToLoginEmployee };
+        if (isSuperAdmin) return { allowed: true, redirectTo: null };
         if (
           allowedEmployeeRoles.length > 0 &&
           !allowedEmployeeRoles.includes(employee!.role as EmployeeRole)
         ) {
-          router.replace(unauthorizedTo);
-          return null;
+          return { allowed: false, redirectTo: unauthorizedTo };
+        }
+        return { allowed: true, redirectTo: null };
+      }
+
+      // principal === "any"
+      const passAsCustomer = allowCustomerWhenAny && isCustomer;
+      const passAsEmployee =
+        isEmployee &&
+        (isSuperAdmin ||
+          cfgRef.current.allowedEmployeeRoles.length === 0 ||
+          cfgRef.current.allowedEmployeeRoles.includes(
+            employee!.role as EmployeeRole
+          ));
+
+      if (passAsCustomer || passAsEmployee)
+        return { allowed: true, redirectTo: null };
+
+      return {
+        allowed: false,
+        redirectTo:
+          cfgRef.current.allowedEmployeeRoles.length > 0
+            ? redirectToLoginEmployee
+            : redirectToLoginCustomer,
+      };
+    }, [hydrated, userFlags, employee]);
+
+    // Redirect HANYA di effect; dependency hanya nilai reaktif.
+    useEffect(() => {
+      if (!hydrated) return; // belum siap, jangan redirect
+      if (!allowed && redirectTo) {
+        // tambahkan ?next= supaya balik ke tujuan
+        const url = new URL(redirectTo, window.location.origin);
+        if (pathname) url.searchParams.set("next", pathname);
+        if (url.pathname !== pathname) {
+          router.replace(url.toString());
         }
       }
-    }
+    }, [allowed, redirectTo, hydrated, pathname, router]);
+
+    // Render
+    if (!hydrated) return <Loading />;
+    if (!allowed) return null; // mencegah flicker saat effect melakukan redirect
 
     return <Component {...(props as P)} />;
   };
 
-  Wrapper.displayName = `withAuthGuard(${
-    Component.displayName || Component.name || "Component"
-  })`;
-
+  Wrapper.displayName = `withAuthGuard(${Component.displayName || Component.name || "Component"})`;
   return Wrapper;
 }

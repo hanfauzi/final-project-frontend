@@ -12,7 +12,7 @@ interface LoginPayload {
 
 const useLoginHook = () => {
   const router = useRouter();
-  const { onAuthSuccess } = useAuthStore();
+  const { onCustomerAuthSuccess } = useAuthStore();
 
   const loginCustomerMutation = useMutation({
     mutationFn: async (payload: LoginPayload) => {
@@ -27,7 +27,7 @@ const useLoginHook = () => {
       };
     },
     onSuccess: (data: CustomerStore) => {
-      onAuthSuccess({ customer: data });
+      onCustomerAuthSuccess({ customer: data });
       toast.success("Sign in success");
       router.replace("/");
     },

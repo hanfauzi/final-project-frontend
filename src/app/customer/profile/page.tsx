@@ -4,7 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -126,11 +126,40 @@ function CustomerProfilePage() {
         <title>Profil • Laundr</title>
       </Head>
 
-      <div className="min-h-screen bg-neutral-50 grid place-items-center px-4 py-8">
-        <Card className="w-full max-w-[520px] overflow-hidden rounded-2xl border border-neutral-200 shadow-[0_10px_30px_rgba(0,0,0,.06)]">
-          <CardHeader className="pb-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+      <div className="relative min-h-screen bg-neutral-50">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
+          aria-hidden="true"
+          style={{
+            background:
+              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
+          }}
+        />
+
+        <div className="mx-auto w-full max-w-sm px-4 py-6">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="inline-flex items-center gap-2">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-neutral-900 text-white font-bold">
+                L
+              </span>
+              <div className="text-2xl font-black tracking-tight text-neutral-900">
+                Laundr
+              </div>
+            </div>
+          </div>
+
+          <Card className="overflow-hidden rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+            <CardHeader className="pb-0 text-center">
+              <CardTitle className="text-lg font-semibold text-neutral-800">
+                Profil
+              </CardTitle>
+              <p className="mt-1 text-sm text-neutral-500">
+                Kelola informasi akunmu
+              </p>
+            </CardHeader>
+
+            <CardContent className="pt-5">
+              <div className="grid place-items-center">
                 <div className="relative h-24 w-24 rounded-full overflow-hidden border border-neutral-200 bg-white">
                   {avatarSrc ? (
                     <Image
@@ -148,29 +177,25 @@ function CustomerProfilePage() {
                 </div>
 
                 {isEditing && (
-                  <div className="flex items-center gap-2">
+                  <div className="mt-3 grid w-full grid-cols-2 gap-2">
                     <Button
                       type="button"
                       variant="secondary"
                       onClick={pickFile}
                       disabled={pending}
-                      className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800"
+                      className="h-10 rounded-xl bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
                     >
-                      <Camera className="h-4 w-4 mr-2" />
-                      Ganti Foto
+                      <Camera className="h-4 w-4 mr-2" /> Ganti Foto
                     </Button>
-                    {avatarSrc && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={clearPhoto}
-                        disabled={pending}
-                        className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800"
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Hapus
-                      </Button>
-                    )}
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={clearPhoto}
+                      disabled={pending}
+                      className="h-10 rounded-xl bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" /> Hapus
+                    </Button>
                     <input
                       ref={fileRef}
                       type="file"
@@ -184,19 +209,20 @@ function CustomerProfilePage() {
 
               {!isLoading && !isError && profile ? (
                 !isEditing ? (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      formik.resetForm();
-                      setIsEditing(true);
-                    }}
-                    className="rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
-                  >
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Edit
-                  </Button>
+                  <div className="mt-4">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        formik.resetForm();
+                        setIsEditing(true);
+                      }}
+                      className="h-12 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99]"
+                    >
+                      <Pencil className="h-4 w-4 mr-2" /> Edit Profil
+                    </Button>
+                  </div>
                 ) : (
-                  <div className="flex items-center gap-2">
+                  <div className="mt-4 grid grid-cols-2 gap-2">
                     <Button
                       type="button"
                       variant="outline"
@@ -206,16 +232,15 @@ function CustomerProfilePage() {
                         formik.resetForm();
                         clearPhoto();
                       }}
-                      className="rounded-xl"
+                      className="h-12 rounded-xl"
                     >
-                      <X className="h-4 w-4 mr-2" />
-                      Batal
+                      <X className="h-4 w-4 mr-2" /> Batal
                     </Button>
                     <Button
                       type="button"
                       onClick={() => formik.handleSubmit()}
                       disabled={pending}
-                      className="rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
+                      className="h-12 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99]"
                     >
                       {pending ? (
                         <span className="inline-flex items-center gap-2">
@@ -224,247 +249,232 @@ function CustomerProfilePage() {
                         </span>
                       ) : (
                         <>
-                          <Save className="h-4 w-4 mr-2" />
-                          Simpan
+                          <Save className="h-4 w-4 mr-2" /> Simpan
                         </>
                       )}
                     </Button>
                   </div>
                 )
               ) : null}
-            </div>
-          </CardHeader>
 
-          <CardContent className="pt-6">
-            {!isLoading && !isError && profile && (
-              <div
-                className={`mb-5 flex items-start gap-3 rounded-xl border p-3 ${
-                  profile.isVerified
-                    ? "border-emerald-200 bg-emerald-50"
-                    : "border-amber-200 bg-amber-50"
-                }`}
-              >
-                {profile.isVerified ? (
-                  <ShieldCheck className="mt-0.5 h-5 w-5 text-emerald-600" />
-                ) : (
-                  <ShieldAlert className="mt-0.5 h-5 w-5 text-amber-600" />
-                )}
-                <div>
-                  <p className="text-sm font-semibold text-neutral-900">
-                    {profile.isVerified
-                      ? "Email verified"
-                      : "Email not verified"}
-                  </p>
-                  <p className="text-xs text-neutral-600">
-                    {profile.isVerified
-                      ? "Your email address has been successfully verified."
-                      : "Please verify your email to secure your account and unlock all features."}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {isLoading ? (
-              <div className="py-14 grid place-items-center text-neutral-600">
-                <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
-                Memuat profil...
-              </div>
-            ) : isError ? (
-              <div className="py-14 text-center text-red-600">
-                Gagal memuat profil
-                {error?.message ? `: ${error.message}` : "."}
-              </div>
-            ) : !profile ? (
-              <div className="py-14 text-center text-neutral-600">
-                Profil tidak ditemukan.
-              </div>
-            ) : (
-              <form
-                onSubmit={formik.handleSubmit}
-                className="space-y-5"
-                aria-busy={pending}
-              >
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="name"
-                    className="text-neutral-900 flex items-center gap-2"
-                  >
-                    <User className="h-4 w-4 text-neutral-500" />
-                    Nama
-                  </Label>
-                  {!isEditing ? (
-                    <Input disabled placeholder={profile.name ?? ""} />
+              {!isLoading && !isError && profile && (
+                <div
+                  className={`mt-5 flex items-start gap-3 rounded-xl border p-3 ${
+                    profile.isVerified
+                      ? "border-emerald-200 bg-emerald-50"
+                      : "border-amber-200 bg-amber-50"
+                  }`}
+                >
+                  {profile.isVerified ? (
+                    <ShieldCheck className="mt-0.5 h-5 w-5 text-emerald-600" />
                   ) : (
-                    <>
-                      <Input
-                        id="name"
-                        type="text"
-                        disabled={pending}
-                        {...formik.getFieldProps("name")}
-                        placeholder="Nama kamu"
-                        className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                          hasErr("name") ? "border-red-400" : ""
-                        }`}
-                      />
-                      {hasErr("name") && (
-                        <p className="text-xs text-red-500" role="alert">
-                          {formik.errors.name}
-                        </p>
-                      )}
-                    </>
+                    <ShieldAlert className="mt-0.5 h-5 w-5 text-amber-600" />
                   )}
+                  <div>
+                    <p className="text-sm font-semibold text-neutral-900">
+                      {profile.isVerified ? "Email verified" : "Email not verified"}
+                    </p>
+                    <p className="text-xs text-neutral-600">
+                      {profile.isVerified
+                        ? "Your email address has been successfully verified."
+                        : "Please verify your email to secure your account and unlock all features."}
+                    </p>
+                  </div>
                 </div>
+              )}
 
-                <div className="space-y-2">
-                  <Label className="text-neutral-900 flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-neutral-500" />
-                    Email
-                  </Label>
-
-                  {!isEditingEmail ? (
-                    <div className="flex items-center gap-2">
-                      <Input disabled placeholder={profile.email ?? ""} />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => copy(profile.email, "email")}
-                        className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800"
-                      >
-                        {copied.email ? "Copied!" : "Copy"}
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={() => {
-                          // tutup edit profil umum biar yang aktif cuma email
-                          setIsEditing(false);
-                          formik.resetForm();
-                          emailFormik.setFieldValue(
-                            "email",
-                            profile.email ?? ""
-                          );
-                          setIsEditingEmail(true);
-                        }}
-                        className="rounded-md bg-neutral-900 text-white hover:bg-neutral-800"
-                      >
-                        <Pencil className="h-3.5 w-3.5 mr-1" />
-                        Edit
-                      </Button>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2">
+              {isLoading ? (
+                <div className="py-14 grid place-items-center text-neutral-600">
+                  <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
+                  Memuat profil...
+                </div>
+              ) : isError ? (
+                <div className="py-14 text-center text-red-600">
+                  Gagal memuat profil
+                  {error?.message ? `: ${error.message}` : "."}
+                </div>
+              ) : !profile ? (
+                <div className="py-14 text-center text-neutral-600">
+                  Profil tidak ditemukan.
+                </div>
+              ) : (
+                <form
+                  onSubmit={formik.handleSubmit}
+                  className="mt-5 space-y-5"
+                  aria-busy={pending}
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-neutral-900 flex items-center gap-2">
+                      <User className="h-4 w-4 text-neutral-500" />
+                      Nama
+                    </Label>
+                    {!isEditing ? (
+                      <Input disabled value={profile.name ?? ""} />
+                    ) : (
+                      <>
                         <Input
-                          id="email"
-                          type="email"
-                          disabled={pendingEmail}
-                          {...emailFormik.getFieldProps("email")}
-                          placeholder="you@example.com"
+                          id="name"
+                          type="text"
+                          disabled={pending}
+                          {...formik.getFieldProps("name")}
+                          placeholder="Nama kamu"
                           className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                            hasErrEmail ? "border-red-400" : ""
+                            hasErr("name") ? "border-red-400" : ""
                           }`}
                         />
+                        {hasErr("name") && (
+                          <p className="text-xs text-red-500" role="alert">
+                            {formik.errors.name}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-neutral-900 flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-neutral-500" />
+                      Email
+                    </Label>
+
+                    {!isEditingEmail ? (
+                      <div className="flex items-center gap-2">
+                        <Input disabled value={profile.email ?? ""} />
                         <Button
                           type="button"
                           variant="secondary"
                           size="sm"
-                          disabled={pendingEmail}
-                          onClick={() => {
-                            setIsEditingEmail(false);
-                            emailFormik.resetForm();
-                          }}
-                          className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800"
+                          onClick={() => copy(profile.email, "email")}
+                          className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
                         >
-                          Batal
+                          {copied.email ? "Copied!" : "Copy"}
                         </Button>
                         <Button
                           type="button"
                           size="sm"
-                          disabled={pendingEmail}
-                          onClick={() => emailFormik.handleSubmit()}
-                          className="rounded-md bg-neutral-900 text-white hover:bg-neutral-800"
+                          onClick={() => {
+                            setIsEditing(false);
+                            formik.resetForm();
+                            emailFormik.setFieldValue("email", profile.email ?? "");
+                            setIsEditingEmail(true);
+                          }}
+                          className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
                         >
-                          {pendingEmail ? (
-                            <span className="inline-flex items-center gap-2">
-                              <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
-                              Save
-                            </span>
-                          ) : (
-                            "Save"
-                          )}
+                          <Pencil className="h-3.5 w-3.5 mr-1" />
+                          Edit
                         </Button>
                       </div>
-                      {hasErrEmail && (
-                        <p className="text-xs text-red-500" role="alert">
-                          {emailFormik.errors.email}
-                        </p>
-                      )}
-                    </>
-                  )}
-                </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            id="email"
+                            type="email"
+                            disabled={pendingEmail}
+                            {...emailFormik.getFieldProps("email")}
+                            placeholder="you@example.com"
+                            className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                              hasErrEmail ? "border-red-400" : ""
+                            }`}
+                          />
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            size="sm"
+                            disabled={pendingEmail}
+                            onClick={() => {
+                              setIsEditingEmail(false);
+                              emailFormik.resetForm();
+                            }}
+                            className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                          >
+                            Batal
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            disabled={pendingEmail}
+                            onClick={() => emailFormik.handleSubmit()}
+                            className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
+                          >
+                            {pendingEmail ? (
+                              <span className="inline-flex items-center gap-2">
+                                <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                                Save
+                              </span>
+                            ) : (
+                              "Save"
+                            )}
+                          </Button>
+                        </div>
+                        {hasErrEmail && (
+                          <p className="text-xs text-red-500" role="alert">
+                            {emailFormik.errors.email}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
 
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="phoneNumber"
-                    className="text-neutral-900 flex items-center gap-2"
-                  >
-                    <Phone className="h-4 w-4 text-neutral-500" />
-                    No. Telepon
-                  </Label>
-                  {!isEditing ? (
-                    <div className="flex items-center gap-2">
-                      <Input disabled placeholder={profile.phoneNumber ?? ""} />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        disabled={!profile.phoneNumber}
-                        onClick={() =>
-                          profile.phoneNumber &&
-                          copy(profile.phoneNumber, "phone")
-                        }
-                        className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800 disabled:opacity-50"
-                      >
-                        {copied.phone ? "Copied!" : "Copy"}
-                      </Button>
-                    </div>
-                  ) : (
-                    <>
-                      <Input
-                        id="phoneNumber"
-                        type="tel"
-                        disabled={pending}
-                        {...formik.getFieldProps("phoneNumber")}
-                        placeholder="08xxxxxxxxxx"
-                        className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                          hasErr("phoneNumber") ? "border-red-400" : ""
-                        }`}
-                      />
-                      {hasErr("phoneNumber") && (
-                        <p className="text-xs text-red-500" role="alert">
-                          {formik.errors.phoneNumber}
-                        </p>
-                      )}
-                    </>
-                  )}
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneNumber" className="text-neutral-900 flex items-center gap-2">
+                      <Phone className="h-4 w-4 text-neutral-500" />
+                      No. Telepon
+                    </Label>
+                    {!isEditing ? (
+                      <div className="flex items-center gap-2">
+                        <Input disabled value={profile.phoneNumber ?? ""} />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          disabled={!profile.phoneNumber}
+                          onClick={() => profile.phoneNumber && copy(profile.phoneNumber, "phone")}
+                          className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200 disabled:opacity-50"
+                        >
+                          {copied.phone ? "Copied!" : "Copy"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <Input
+                          id="phoneNumber"
+                          type="tel"
+                          disabled={pending}
+                          {...formik.getFieldProps("phoneNumber")}
+                          placeholder="08xxxxxxxxxx"
+                          className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                            hasErr("phoneNumber") ? "border-red-400" : ""
+                          }`}
+                        />
+                        {hasErr("phoneNumber") && (
+                          <p className="text-xs text-red-500" role="alert">
+                            {formik.errors.phoneNumber}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
 
-                {isEditing && (
-                  <p className="text-[11px] text-neutral-500">
-                    Foto maksimal 1MB • Format: PNG/JPG/JPEG/WEBP
-                  </p>
-                )}
-              </form>
-            )}
-          </CardContent>
-        </Card>
+                  {isEditing && (
+                    <p className="text-[11px] text-neutral-500">
+                      Foto maksimal 1MB • Format: PNG/JPG/JPEG/WEBP
+                    </p>
+                  )}
+                </form>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="h-6" />
+        </div>
       </div>
     </>
   );
 }
+
 export default withAuthGuard(CustomerProfilePage, {
-  principal: "customer",
+  principal: "CUSTOMER",
   redirectToLoginCustomer: "/customer/login",
   superAdminCanAccessCustomer: true,
 });
