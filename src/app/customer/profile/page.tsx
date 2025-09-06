@@ -27,22 +27,16 @@ import useEditProfile, { EditProfilePayload } from "../_hooks/useEditProfile";
 import { validationCustomerProfileSchema } from "@/features/customer/profile/schema/validationCustomerProfileSchema";
 import useEditEmail from "../_hooks/useEditEmail";
 import { validationCustomerEmailSchema } from "@/features/customer/email/schema/validationCustomerEmailSchema";
+import { CustomerProfile } from "@/types/customerProfile";
+import { withAuthGuard } from "@/hoc/AuthGuard";
 
-type CustomerProfile = {
-  name: string | null;
-  email: string;
-  phoneNumber: string | null;
-  photoUrl: string | null;
-  isVerified: boolean;
-};
-
-export default function CustomerProfilePage() {
+function CustomerProfilePage() {
   const { data, isLoading, isError, error } = useGetCustomerProfile();
   const profile = (data ?? null) as CustomerProfile | null;
   const { editProfileMutation } = useEditProfile();
   const pending = editProfileMutation.isPending;
-    const { editEmailMutation } = useEditEmail();  
-const pendingEmail = editEmailMutation.isPending;
+  const { editEmailMutation } = useEditEmail();
+  const pendingEmail = editEmailMutation.isPending;
 
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -73,13 +67,17 @@ const pendingEmail = editEmailMutation.isPending;
   const emailFormik = useFormik<{ email: string }>({
     enableReinitialize: true,
     initialValues: { email: data?.email || "" },
-    validationSchema: validationCustomerEmailSchema 
-    ,
+    validationSchema: validationCustomerEmailSchema,
     onSubmit: (values) => {
-      editEmailMutation.mutate({ email: values.email }, { onSuccess: () => setIsEditingEmail(false) });
+      editEmailMutation.mutate(
+        { email: values.email },
+        { onSuccess: () => setIsEditingEmail(false) }
+      );
     },
   });
-  const hasErrEmail = Boolean(emailFormik.touched.email && emailFormik.errors.email);
+  const hasErrEmail = Boolean(
+    emailFormik.touched.email && emailFormik.errors.email
+  );
 
   const avatarSrc = useMemo(() => {
     if (formik.values.photoUrl instanceof File) {
@@ -342,7 +340,10 @@ const pendingEmail = editEmailMutation.isPending;
                           // tutup edit profil umum biar yang aktif cuma email
                           setIsEditing(false);
                           formik.resetForm();
-                          emailFormik.setFieldValue("email", profile.email ?? "");
+                          emailFormik.setFieldValue(
+                            "email",
+                            profile.email ?? ""
+                          );
                           setIsEditingEmail(true);
                         }}
                         className="rounded-md bg-neutral-900 text-white hover:bg-neutral-800"
@@ -462,3 +463,8 @@ const pendingEmail = editEmailMutation.isPending;
     </>
   );
 }
+export default withAuthGuard(CustomerProfilePage, {
+  principal: "customer",
+  redirectToLoginCustomer: "/customer/login",
+  superAdminCanAccessCustomer: true,
+});

@@ -18,8 +18,9 @@ import { EditAddressCustomerSchema } from "@/features/customer/address/schema/va
 // pakai schema yang sama dengan edit (rules-nya identik)
 import useCreateCustomerAddress from "../../_hooks/useCreateAddress";
 import type { LabelEnum } from "../../_hooks/useEditAddress";
+import { withAuthGuard } from "@/hoc/AuthGuard";
 
-export default function CreateAddressPage() {
+ function CreateAddressPage() {
   const router = useRouter();
   const { createAddressMutation } = useCreateCustomerAddress();
 
@@ -257,3 +258,8 @@ export default function CreateAddressPage() {
     </>
   );
 }
+export default withAuthGuard(CreateAddressPage, {
+  principal: "customer",
+  redirectToLoginCustomer: "/customer/login",
+  superAdminCanAccessCustomer: true,
+});
