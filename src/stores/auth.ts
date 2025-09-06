@@ -10,7 +10,7 @@ export interface EmployeeStore extends Employee {
   token: string;
 }
 
-type Principal = "customer" | "employee" | null;
+type Principal = "CUSTOMER" | "EMPLOYEE" | null;
 
 type Store = {
   customer: CustomerStore | null;
@@ -56,8 +56,8 @@ export const useAuthStore = create<Store>()(
       },
 
       getPrincipal: () => {
-        if (get().employee) return "employee";
-        if (get().customer) return "customer";
+        if (get().employee) return "EMPLOYEE";
+        if (get().customer) return "CUSTOMER";
         return null;
       },
 
@@ -65,9 +65,10 @@ export const useAuthStore = create<Store>()(
     }),
     {
       name: "laundr-store",
-      onRehydrateStorage: () => (state, error) => {
-        if (error) return;
-        (state as Store | undefined)?.setHydrated(true);
+      onRehydrateStorage: () => {
+        return () => {
+          useAuthStore.setState({ isHydrated: true });
+        };
       },
     }
   )

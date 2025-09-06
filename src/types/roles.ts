@@ -1,8 +1,8 @@
 export const EMPLOYEE_ROLES = [
-  "super_admin",
-  "outlet_admin",
-  "driver",
-  "worker",
+  "SUPER_ADMIN",
+  "OUTLET_ADMIN",
+  "DRIVER",
+  "WORKER",
 ] as const;
 
 export type EmployeeRole = (typeof EMPLOYEE_ROLES)[number];

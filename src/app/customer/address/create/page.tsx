@@ -1,26 +1,24 @@
 "use client";
 
-import { useFormik } from "formik";
-import Head from "next/head";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label as UILabel } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useFormik } from "formik";
 import { ChevronLeft, LoaderCircle, MapPin } from "lucide-react";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
 
-import PinpointDialog from "../../_components/PinPointDialog";
-import { LabelChips } from "../../_components/LabelChips";
 import { EditAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerEditAddressSchema";
-// pakai schema yang sama dengan edit (rules-nya identik)
+import { withAuthGuard } from "@/hoc/AuthGuard";
+import { LabelChips } from "../../_components/LabelChips";
+import PinpointDialog from "../../_components/PinPointDialog";
 import useCreateCustomerAddress from "../../_hooks/useCreateAddress";
 import type { LabelEnum } from "../../_hooks/useEditAddress";
-import { withAuthGuard } from "@/hoc/AuthGuard";
 
- function CreateAddressPage() {
+function CreateAddressPage() {
   const router = useRouter();
   const { createAddressMutation } = useCreateCustomerAddress();
 
@@ -33,8 +31,8 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
     phoneNumber: string;
     latitude: number;
     longitude: number;
-    pinpoint: string;     // UI only (preview text)
-    makePrimary: boolean; // untuk toggle set primary
+    pinpoint: string; // UI only (preview text)
+    makePrimary: boolean; // toggle set primary
   }>({
     initialValues: {
       label: "HOME",
@@ -62,13 +60,13 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
           notes: values.notes,
           isPrimary: values.makePrimary,
         });
-        router.back(); // balik ke list
+        router.back();
       } catch {
-        // notifikasi sudah dihandle di hook
       }
     },
   });
 
+  const pending = createAddressMutation.isPending;
   const coordsReady =
     Number.isFinite(formik.values.latitude) &&
     Number.isFinite(formik.values.longitude) &&
@@ -80,10 +78,18 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
         <title>Tambah Alamat • Laundr</title>
       </Head>
 
-      <div className="min-h-screen bg-neutral-50">
-        {/* Top Bar */}
-        <div className="sticky top-0 z-40 bg-neutral-50/80 backdrop-blur border-b border-neutral-200">
-          <div className="mx-auto max-w-2xl px-4 h-14 flex items-center gap-2">
+      <div className="relative min-h-screen bg-neutral-50">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
+          aria-hidden="true"
+          style={{
+            background:
+              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
+          }}
+        />
+
+        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -92,19 +98,16 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="font-semibold text-neutral-900">Tambah Alamat</div>
+            <div className="text-[15px] font-semibold text-neutral-900">Tambah Alamat</div>
           </div>
         </div>
 
-        <div className="mx-auto max-w-2xl px-4 py-4">
-          <Card className="rounded-2xl border border-neutral-200 shadow-[0_10px_30px_rgba(0,0,0,.05)]">
+        <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24">
+          <Card className="rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-neutral-800">
-                Detail Alamat
-              </CardTitle>
+              <CardTitle className="text-base font-semibold text-neutral-800">Detail Alamat</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Pinpoint (peta + geolocate) */}
               <PinpointDialog
                 valueText={formik.values.pinpoint}
                 lat={formik.values.latitude}
@@ -115,6 +118,7 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                   if (display) formik.setFieldValue("pinpoint", display);
                 }}
               />
+
               <div className="flex items-center gap-2 text-xs">
                 <span
                   className={[
@@ -128,13 +132,10 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                   {coordsReady ? "Koordinat tersimpan" : "Pilih titik di peta"}
                 </span>
                 {!coordsReady && (
-                  <span className="text-neutral-500">
-                    (wajib untuk simpan alamat)
-                  </span>
+                  <span className="text-neutral-500">(wajib untuk simpan alamat)</span>
                 )}
               </div>
 
-              {/* Label */}
               <div className="space-y-2">
                 <UILabel className="text-neutral-900">Label Alamat</UILabel>
                 <LabelChips
@@ -143,7 +144,6 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                 />
               </div>
 
-              {/* Alamat Lengkap */}
               <div className="space-y-2">
                 <UILabel className="text-neutral-900">Alamat Lengkap</UILabel>
                 <Textarea
@@ -158,11 +158,8 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                 </div>
               </div>
 
-              {/* Catatan Kurir (opsional) */}
               <div className="space-y-2">
-                <UILabel className="text-neutral-900">
-                  Catatan Untuk Kurir (Opsional)
-                </UILabel>
+                <UILabel className="text-neutral-900">Catatan Untuk Kurir (Opsional)</UILabel>
                 <Input
                   placeholder="Warna rumah, patokan, pesan khusus, dll."
                   value={formik.values.notes ?? ""}
@@ -175,29 +172,24 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                 </div>
               </div>
 
-              {/* City + Postal */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <UILabel className="text-neutral-900">Kota/Kabupaten</UILabel>
-                  <Input
-                    value={formik.values.city}
-                    onChange={(e) => formik.setFieldValue("city", e.target.value)}
-                    className="h-11 rounded-xl bg-white border-neutral-300"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <UILabel className="text-neutral-900">Kode Pos</UILabel>
-                  <Input
-                    value={formik.values.postalCode}
-                    onChange={(e) =>
-                      formik.setFieldValue("postalCode", e.target.value)
-                    }
-                    className="h-11 rounded-xl bg-white border-neutral-300"
-                  />
-                </div>
+              <div className="space-y-2">
+                <UILabel className="text-neutral-900">Kota/Kabupaten</UILabel>
+                <Input
+                  value={formik.values.city}
+                  onChange={(e) => formik.setFieldValue("city", e.target.value)}
+                  className="h-11 rounded-xl bg-white border-neutral-300"
+                />
               </div>
 
-              {/* Phone */}
+              <div className="space-y-2">
+                <UILabel className="text-neutral-900">Kode Pos</UILabel>
+                <Input
+                  value={formik.values.postalCode}
+                  onChange={(e) => formik.setFieldValue("postalCode", e.target.value)}
+                  className="h-11 rounded-xl bg-white border-neutral-300"
+                />
+              </div>
+
               <div className="space-y-2">
                 <UILabel className="text-neutral-900">Nomor HP</UILabel>
                 <Input
@@ -207,59 +199,57 @@ import { withAuthGuard } from "@/hoc/AuthGuard";
                 />
               </div>
 
-              {/* Checkbox: Jadikan alamat utama */}
               <div className="pt-1">
                 <div className="flex items-center gap-2">
                   <Checkbox
                     id="makePrimary"
                     checked={formik.values.makePrimary}
-                    onCheckedChange={(v) =>
-                      formik.setFieldValue("makePrimary", Boolean(v))
-                    }
+                    onCheckedChange={(v) => formik.setFieldValue("makePrimary", Boolean(v))}
                   />
-                  <UILabel htmlFor="makePrimary" className="text-sm">
-                    Jadikan alamat utama
-                  </UILabel>
+                  <UILabel htmlFor="makePrimary" className="text-sm">Jadikan alamat utama</UILabel>
                 </div>
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-end gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="rounded-xl border-neutral-300"
-                  onClick={() => router.back()}
-                  disabled={createAddressMutation.isPending}
-                >
-                  Batal
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => formik.handleSubmit()}
-                  className="rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
-                  disabled={!formik.isValid || !coordsReady || createAddressMutation.isPending}
-                >
-                  {createAddressMutation.isPending ? (
-                    <span className="inline-flex items-center gap-2">
-                      <LoaderCircle className="h-4 w-4 animate-spin" />
-                      Menyimpan…
-                    </span>
-                  ) : (
-                    "Simpan"
-                  )}
-                </Button>
               </div>
             </CardContent>
           </Card>
         </div>
+
+        <div className="sticky bottom-0 z-40 border-t border-neutral-200 bg-white/90 backdrop-blur">
+          <div className="mx-auto w-full max-w-sm px-4 py-3 grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-12 rounded-xl"
+              onClick={() => router.back()}
+              disabled={pending}
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              onClick={() => formik.handleSubmit()}
+              className="h-12 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-60"
+              disabled={!formik.isValid || !coordsReady || pending}
+            >
+              {pending ? (
+                <span className="inline-flex items-center gap-2">
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
+                  Menyimpan…
+                </span>
+              ) : (
+                "Simpan"
+              )}
+            </Button>
+          </div>
+        </div>
+
+        <div className="h-6" />
       </div>
     </>
   );
 }
+
 export default withAuthGuard(CreateAddressPage, {
-  principal: "customer",
+  principal: "CUSTOMER",
   redirectToLoginCustomer: "/customer/login",
   superAdminCanAccessCustomer: true,
 });

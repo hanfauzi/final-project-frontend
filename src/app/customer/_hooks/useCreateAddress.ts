@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import type { LabelEnum } from "./useEditAddress"; // sudah ada di project-mu
+import type { LabelEnum } from "./useEditAddress"; 
 
 export type CreateCustomerAddressPayload = {
   label: LabelEnum;
@@ -15,7 +15,7 @@ export type CreateCustomerAddressPayload = {
   latitude: number;
   longitude: number;
   notes?: string | null;
-  isPrimary?: boolean; // optional, service-mu sudah handle unset primary lain
+  isPrimary?: boolean; 
 };
 
 export default function useCreateCustomerAddress() {
