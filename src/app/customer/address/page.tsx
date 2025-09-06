@@ -12,8 +12,9 @@ import useGetCustomerAddresses, {
 import Link from "next/link";
 import useSetPrimaryCustomerAddress from "../_hooks/useSetPrimaryAddress";
 import useDeleteCustomerAddress from "../_hooks/useDeleteAddress";
+import { withAuthGuard } from "@/hoc/AuthGuard";
 
-export default function AddressListPage() {
+ function AddressListPage() {
   const { data, isLoading, isError } = useGetCustomerAddresses();
   const { deleteAddressMutation } = useDeleteCustomerAddress();
   const sorted: CustomerAddress[] = useMemo(() => {
@@ -150,3 +151,8 @@ export default function AddressListPage() {
     </>
   );
 }
+export default withAuthGuard(AddressListPage, {
+  principal: "customer",
+  redirectToLoginCustomer: "/customer/login",
+  superAdminCanAccessCustomer: true,
+});

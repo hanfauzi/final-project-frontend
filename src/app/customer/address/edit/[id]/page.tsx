@@ -19,8 +19,9 @@ import { EditAddressCustomerSchema } from "@/features/customer/address/schema/va
 import useEditCustomerAddress, { LabelEnum } from "../../../_hooks/useEditAddress";
 import useSetPrimaryCustomerAddress from "../../../_hooks/useSetPrimaryAddress";
 import { Checkbox } from "@/components/ui/checkbox";
+import { withAuthGuard } from "@/hoc/AuthGuard";
 
-export default function EditAddressPage() {
+ function EditAddressPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const id = params?.id;
@@ -315,3 +316,8 @@ const { setPrimaryMutation } = useSetPrimaryCustomerAddress(id);
     </>
   );
 }
+export default withAuthGuard(EditAddressPage, {
+  principal: "customer",
+  redirectToLoginCustomer: "/customer/login",
+  superAdminCanAccessCustomer: true,
+});

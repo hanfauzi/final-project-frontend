@@ -1,41 +1,74 @@
 import type { Customer } from "@/types/customer";
+import type { Employee } from "@/types/employee";
 import { create } from "zustand";
-import { persist /*, createJSONStorage*/ } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 export interface CustomerStore extends Customer {
   token: string;
 }
+export interface EmployeeStore extends Employee {
+  token: string;
+}
+
+type Principal = "customer" | "employee" | null;
 
 type Store = {
   customer: CustomerStore | null;
-  onAuthSuccess: (payload: { customer: CustomerStore }) => void;
+  employee: EmployeeStore | null;
+  isHydrated: boolean;
+
+  onCustomerAuthSuccess: (payload: { customer: CustomerStore }) => void;
+  onEmployeeAuthSuccess: (payload: { employee: EmployeeStore }) => void;
+
+  clearCustomer: () => void;
+  clearEmployee: () => void;
   clearAuth: () => void;
 
-  // optional helpers
   isLoggedIn: () => boolean;
-  getToken: () => string | undefined;
+  getToken: (prefer?: "customer" | "employee") => string | undefined;
+  getPrincipal: () => Principal;
+
+  setHydrated: (v: boolean) => void;
 };
 
 export const useAuthStore = create<Store>()(
   persist(
     (set, get) => ({
       customer: null,
+      employee: null,
+      isHydrated: false,
 
-      onAuthSuccess: ({ customer }) => {
-        set({ customer: { ...customer } });
+      onCustomerAuthSuccess: ({ customer }) =>
+        set({ customer: { ...customer } }),
+      onEmployeeAuthSuccess: ({ employee }) =>
+        set({ employee: { ...employee } }),
+
+      clearCustomer: () => set({ customer: null }),
+      clearEmployee: () => set({ employee: null }),
+      clearAuth: () => set({ customer: null, employee: null }),
+
+      isLoggedIn: () => !!(get().customer || get().employee),
+
+      getToken: (prefer) => {
+        if (prefer === "customer") return get().customer?.token;
+        if (prefer === "employee") return get().employee?.token;
+        return get().employee?.token ?? get().customer?.token;
       },
 
-      clearAuth: () => set({ customer: null }),
+      getPrincipal: () => {
+        if (get().employee) return "employee";
+        if (get().customer) return "customer";
+        return null;
+      },
 
-      // helpers
-      isLoggedIn: () => !!get().customer,
-      getToken: () => get().customer?.token,
+      setHydrated: (v) => set({ isHydrated: v }),
     }),
     {
       name: "laundr-store",
-      // ⚠️ pertimbangkan keamanan token:
-      // storage: createJSONStorage(() => sessionStorage),
-      // partialize: (s) => ({ customer: s.customer ? { ...s.customer, token: undefined as any } : null }),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) return;
+        (state as Store | undefined)?.setHydrated(true);
+      },
     }
   )
 );
