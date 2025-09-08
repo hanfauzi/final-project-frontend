@@ -1,0 +1,218 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { CustomerProfile } from "@/types/customerProfile";
+import { LoaderCircle, Mail, Pencil, Phone, User } from "lucide-react";
+import { useState } from "react";
+import { useClipboardMap } from "../_hooks/ui/useClipboardMap";
+import { useProfileForms } from "../_hooks/ui/useProfileForms";
+import useGetCustomerProfile from "../_hooks/useGetProfile";
+
+export function ProfileForm() {
+  const { data, isLoading, isError, error } = useGetCustomerProfile();
+  const profile = (data ?? null) as CustomerProfile | null;
+  const [isEditing, setIsEditing] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const {
+    profileFormik: formik,
+    emailFormik,
+    hasErr,
+    hasErrEmail,
+    pending,
+    pendingEmail,
+  } = useProfileForms(profile);
+  const { copied, copy } = useClipboardMap({ email: false, phone: false });
+
+  return (
+    <>
+      {isLoading ? (
+        <div className="py-14 grid place-items-center text-neutral-600">
+          <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
+          Memuat profil...
+        </div>
+      ) : isError ? (
+        <div className="py-14 text-center text-red-600">
+          Gagal memuat profil
+          {error?.message ? `: ${error.message}` : "."}
+        </div>
+      ) : !profile ? (
+        <div className="py-14 text-center text-neutral-600">
+          Profil tidak ditemukan.
+        </div>
+      ) : (
+        <form
+          onSubmit={formik.handleSubmit}
+          className="mt-5 space-y-5"
+          aria-busy={pending}
+        >
+          <div className="space-y-2">
+            <Label
+              htmlFor="name"
+              className="text-neutral-900 flex items-center gap-2"
+            >
+              <User className="h-4 w-4 text-neutral-500" />
+              Nama
+            </Label>
+            {!isEditing ? (
+              <Input disabled value={profile.name ?? ""} />
+            ) : (
+              <>
+                <Input
+                  id="name"
+                  type="text"
+                  disabled={pending}
+                  {...formik.getFieldProps("name")}
+                  placeholder="Nama kamu"
+                  className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                    hasErr("name") ? "border-red-400" : ""
+                  }`}
+                />
+                {hasErr("name") && (
+                  <p className="text-xs text-red-500" role="alert">
+                    {formik.errors.name}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-neutral-900 flex items-center gap-2">
+              <Mail className="h-4 w-4 text-neutral-500" />
+              Email
+            </Label>
+
+            {!isEditingEmail ? (
+              <div className="flex items-center gap-2">
+                <Input disabled value={profile.email ?? ""} />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => copy(profile.email, "email")}
+                  className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                >
+                  {copied.email ? "Copied!" : "Copy"}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setIsEditing(false);
+                    formik.resetForm();
+                    emailFormik.setFieldValue("email", profile.email ?? "");
+                    setIsEditingEmail(true);
+                  }}
+                  className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
+                >
+                  <Pencil className="h-3.5 w-3.5 mr-1" />
+                  Edit
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="email"
+                    type="email"
+                    disabled={pendingEmail}
+                    {...emailFormik.getFieldProps("email")}
+                    placeholder="you@example.com"
+                    className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                      hasErrEmail ? "border-red-400" : ""
+                    }`}
+                  />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    disabled={pendingEmail}
+                    onClick={() => {
+                      setIsEditingEmail(false);
+                      emailFormik.resetForm();
+                    }}
+                    className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={pendingEmail}
+                    onClick={() => emailFormik.handleSubmit()}
+                    className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
+                  >
+                    {pendingEmail ? (
+                      <span className="inline-flex items-center gap-2">
+                        <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                        Save
+                      </span>
+                    ) : (
+                      "Save"
+                    )}
+                  </Button>
+                </div>
+                {hasErrEmail && (
+                  <p className="text-xs text-red-500" role="alert">
+                    {emailFormik.errors.email}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label
+              htmlFor="phoneNumber"
+              className="text-neutral-900 flex items-center gap-2"
+            >
+              <Phone className="h-4 w-4 text-neutral-500" />
+              No. Telepon
+            </Label>
+            {!isEditing ? (
+              <div className="flex items-center gap-2">
+                <Input disabled value={profile.phoneNumber ?? ""} />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  disabled={!profile.phoneNumber}
+                  onClick={() =>
+                    profile.phoneNumber && copy(profile.phoneNumber, "phone")
+                  }
+                  className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200 disabled:opacity-50"
+                >
+                  {copied.phone ? "Copied!" : "Copy"}
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  disabled={pending}
+                  {...formik.getFieldProps("phoneNumber")}
+                  placeholder="08xxxxxxxxxx"
+                  className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                    hasErr("phoneNumber") ? "border-red-400" : ""
+                  }`}
+                />
+                {hasErr("phoneNumber") && (
+                  <p className="text-xs text-red-500" role="alert">
+                    {formik.errors.phoneNumber}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+
+          {isEditing && (
+            <p className="text-[11px] text-neutral-500">
+              Foto maksimal 1MB • Format: PNG/JPG/JPEG
+            </p>
+          )}
+        </form>
+      )}
+    </>
+  );
+}
