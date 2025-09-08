@@ -1,21 +1,21 @@
+// components/CardMap.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog, DialogContent,
+  DialogDescription,
+  DialogHeader, DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import useGetLocationByCoord from "@/hooks/useGetLocationByCoord";
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
-import { FC, useEffect, useState } from "react";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet";
+import { FC, useEffect, useRef, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
 
 L.Icon.Default.mergeOptions({
   iconUrl: (markerIcon as { src: string }).src,
@@ -24,61 +24,80 @@ L.Icon.Default.mergeOptions({
 });
 
 export type LocationPick = {
-  addressLine: string; // formatted dari OpenCage
+  addressLine: string;
   city: string;
   latitude: number;
   longitude: number;
   isPrimary?: boolean;
 };
 
+export type InitialLocation = {
+  lat: number;             // wajib: latitude tersimpan
+  lng: number;             // wajib: longitude tersimpan
+  addressLine?: string;    // optional: teks alamat yang sudah ada
+  city?: string;           // optional: kota yang sudah ada
+};
 interface CardMapProps {
   onLocationSelect: (loc: LocationPick) => void;
+  initial: InitialLocation
 }
 
 const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
   const { getLocation, data } = useGetLocationByCoord();
-  const [currentPosition, setCurrentPosition] = useState<
-    [number, number] | null
-  >(null);
+  const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const shouldCloseRef = useRef(false);
 
-  // buka dialog
+  // simpan ref untuk fungsi agar efek tidak loop
+  const onSelectRef = useRef(onLocationSelect);
+  useEffect(() => { onSelectRef.current = onLocationSelect; }, [onLocationSelect]);
+
+  const getLocationRef = useRef(getLocation);
+  useEffect(() => { getLocationRef.current = getLocation; }, [getLocation]);
+
   const handleOpen = () => setIsOpen(true);
 
-  // geolocate awal
+  // Geolokasi sekali saja
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.navigator.geolocation.getCurrentPosition(
+    if (typeof window === "undefined" || !("geolocation" in navigator)) return;
+    navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setCurrentPosition([pos.coords.latitude, pos.coords.longitude]);
+        const next: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setCurrentPosition(next);
+        void getLocationRef.current(next[0], next[1]);
       },
       () => {
-        // fallback Jakarta
-        setCurrentPosition([-6.2088, 106.8456]);
+        // biarkan user memilih di peta kalau izin gagal
+        setCurrentPosition(null);
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
+    // kosong: jalan sekali
   }, []);
 
-  // setiap selesai reverse geocode → kirim ke parent
+  // Saat data reverse geocode siap → kirim ke parent
   useEffect(() => {
     if (!data || !currentPosition) return;
-    onLocationSelect({
+    onSelectRef.current({
       addressLine: data.formatted,
       city: data.city,
       latitude: currentPosition[0],
       longitude: currentPosition[1],
     });
-  }, [data, currentPosition, onLocationSelect]);
+    if (shouldCloseRef.current) {
+      shouldCloseRef.current = false;
+      setIsOpen(false);
+    }
+  }, [data, currentPosition]);
 
-  // handler click map
+  // Klik peta → update & reverse geocode → dialog ditutup setelah data masuk
   function ClickHandler() {
     useMapEvents({
       click: (evt) => {
         const { lat, lng } = evt.latlng;
         setCurrentPosition([lat, lng]);
-        void getLocation(lat, lng);
-        setIsOpen(false);
+        shouldCloseRef.current = true;
+        void getLocationRef.current(lat, lng);
       },
     });
     return null;
@@ -98,12 +117,17 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
       </DialogTrigger>
 
       <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle className="sr-only">Pilih lokasi di peta</DialogTitle>
+          <DialogDescription className="sr-only">Klik peta untuk memilih lokasi.</DialogDescription>
+        </DialogHeader>
+
         <div className="h-96">
-          {currentPosition && (
+          {currentPosition ? (
             <MapContainer
               center={currentPosition}
               zoom={15}
-              scrollWheelZoom={true}
+              scrollWheelZoom
               className="h-full w-full rounded-xl overflow-hidden"
             >
               <TileLayer
@@ -115,8 +139,13 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
                 <Popup>Klik pada peta untuk memilih lokasi.</Popup>
               </Marker>
             </MapContainer>
+          ) : (
+            <div className="h-full grid place-items-center text-sm text-neutral-500">
+              Aktifkan izin lokasi lalu buka peta.
+            </div>
           )}
         </div>
+
         <div className="text-[11px] text-neutral-500">
           Geocoding by OpenCage. Map © OpenStreetMap contributors.
         </div>

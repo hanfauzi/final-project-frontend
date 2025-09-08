@@ -50,12 +50,10 @@ export function withAuthGuard<P extends object>(
     const router = useRouter();
     const pathname = usePathname();
 
-    // Ambil state reaktif dari store
     const customer = useAuthStore((s) => s.customer);
     const employee = useAuthStore((s) => s.employee);
     const hydrated = useStoreHydrated();
 
-    // Hitung status user (reactive) — cuma depend ke store
     const userFlags = useMemo(() => {
       const isCustomer = !!customer?.sub;
       const isEmployee = !!employee?.id;
@@ -66,7 +64,6 @@ export function withAuthGuard<P extends object>(
       return { isCustomer, isEmployee, isSuperAdmin };
     }, [customer, employee]);
 
-    // Tentukan allowed + target redirect (pure compute, tanpa side-effect)
     const { allowed, redirectTo } = useMemo(() => {
       if (!hydrated) return { allowed: false, redirectTo: null as string | null };
 
@@ -83,7 +80,6 @@ export function withAuthGuard<P extends object>(
 
       const { isCustomer, isEmployee, isSuperAdmin } = userFlags;
 
-      // requireAuth = false → hanya cek role mismatch untuk EMPLOYEE (opsional)
       if (!requireAuth) {
         if (principal === "EMPLOYEE" && isEmployee && !isSuperAdmin) {
           if (
@@ -115,7 +111,6 @@ export function withAuthGuard<P extends object>(
         return { allowed: true, redirectTo: null };
       }
 
-      // principal === "any"
       const passAsCustomer = allowCustomerWhenAny && isCustomer;
       const passAsEmployee =
         isEmployee &&
@@ -137,11 +132,9 @@ export function withAuthGuard<P extends object>(
       };
     }, [hydrated, userFlags, employee]);
 
-    // Redirect HANYA di effect; dependency hanya nilai reaktif.
     useEffect(() => {
-      if (!hydrated) return; // belum siap, jangan redirect
+      if (!hydrated) return; 
       if (!allowed && redirectTo) {
-        // tambahkan ?next= supaya balik ke tujuan
         const url = new URL(redirectTo, window.location.origin);
         if (pathname) url.searchParams.set("next", pathname);
         if (url.pathname !== pathname) {
@@ -150,9 +143,8 @@ export function withAuthGuard<P extends object>(
       }
     }, [allowed, redirectTo, hydrated, pathname, router]);
 
-    // Render
     if (!hydrated) return <Loading />;
-    if (!allowed) return null; // mencegah flicker saat effect melakukan redirect
+    if (!allowed) return null; 
 
     return <Component {...(props as P)} />;
   };
