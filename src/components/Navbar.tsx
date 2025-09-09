@@ -31,7 +31,7 @@ export function Navbar() {
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
   const loggedIn = Boolean(
-    customer?.token ?? employee?.token ?? customer?.sub ?? employee?.id
+    customer?.token ?? employee?.token ?? customer?.id ?? employee?.id
   );
 
   const items = useMemo(() => {
