@@ -13,7 +13,17 @@ import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "./ui/separator";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 export function Navbar() {
   const router = useRouter();
   const customer = useAuthStore((s) => s.customer);
@@ -79,32 +89,48 @@ export function Navbar() {
 
               {!loggedIn ? (
                 <div className="px-3 pt-2 pb-3 grid grid-cols-2 gap-2">
-                  <Link
-                    href="/customer/login"
-                    className="inline-flex items-center justify-center h-11 rounded-xl border border-neutral-300"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/customer/register"
-                    className="inline-flex items-center justify-center h-11 rounded-xl border border-neutral-300"
-                  >
-                    Register
-                  </Link>
+                  <Button className="inline-flex items-center justify-center h-11 rounded-xl border border-neutral-300">
+                    <Link href="/customer/login">Login</Link>
+                  </Button>
+                  <Button className="inline-flex items-center justify-center h-11 rounded-xl border border-neutral-300">
+                    <Link href="/customer/register">Register</Link>
+                  </Button>
                 </div>
               ) : (
                 <>
                   <Separator className="my-2" />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      clearAuth();
-                      router.refresh();
-                    }}
-                    className="mx-3 mb-3 inline-flex items-center justify-center h-11 w-[calc(100%-1.5rem)] rounded-xl bg-neutral-900 text-white"
-                  >
-                    Logout
-                  </button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className="mx-3 mb-3 inlineF-flex items-center justify-center h-11 w-[calc(100%-1.5rem)] rounded-xl bg-neutral-900 text-white"
+                      >
+                        Logout
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Keluar dari akun?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Kamu akan keluar dari Laundr di perangkat ini.
+                          Pastikan perubahan sudah disimpan.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            clearAuth();
+                            router.refresh();
+                          }}
+                        >
+                          Keluar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </>
               )}
             </nav>
