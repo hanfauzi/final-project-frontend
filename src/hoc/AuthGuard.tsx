@@ -55,7 +55,7 @@ export function withAuthGuard<P extends object>(
     const hydrated = useStoreHydrated();
 
     const userFlags = useMemo(() => {
-      const isCustomer = !!customer?.sub;
+      const isCustomer = !!customer?.id;
       const isEmployee = !!employee?.id;
       const isSuperAdmin =
         cfgRef.current.superAdminBypass &&

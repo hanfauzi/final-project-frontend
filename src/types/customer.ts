@@ -1,6 +1,6 @@
 export interface Customer {
   
-  sub: string;
+  id: string;
   email: string;
   role: string;
 }
