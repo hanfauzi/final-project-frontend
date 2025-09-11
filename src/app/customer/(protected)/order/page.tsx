@@ -42,8 +42,6 @@ export default function CustomerOrdersPage() {
               "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
           }}
         />
-
-        {/* Header */}
         <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
@@ -73,8 +71,6 @@ export default function CustomerOrdersPage() {
             </Button>
           </div>
         </div>
-
-        {/* Content */}
         <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
           {isLoading && (
             <div className="py-10 grid place-items-center text-neutral-600">
@@ -132,9 +128,16 @@ export default function CustomerOrdersPage() {
                 </Card>
               </Link>
             ))}
+          
         </main>
 
-        <div className="h-6" />
+         <div className="sticky bottom-0 z-40 text-white ">
+          <div className="mx-auto w-full max-w-sm px-4 py-3 pb-[max(env(safe-area-inset-bottom),0px)]">
+            <Button asChild className="w-full h-12 rounded-xl   ">
+              <Link href="/customer/order/create">Create Order</Link>
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );
