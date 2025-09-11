@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { EditAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerEditAddressSchema";
-import { withAuthGuard } from "@/hoc/AuthGuard";
 import { useFormik } from "formik";
 import { ChevronLeft, LoaderCircle } from "lucide-react";
 import Head from "next/head";
@@ -24,8 +23,8 @@ function CreateAddressPage() {
     phoneNumber: string;
     latitude: number;
     longitude: number;
-    pinpoint: string; // UI only (preview text)
-    makePrimary: boolean; // toggle set primary
+    pinpoint: string;
+    makePrimary: boolean;
   }>({
     initialValues: {
       label: "HOME",
@@ -54,8 +53,7 @@ function CreateAddressPage() {
           isPrimary: values.makePrimary,
         });
         router.back();
-      } catch {
-      }
+      } catch {}
     },
   });
 
@@ -91,7 +89,9 @@ function CreateAddressPage() {
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="text-[15px] font-semibold text-neutral-900">Tambah Alamat</div>
+            <div className="text-[15px] font-semibold text-neutral-900">
+              Tambah Alamat
+            </div>
           </div>
         </div>
 
@@ -127,14 +127,9 @@ function CreateAddressPage() {
             </Button>
           </div>
         </div>
-
       </div>
     </>
   );
 }
 
-export default withAuthGuard(CreateAddressPage, {
-  principal: "CUSTOMER",
-  redirectToLoginCustomer: "/customer/login",
-  superAdminCanAccessCustomer: true,
-});
+export default CreateAddressPage;

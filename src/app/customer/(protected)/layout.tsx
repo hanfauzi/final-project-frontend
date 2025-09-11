@@ -16,7 +16,9 @@ export default function CustomerProtectedLayout({ children }: { children: ReactN
       />
       <Navbar />
       <main className="mx-auto w-full max-w-sm px-4 py-4">
-        <ClientAuth>{children}</ClientAuth>
+        <ClientAuth>
+          {children}
+        </ClientAuth>
       </main>
       <Footer/>
       <div className="h-6" />

@@ -1,17 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, LoaderCircle, Plus } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, Plus, LoaderCircle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ActionSheet } from "../../_components/ActionSheet";
+import { AddressCard } from "../../_components/AddressCard";
+import useDeleteCustomerAddress from "./_hooks/useDeleteAddress";
 import useGetCustomerAddresses, { CustomerAddress } from "./_hooks/useGetAddresses";
 import useSetPrimaryCustomerAddress from "./_hooks/useSetPrimaryAddress";
-import useDeleteCustomerAddress from "./_hooks/useDeleteAddress";
-import { withAuthGuard } from "@/hoc/AuthGuard";
-import { AddressCard } from "../../_components/AddressCard";
-import { ActionSheet } from "../../_components/ActionSheet";
 
 function AddressListPage() {
   const router = useRouter();
@@ -150,8 +149,4 @@ function AddressListPage() {
   );
 }
 
-export default withAuthGuard(AddressListPage, {
-  principal: "CUSTOMER",
-  redirectToLoginCustomer: "/customer/login",
-  superAdminCanAccessCustomer: true,
-});
+export default AddressListPage

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { withAuthGuard } from "@/hoc/AuthGuard";
 import {
   ChevronLeft
 } from "lucide-react";
@@ -60,8 +59,4 @@ function CustomerProfilePage() {
   );
 }
 
-export default withAuthGuard(CustomerProfilePage, {
-  principal: "CUSTOMER",
-  redirectToLoginCustomer: "/customer/login",
-  superAdminCanAccessCustomer: true,
-});
+export default CustomerProfilePage;

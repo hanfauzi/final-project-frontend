@@ -1,23 +1,22 @@
 "use client";
 
+import { LabelChips } from "@/app/customer/_components/LabelChips";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label as UILabel } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { EditAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerEditAddressSchema";
 import { useFormik } from "formik";
 import { ChevronLeft, LoaderCircle, MapPin } from "lucide-react";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
-import { EditAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerEditAddressSchema";
-import { withAuthGuard } from "@/hoc/AuthGuard";
 import useEditCustomerAddress, { LabelEnum } from "../../_hooks/useEditAddress";
+import useGetCustomerAddressById from "../../_hooks/useGetAddressById";
 import { CustomerAddress } from "../../_hooks/useGetAddresses";
 import useSetPrimaryCustomerAddress from "../../_hooks/useSetPrimaryAddress";
-import useGetCustomerAddressById from "../../_hooks/useGetAddressById";
-import { LabelChips } from "@/app/customer/_components/LabelChips";
 
 // ⬇️ pakai CardMap (yang simple)
 import CardMap from "@/app/customer/_components/CardMap";
@@ -348,8 +347,4 @@ function EditAddressPage() {
   );
 }
 
-export default withAuthGuard(EditAddressPage, {
-  principal: "CUSTOMER",
-  redirectToLoginCustomer: "/customer/login",
-  superAdminCanAccessCustomer: true,
-});
+export default EditAddressPage
