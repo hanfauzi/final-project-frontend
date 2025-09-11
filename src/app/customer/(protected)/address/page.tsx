@@ -9,7 +9,9 @@ import { useEffect, useMemo, useState } from "react";
 import { ActionSheet } from "../../_components/ActionSheet";
 import { AddressCard } from "../../_components/AddressCard";
 import useDeleteCustomerAddress from "./_hooks/useDeleteAddress";
-import useGetCustomerAddresses, { CustomerAddress } from "./_hooks/useGetAddresses";
+import useGetCustomerAddresses, {
+  CustomerAddress,
+} from "./_hooks/useGetAddresses";
 import useSetPrimaryCustomerAddress from "./_hooks/useSetPrimaryAddress";
 
 function AddressListPage() {
@@ -25,13 +27,18 @@ function AddressListPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetTargetId, setSheetTargetId] = useState<string | null>(null);
-  const { setPrimaryMutation } = useSetPrimaryCustomerAddress(sheetTargetId ?? "");
+  const { setPrimaryMutation } = useSetPrimaryCustomerAddress(
+    sheetTargetId ?? ""
+  );
 
   useEffect(() => {
     setSelectedId(sorted[0]?.id ?? null);
   }, [sorted]);
 
-  const selected = useMemo(() => sorted.find((x) => x.id === selectedId) ?? null, [sorted, selectedId]);
+  const selected = useMemo(
+    () => sorted.find((x) => x.id === selectedId) ?? null,
+    [sorted, selectedId]
+  );
 
   function openSheetFor(id: string) {
     setSheetTargetId(id);
@@ -78,12 +85,22 @@ function AddressListPage() {
         <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onClick={() => router.back()}
+              >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <div className="text-[15px] font-semibold text-neutral-900">Detail Alamat</div>
+              <div className="text-[15px] font-semibold text-neutral-900">
+                Detail Alamat
+              </div>
             </div>
-            <Link href="/customer/address/create" className="inline-flex items-center gap-1.5 text-neutral-900">
+            <Link
+              href="/customer/address/create"
+              className="inline-flex items-center gap-1.5 text-neutral-900"
+            >
               <Plus className="h-4 w-4" />
               <span className="text-sm font-medium">Tambah</span>
             </Link>
@@ -99,24 +116,31 @@ function AddressListPage() {
           )}
 
           {isError && !isLoading && (
-            <div className="py-10 text-center text-red-600">Gagal memuat alamat.</div>
+            <div className="py-10 text-center text-red-600">
+              Gagal memuat alamat.
+            </div>
           )}
 
-          {!isLoading && !isError && sorted.map((a) => (
-            <AddressCard
-              key={a.id}
-              data={a}
-              active={a.id === selectedId}
-              onSelect={() => setSelectedId(a.id)}
-              onMore={() => openSheetFor(a.id)}
-            />
-          ))}
+          {!isLoading &&
+            !isError &&
+            sorted.map((a) => (
+              <AddressCard
+                key={a.id}
+                data={a}
+                active={a.id === selectedId}
+                onSelect={() => setSelectedId(a.id)}
+                onMore={() => openSheetFor(a.id)}
+              />
+            ))}
 
           {!isLoading && !isError && sorted.length === 0 && (
             <div className="py-10 text-center text-neutral-600">
               Belum ada alamat tersimpan.
               <div className="mt-3">
-                <Link href="/customer/address/create" className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800">
+                <Link
+                  href="/customer/address/create"
+                  className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
+                >
                   <Plus className="h-4 w-4 mr-1" /> Tambah Alamat
                 </Link>
               </div>
@@ -142,11 +166,13 @@ function AddressListPage() {
       <ActionSheet
         open={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        onMakePrimaryAndSelect={() => sheetTargetId && handleMakePrimaryAndSelect()}
+        onMakePrimaryAndSelect={() =>
+          sheetTargetId && handleMakePrimaryAndSelect()
+        }
         onDelete={() => sheetTargetId && handleDelete()}
       />
     </>
   );
 }
 
-export default AddressListPage
+export default AddressListPage;
