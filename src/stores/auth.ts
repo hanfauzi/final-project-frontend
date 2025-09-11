@@ -65,10 +65,9 @@ export const useAuthStore = create<Store>()(
     }),
     {
       name: "laundr-store",
-      onRehydrateStorage: () => {
-        return () => {
-          useAuthStore.setState({ isHydrated: true });
-        };
+      onRehydrateStorage: () => (state) => {
+        // dipanggil SETELAH rehydrate selesai
+        state?.setHydrated?.(true);
       },
     }
   )
