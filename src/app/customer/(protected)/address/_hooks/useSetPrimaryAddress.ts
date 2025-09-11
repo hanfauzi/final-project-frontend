@@ -1,12 +1,10 @@
 // src/app/customer/_hooks/useSetPrimaryAddress.ts
 import { axiosInstance } from "@/lib/axios";
-import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 export default function useSetPrimaryCustomerAddress(id: string) {
-  const { customer } = useAuthStore();
   const queryClient = useQueryClient();
 
   const setPrimaryMutation = useMutation({
@@ -14,11 +12,7 @@ export default function useSetPrimaryCustomerAddress(id: string) {
       const { data } = await axiosInstance.patch(
         `/api/address/primary/${id}`,
         undefined,
-        {
-          headers: {
-            Authorization: `Bearer ${customer?.token}`,
-          },
-        }
+
       );
       return data; 
     },

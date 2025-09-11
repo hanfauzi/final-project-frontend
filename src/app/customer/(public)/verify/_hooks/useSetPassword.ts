@@ -16,7 +16,7 @@ export default function useSetPassword() {
     mutationFn: async (payload: SetPasswordPayload) => {
       await axiosInstance.post<SetPasswordPayload>(
         `/api/auth/customer/set-password/${verifyToken}`,
-        payload
+        payload, {skipAuth: true}
       );
     },
     onSuccess: () => {

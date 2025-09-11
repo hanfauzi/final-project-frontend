@@ -16,7 +16,7 @@ export default function useResetPassword() {
     mutationFn: async (payload: ResetPasswordPayload) => {
       await axiosInstance.post<ResetPasswordPayload>(
         `/api/auth/customer/reset-password-by/${token}`,
-        payload
+        payload, {skipAuth: true}
       );
     },
     onSuccess: () => {

@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib/axios";
-import { useAuthStore } from "@/stores/auth";
 import { useQuery } from "@tanstack/react-query";
 
 type CustomerProfile = {
@@ -11,17 +10,12 @@ type CustomerProfile = {
 }
 
 const useGetCustomerProfile = () => {
-  const { customer } = useAuthStore();
   return useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
       const { data } = await axiosInstance.get<CustomerProfile>(
-        "/api/profile/customer",
-        {
-          headers: {
-            Authorization: `Bearer ${customer?.token}`,
-          },
-        }
+        "/api/profile/customer", 
+        
       );
       return data;
     },
