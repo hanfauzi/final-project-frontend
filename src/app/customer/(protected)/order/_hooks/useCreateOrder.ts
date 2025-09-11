@@ -2,6 +2,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export type CreatePickupOrderPayload = {
@@ -23,7 +24,7 @@ export type PickupOrderResponse = {
 };
 
 export default function useCreatePickupOrder() {
-
+const router = useRouter();
   const createPickUpOrderMutation = useMutation({
     mutationFn: async (payload: CreatePickupOrderPayload) => {
       const { data } = await axiosInstance.post<PickupOrderResponse>(
@@ -35,6 +36,7 @@ export default function useCreatePickupOrder() {
     },
     onSuccess: () => {
       toast.success("Your pickup order has been created successfully!");
+      router.replace("/customer/order");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data.message ?? "Something went wrong!");
