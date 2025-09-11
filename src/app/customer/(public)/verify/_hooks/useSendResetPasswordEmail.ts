@@ -12,7 +12,7 @@ export default function useSendResetPasswordEmail() {
 
   const sendResetPasswordEmailMutation = useMutation({
     mutationFn: async (payload: SendEmailPayload) => {
-      await axiosInstance.post<SendEmailPayload>("/api/auth/customer/reset-password", payload
+      await axiosInstance.post<SendEmailPayload>("/api/auth/customer/reset-password", payload, {skipAuth: true}
       );
     },
     onSuccess: () => {

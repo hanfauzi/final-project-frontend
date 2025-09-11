@@ -8,7 +8,8 @@ export default function useVerifyEmail() {
   return useMutation<VerifyResponse, AxiosError<{ message: string }>, string>({
     mutationFn: async (token: string) => {
       const { data } = await axiosInstance.post<VerifyResponse>(
-        `/api/profile/email/${token}`
+        `/api/profile/email/${token}`,
+        { skipAuth: true }
       );
       return data;
     },

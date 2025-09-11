@@ -1,6 +1,5 @@
 // src/app/customer/_hooks/useEditAddress.ts
 import { axiosInstance } from "@/lib/axios";
-import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -22,18 +21,13 @@ export interface EditCustomerAddressPayload {
 
 export default function useEditCustomerAddress(id: string) {
   const queryClient = useQueryClient();
-  const { customer } = useAuthStore();
 
   const editAddressMutation = useMutation({
     mutationFn: async (payload: EditCustomerAddressPayload) => {
       const { data } = await axiosInstance.patch(
         `/api/address/edit/${id}`,
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${customer?.token}`,
-          },
-        }
+  
       );
       return data; 
     },

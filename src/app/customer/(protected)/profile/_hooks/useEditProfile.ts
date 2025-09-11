@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib/axios";
-import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -12,7 +11,6 @@ export interface EditProfilePayload {
 
 export default function useEditProfile() {
   const queryClient = useQueryClient();
-  const { customer } = useAuthStore();
 
 
   const editProfileMutation = useMutation({
@@ -26,7 +24,7 @@ export default function useEditProfile() {
       await axiosInstance.patch<EditProfilePayload>("/api/profile/edit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${customer?.token}`,
+          
         },
       });
     },

@@ -1,6 +1,5 @@
 // src/app/customer/_hooks/useCreateAddress.ts
 import { axiosInstance } from "@/lib/axios";
-import { useAuthStore } from "@/stores/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -19,7 +18,6 @@ export type CreateCustomerAddressPayload = {
 };
 
 export default function useCreateCustomerAddress() {
-  const { customer } = useAuthStore();
   const queryClient = useQueryClient();
 
   const createAddressMutation = useMutation({
@@ -27,11 +25,7 @@ export default function useCreateCustomerAddress() {
       const { data } = await axiosInstance.post(
         "/api/address/create",
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${customer?.token}`,
-          },
-        }
+      
       );
       return data; 
     },

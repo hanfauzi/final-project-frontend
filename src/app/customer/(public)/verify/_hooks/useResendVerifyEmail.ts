@@ -12,7 +12,7 @@ export default function useResendVerifyEmail() {
 
   const resendVerifyEmailMutation = useMutation({
     mutationFn: async (payload: SendEmailPayload) => {
-      await axiosInstance.post<SendEmailPayload>("/api/auth/customer/resend", payload
+      await axiosInstance.post<SendEmailPayload>("/api/auth/customer/resend", payload, {skipAuth: true}
       );
     },
     onSuccess: () => {

@@ -15,7 +15,7 @@ const useRegisterHook = () => {
     mutationFn: async (payload: RegisterPayload) => {
       const { data } = await axiosInstance.post<RegisterPayload>(
         "/api/auth/customer/register",
-        payload
+        payload, {skipAuth: true}
       );
       return data;
     },

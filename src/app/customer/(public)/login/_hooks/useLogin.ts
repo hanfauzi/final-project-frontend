@@ -19,7 +19,7 @@ const useLoginHook = () => {
       const { data } = await axiosInstance.post<{
         payload: CustomerStore;
         token: string;
-      }>("/api/auth/customer/login", payload);
+      }>("/api/auth/customer/login", payload, {skipAuth: true});
 
       return {
         ...data.payload,
