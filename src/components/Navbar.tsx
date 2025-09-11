@@ -47,7 +47,7 @@ export function Navbar() {
       { label: "Profile", href: "/customer/profile" },
       { label: "Service", href: "#services" },
       { label: "Address", href: "/customer/address" },
-      { label: "Transaction", href: "/customer/transactions" },
+      { label: "Order", href: "/customer/order" },
       { label: "About Us", href: "#about" },
     ] as const;
   }, [loggedIn]);

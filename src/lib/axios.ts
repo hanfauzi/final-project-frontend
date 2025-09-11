@@ -19,14 +19,18 @@ export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
 });
 
-function isAxiosHeaders(h: InternalAxiosRequestConfig["headers"]): h is AxiosHeaders {
+function isAxiosHeaders(
+  h: InternalAxiosRequestConfig["headers"]
+): h is AxiosHeaders {
   return !!h && typeof (h as AxiosHeaders).set === "function";
 }
 
 function guessLoginPath(): string {
-  const principal = useAuthStore.getState().getPrincipal?.(); 
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const looksEmployeePath = /^\/(employee|admin|driver|worker|staff)(\/|$)/i.test(pathname);
+  const principal = useAuthStore.getState().getPrincipal?.();
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const looksEmployeePath =
+    /^\/(employee|admin|driver|worker|staff)(\/|$)/i.test(pathname);
 
   if (principal === "EMPLOYEE" || looksEmployeePath) {
     return "/employee/login";
@@ -72,7 +76,9 @@ axiosInstance.interceptors.response.use(
         const loginPath = guessLoginPath();
 
         if (!isOnLoginPage(window.location.pathname)) {
-          window.location.replace(`${loginPath}?next=${encodeURIComponent(here)}`);
+          window.location.replace(
+            `${loginPath}?next=${encodeURIComponent(here)}`
+          );
         }
       }
     }
