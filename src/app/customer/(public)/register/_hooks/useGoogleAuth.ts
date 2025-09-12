@@ -10,7 +10,6 @@ type GoogleResp = {
   success: boolean;
   mode: "LOGIN" | "REGISTER";
   token?: string;
-  // customer?: any;
   setPasswordEmailSent?: boolean;
   message?: string;
 };
@@ -30,9 +29,7 @@ export function useGoogleAuth() {
     onSuccess: (data) => {
       if (data.mode === "LOGIN") {
         toast.success("Login with Google succesfully!");
-        // TODO: simpan token & user ke store-mu
-        // useAuthStore.getState().onAuthSuccess({ user: {..., token: data.token! }})
-        router.replace("/customer"); // sesuaikan rute
+        router.replace("/"); 
       } else {
         toast.success("Create account succesfully. Please set your password! The link has been sent to your email!");
         router.replace("/customer/login");

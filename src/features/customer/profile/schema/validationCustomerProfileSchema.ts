@@ -15,7 +15,7 @@ export const validationCustomerProfileSchema = Yup.object().shape({
       "Format gambar tidak didukung",
       (file) =>
         !file ||
-        ["image/jpg", "image/jpeg", "image/png", "image/webp"].includes(
+        ["image/jpg", "image/jpeg", "image/png"].includes(
           file.type
         )
     ),

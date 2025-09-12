@@ -38,7 +38,6 @@ export function HomeCarousel() {
             <div key={s.id} className="min-w-full snap-start px-4">
               <Card className="rounded-2xl overflow-hidden border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
                 <CardContent className="p-0">
-                  {/* Ganti div ini dengan <Image> milik kamu */}
                   <div className="h-44 w-full bg-neutral-200 grid place-items-center text-neutral-600 text-sm">
                     Gambar Carousel {i + 1}
                   </div>

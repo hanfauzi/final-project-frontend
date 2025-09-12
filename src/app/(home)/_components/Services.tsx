@@ -5,25 +5,25 @@ export function Services() {
   const data = [
     {
       key: "pickup",
-      icon: <Truck className="h-5 w-5" />, // Antar-Jemput
+      icon: <Truck className="h-5 w-5" />, 
       title: "Antar Jemput",
       desc: "Kami ambil & antar pakaianmu tepat waktu.",
     },
     {
       key: "wash",
-      icon: <Shirt className="h-5 w-5" />, // Cuci
+      icon: <Shirt className="h-5 w-5" />, 
       title: "Cuci",
       desc: "Pencucian higienis dengan detergen berkualitas.",
     },
     {
       key: "iron",
-      icon: <Flame className="h-5 w-5" />, // Setrika
+      icon: <Flame className="h-5 w-5" />, 
       title: "Setrika",
       desc: "Rapi & wangi, siap pakai kapan saja.",
     },
     {
       key: "fold",
-      icon: <FoldVertical className="h-5 w-5" />, // Lipat
+      icon: <FoldVertical className="h-5 w-5" />, 
       title: "Lipat",
       desc: "Dilipat rapi agar mudah disimpan.",
     },

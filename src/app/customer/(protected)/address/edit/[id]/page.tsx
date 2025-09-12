@@ -18,7 +18,6 @@ import useGetCustomerAddressById from "../../_hooks/useGetAddressById";
 import { CustomerAddress } from "../../_hooks/useGetAddresses";
 import useSetPrimaryCustomerAddress from "../../_hooks/useSetPrimaryAddress";
 
-// ⬇️ pakai CardMap (yang simple)
 import CardMap from "@/app/customer/_components/CardMap";
 
 function EditAddressPage() {
@@ -58,7 +57,6 @@ function EditAddressPage() {
           phoneNumber: initial.phoneNumber ?? "",
           latitude: initial.latitude ?? 0,
           longitude: initial.longitude ?? 0,
-          // tampilkan sesuatu buat preview
           pinpoint:
             initial.address ||
             [initial.city, initial.postalCode].filter(Boolean).join(", "),
@@ -163,7 +161,6 @@ function EditAddressPage() {
                 </div>
               )}
 
-              {/* ⬇️ Ganti PinpointDialog → CardMap */}
               <CardMap
                 initial={{
                   lat: formik.values.latitude,

@@ -1,4 +1,4 @@
-import { LabelEnum } from "@/app/customer/address/_hooks/useEditAddress";
+import { LabelEnum } from "@/app/customer/(protected)/address/_hooks/useEditAddress";
 import * as Yup from "yup";
 
 export const EditAddressCustomerSchema = Yup.object({

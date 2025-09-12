@@ -1,6 +1,5 @@
-// src/app/customer/_hooks/useCreatePickupOrder.ts
 import { axiosInstance } from "@/lib/axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -25,6 +24,8 @@ export type PickupOrderResponse = {
 
 export default function useCreatePickupOrder() {
 const router = useRouter();
+  const queryClient = useQueryClient();
+
   const createPickUpOrderMutation = useMutation({
     mutationFn: async (payload: CreatePickupOrderPayload) => {
       const { data } = await axiosInstance.post<PickupOrderResponse>(
@@ -35,6 +36,8 @@ const router = useRouter();
       return data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+
       toast.success("Your pickup order has been created successfully!");
       router.replace("/customer/order");
     },

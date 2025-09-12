@@ -1,4 +1,3 @@
-// src/app/customer/orders/_hooks/useGetCustomerOrders.ts
 import { axiosInstance } from "@/lib/axios";
 import { CustomerOrder } from "@/types/customerOrders";
 import { OrderStatus } from "@/types/orderStatus";
