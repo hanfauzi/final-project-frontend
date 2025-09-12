@@ -89,7 +89,6 @@ export default function OrderDetailPage() {
           {!isLoading && !isError && order && (
             <Card className="rounded-2xl border-neutral-200">
               <CardContent className="p-4 space-y-4">
-                {/* Invoice */}
                 <div className="flex items-start gap-2">
                   <Hash className="h-4 w-4 text-neutral-500 mt-0.5" />
                   <div>
@@ -98,13 +97,11 @@ export default function OrderDetailPage() {
                   </div>
                 </div>
 
-                {/* Status */}
                 <div className="flex items-center justify-between">
                   <div className="text-[12px] text-neutral-500">Status</div>
                   <StatusBadge status={order.status} />
                 </div>
 
-                {/* Layanan / Notes */}
                 <div className="flex items-start gap-2">
                   <Package className="h-4 w-4 text-neutral-500 mt-0.5" />
                   <div>
@@ -113,7 +110,6 @@ export default function OrderDetailPage() {
                   </div>
                 </div>
 
-                {/* Waktu dibuat */}
                 <div className="flex items-start gap-2">
                   <CalendarClock className="h-4 w-4 text-neutral-500 mt-0.5" />
                   <div>
@@ -122,7 +118,6 @@ export default function OrderDetailPage() {
                   </div>
                 </div>
 
-                {/* Estimasi */}
                 {order.estHours !== null && (
                   <div className="flex items-start gap-2">
                     <Clock className="h-4 w-4 text-neutral-500 mt-0.5" />
@@ -133,7 +128,6 @@ export default function OrderDetailPage() {
                   </div>
                 )}
 
-                {/* Outlet */}
                 <div className="flex items-start gap-2">
                   <Store className="h-4 w-4 text-neutral-500 mt-0.5" />
                   <div>

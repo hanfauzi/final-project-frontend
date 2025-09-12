@@ -7,19 +7,24 @@ import {
   CalendarClock,
   ChevronLeft,
   ChevronRight,
+  Hash,
   Package,
+  Plus,
   RefreshCw,
-  Hash, // ⬅️ NEW
 } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { formatDate } from "./_components/FormatDate";
 import { StatusBadge } from "./_components/StatusBadge";
 import useGetCustomerOrders from "./_hooks/useGetOrders";
-import { formatDate } from "./_components/FormatDate";
 
 export default function CustomerOrdersPage() {
-  const { data: orders, isLoading, isError, refetch, isFetching } = useGetCustomerOrders();
+  const {
+    data: orders,
+    isLoading,
+    isError,
+  } = useGetCustomerOrders();
   const router = useRouter();
 
   return (
@@ -48,18 +53,17 @@ export default function CustomerOrdersPage() {
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <div className="text-[15px] font-semibold text-neutral-900">Order Saya</div>
+              <div className="text-[15px] font-semibold text-neutral-900">
+                Order Saya
+              </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => refetch()}
-              disabled={isFetching}
-              className="gap-1"
+            <Link
+              href="/customer/order/create"
+              className="inline-flex items-center gap-1.5 text-neutral-900"
             >
-              <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
-              <span className="text-sm">Refresh</span>
-            </Button>
+              <Plus className="h-4 w-4 cursor-pointer" />
+              <span className="text-sm font-medium">Create Order</span>
+            </Link>
           </div>
         </div>
 
@@ -72,11 +76,15 @@ export default function CustomerOrdersPage() {
           )}
 
           {isError && !isLoading && (
-            <div className="py-10 text-center text-red-600">Gagal memuat order.</div>
+            <div className="py-10 text-center text-red-600">
+              Gagal memuat order.
+            </div>
           )}
 
           {!isLoading && !isError && (orders?.length ?? 0) === 0 && (
-            <div className="py-10 text-center text-neutral-600">Belum ada order.</div>
+            <div className="py-10 text-center text-neutral-600">
+              Belum ada order.
+            </div>
           )}
 
           {!isLoading &&
@@ -93,13 +101,13 @@ export default function CustomerOrdersPage() {
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div className="space-y-1.5">
-                          {/* Invoice */}
                           <div className="flex items-center gap-2 text-[12px] text-neutral-600">
                             <Hash className="h-3.5 w-3.5 text-neutral-500" />
-                            <span className="font-medium text-neutral-800">{inv}</span>
+                            <span className="font-medium text-neutral-800">
+                              {inv}
+                            </span>
                           </div>
 
-                          {/* Notes / service */}
                           <div className="flex items-center gap-2">
                             <Package className="h-4 w-4 text-neutral-500" />
                             <div className="text-[13px] font-medium text-neutral-900">
@@ -107,7 +115,6 @@ export default function CustomerOrdersPage() {
                             </div>
                           </div>
 
-                          {/* Created at */}
                           <div className="flex items-center gap-2">
                             <CalendarClock className="h-4 w-4 text-neutral-500" />
                             <div className="text-[12px] text-neutral-600">
@@ -128,15 +135,6 @@ export default function CustomerOrdersPage() {
               );
             })}
         </main>
-
-        {/* Sticky create button */}
-        <div className="sticky bottom-0 z-40">
-          <div className="mx-auto w-full max-w-sm px-4 py-3 text-white pb-[max(env(safe-area-inset-bottom),0px)] bg-white/90 backdrop-blur border-t border-neutral-200">
-            <Button asChild className="w-full h-12 rounded-xl bg-neutral-900  hover:bg-neutral-800">
-              <Link href="/customer/order/create">Create Order</Link>
-            </Button>
-          </div>
-        </div>
       </div>
     </>
   );

@@ -20,7 +20,7 @@ export type AddressFormValues = {
   phoneNumber: string;
   latitude: number;
   longitude: number;
-  pinpoint: string;      // preview alamat dari reverse geocode
+  pinpoint: string;      
   makePrimary: boolean;
 };
 
@@ -52,15 +52,12 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             longitude: number;
             isPrimary?: boolean;
           }) => {
-            // set koordinat
             formik.setFieldValue("latitude",  loc.latitude);
             formik.setFieldValue("longitude", loc.longitude);
 
-            // set preview "pinpoint" + kota
             formik.setFieldValue("pinpoint",  loc.addressLine);
             formik.setFieldValue("city",      loc.city ?? "");
 
-            // kalau alamat user masih kosong/belum diisi, auto-isi dari reverse geocode
             if (!formik.values.address || formik.values.address.trim().length === 0) {
               formik.setFieldValue("address", loc.addressLine);
             }

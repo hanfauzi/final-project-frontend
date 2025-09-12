@@ -1,4 +1,3 @@
-// src/app/customer/order/_hooks/useSuggestOutlet.ts
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
 

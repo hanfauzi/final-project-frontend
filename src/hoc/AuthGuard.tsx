@@ -20,10 +20,8 @@ interface WithAuthOptions {
   superAdminCanAccessCustomer?: boolean;
 }
 
-/** Siap pakai: tunggu rehydrate dari store (pakai flag store & fallback kecil). */
 function useStoreHydrated(): boolean {
   const isHydrated = useAuthStore((s) => s.isHydrated);
-  // fallback kecil kalau isHydrated belum di-set oleh store (optional):
   const ready = isHydrated ?? false;
   return ready;
 }
@@ -32,7 +30,6 @@ export function withAuthGuard<P extends object>(
   Component: ComponentType<P>,
   opts: WithAuthOptions = {}
 ): ComponentType<P> {
-  // Bekukan opsi di ref supaya tidak jadi dependency useEffect/useMemo (tak berubah sepanjang hidup Wrapper)
   const cfgStatic = {
     requireAuth: opts.requireAuth ?? true,
     principal: opts.principal ?? "any",
@@ -44,7 +41,7 @@ export function withAuthGuard<P extends object>(
     superAdminBypass: opts.superAdminBypass ?? true,
     superAdminCanAccessCustomer: opts.superAdminCanAccessCustomer ?? false,
   };
-  const cfgRef = { current: cfgStatic }; // tanpa any
+  const cfgRef = { current: cfgStatic }; 
 
   const Wrapper: FC<P> = (props) => {
     const router = useRouter();

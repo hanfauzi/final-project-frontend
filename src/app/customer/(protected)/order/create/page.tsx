@@ -1,50 +1,80 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Check, ChevronDown, ChevronLeft, MapPin, Package, Store } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import {
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  MapPin,
+  Package,
+  Store,
+} from "lucide-react";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
-
 import { useRouter } from "next/navigation";
 import useGetCustomerAddressById from "../../address/_hooks/useGetAddressById";
-import useGetCustomerAddresses, { CustomerAddress } from "../../address/_hooks/useGetAddresses";
+import useGetCustomerAddresses, {
+  CustomerAddress,
+} from "../../address/_hooks/useGetAddresses";
 import useCreatePickupOrder from "../_hooks/useCreateOrder";
 import useSuggestOutlet from "../_hooks/useSuggestOutlet";
 
 const services = [
   { id: "express-wash", name: "Cuci Kiloan Express", desc: "Selesai 1×24 jam" },
   { id: "reguler-wash", name: "Cuci Kiloan Reguler", desc: "Selesai 2–3 hari" },
-  { id: "express-dry",  name: "Cuci Kering Express", desc: "Selesai dalam 6 jam" },
+  {
+    id: "express-dry",
+    name: "Cuci Kering Express",
+    desc: "Selesai dalam 6 jam",
+  },
 ];
 
 export default function CreateOrderPage() {
-  const [service, setService] = useState<string>("");
   const router = useRouter();
-  const { data: addresses = [], isLoading: addrListLoading } = useGetCustomerAddresses();
+
+  const { data: addresses = [], isLoading: addrListLoading } =
+    useGetCustomerAddresses();
   const [addressId, setAddressId] = useState<string | undefined>(undefined);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   useEffect(() => {
     if (!addressId && addresses.length > 0) {
-      const primary = addresses.find(a => a.isPrimary) ?? addresses[0];
+      const primary = addresses.find((a) => a.isPrimary) ?? addresses[0];
       setAddressId(primary.id);
     }
   }, [addresses, addressId]);
 
-  const { data: addressDetail, isLoading: addrLoading } = useGetCustomerAddressById(addressId);
-
+  const { data: addressDetail, isLoading: addrLoading } =
+    useGetCustomerAddressById(addressId);
   const {
     data: suggest,
     isFetching: suggestLoading,
     isError: suggestError,
   } = useSuggestOutlet(addressId);
+
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const toggleService = (name: string, checked: boolean | string) => {
+    const isOn = checked === true || checked === "true";
+    setSelectedServices((curr) =>
+      isOn
+        ? Array.from(new Set([...curr, name]))
+        : curr.filter((s) => s !== name)
+    );
+  };
+
+  const [useSatuan, setUseSatuan] = useState(false);
+  const [satuanName, setSatuanName] = useState("");
 
   const { createPickUpOrderMutation } = useCreatePickupOrder();
   const outletNameAfterCreate = useMemo(
@@ -58,19 +88,32 @@ export default function CreateOrderPage() {
   }
 
   function handleSubmit() {
-    if (!service || !addressId) return;
+    if (!addressId) return;
+
+    const parts: string[] = [];
+    if (selectedServices.length) parts.push(selectedServices.join(", "));
+    if (useSatuan && satuanName.trim())
+      parts.push(`Satuan: ${satuanName.trim()}`);
+
+    const notes = parts.join(" | ");
+    if (!notes) return; 
+
     createPickUpOrderMutation.mutate({
       customerAddressId: addressId,
-      notes: service, 
+      notes,
     });
   }
 
   const submitDisabled =
-    !service || !addressId || createPickUpOrderMutation.isPending;
+    (!selectedServices.length && !(useSatuan && satuanName.trim())) ||
+    !addressId ||
+    createPickUpOrderMutation.isPending;
 
   return (
     <>
-      <Head><title>Buat Order — Laundr</title></Head>
+      <Head>
+        <title>Buat Order — Laundr</title>
+      </Head>
 
       <div className="relative min-h-screen bg-neutral-50 flex flex-col">
         <div
@@ -81,7 +124,7 @@ export default function CreateOrderPage() {
               "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
           }}
         />
-                <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button
               variant="ghost"
@@ -99,10 +142,7 @@ export default function CreateOrderPage() {
 
         <main className="flex-1 mx-auto w-full max-w-sm px-4 py-6">
           <Card className="rounded-2xl shadow-sm border-neutral-200">
-
-
             <CardContent className="space-y-5">
-              {/* Alamat Penjemputan (klik untuk pilih) */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
                   <MapPin className="h-4 w-4 text-neutral-500" />
@@ -118,7 +158,9 @@ export default function CreateOrderPage() {
                     {addrListLoading || addrLoading
                       ? "Memuat alamat…"
                       : addressDetail
-                      ? `${addressDetail.label ?? "Alamat"} — ${addressDetail.address}`
+                      ? `${addressDetail.label ?? "Alamat"} — ${
+                          addressDetail.address
+                        }`
                       : addresses.length === 0
                       ? "Belum ada alamat. Tambah dulu."
                       : "Pilih alamat"}
@@ -136,7 +178,7 @@ export default function CreateOrderPage() {
                       </SheetHeader>
 
                       <div className="mt-4 space-y-2">
-                        {addresses.map(a => {
+                        {addresses.map((a) => {
                           const active = a.id === addressId;
                           return (
                             <button
@@ -144,18 +186,31 @@ export default function CreateOrderPage() {
                               type="button"
                               onClick={() => handleChooseAddress(a)}
                               className={`w-full text-left rounded-xl border p-3 hover:bg-neutral-100 transition ${
-                                active ? "border-neutral-900 bg-neutral-900/5" : "border-neutral-200"
+                                active
+                                  ? "border-neutral-900 bg-neutral-900/5"
+                                  : "border-neutral-200"
                               }`}
                             >
                               <div className="flex items-start gap-2">
-                                <div className={`mt-0.5 h-4 w-4 rounded-full border ${active ? "bg-neutral-900 border-neutral-900" : "border-neutral-400"}`}>
-                                  {active && <Check className="h-4 w-4 text-white" />}
+                                <div
+                                  className={`mt-0.5 h-4 w-4 rounded-full border ${
+                                    active
+                                      ? "bg-neutral-900 border-neutral-900"
+                                      : "border-neutral-400"
+                                  }`}
+                                >
+                                  {active && (
+                                    <Check className="h-4 w-4 text-white" />
+                                  )}
                                 </div>
                                 <div>
                                   <p className="text-sm font-medium text-neutral-900">
-                                    {a.label ?? "Alamat"}{a.isPrimary ? " · Utama" : ""}
+                                    {a.label ?? "Alamat"}
+                                    {a.isPrimary ? " · Utama" : ""}
                                   </p>
-                                  <p className="text-xs text-neutral-600">{a.address}</p>
+                                  <p className="text-xs text-neutral-600">
+                                    {a.address}
+                                  </p>
                                 </div>
                               </div>
                             </button>
@@ -163,7 +218,9 @@ export default function CreateOrderPage() {
                         })}
 
                         {addresses.length === 0 && (
-                          <p className="text-sm text-neutral-500">Belum ada alamat. Silakan tambahkan terlebih dulu.</p>
+                          <p className="text-sm text-neutral-500">
+                            Belum ada alamat. Silakan tambahkan terlebih dulu.
+                          </p>
                         )}
                       </div>
                     </SheetContent>
@@ -171,7 +228,6 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
-              {/* Outlet Terdekat (suggest sebelum submit) */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
                   <Store className="h-4 w-4 text-neutral-500" />
@@ -190,7 +246,6 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
-              {/* Outlet (muncul setelah create sukses) */}
               {!!outletNameAfterCreate && (
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
@@ -203,31 +258,89 @@ export default function CreateOrderPage() {
                 </div>
               )}
 
-              {/* Pilih Layanan */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
                   <Package className="h-4 w-4 text-neutral-500" />
                   Pilih Layanan
                 </Label>
 
-                <RadioGroup value={service} onValueChange={setService} className="grid gap-3">
-                  {services.map((s) => (
-                    <div
-                      key={s.id}
-                      className="rounded-xl border border-neutral-200 hover:bg-neutral-100 data-[state=checked]:border-neutral-900 data-[state=checked]:bg-neutral-900/5 transition"
-                    >
-                      <label htmlFor={s.id} className="flex items-start gap-3 p-3 cursor-pointer w-full">
-                        <RadioGroupItem id={s.id} value={s.name} className="mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-neutral-900">{s.name}</p>
-                          <p className="text-xs text-neutral-600">{s.desc}</p>
-                        </div>
-                      </label>
-                    </div>
-                  ))}
-                </RadioGroup>
+                <div className="grid gap-3">
+                  {services.map((s) => {
+                    const checked = selectedServices.includes(s.name);
+                    return (
+                      <div
+                        key={s.id}
+                        className={`rounded-xl border p-3 transition ${
+                          checked
+                            ? "border-neutral-900 bg-neutral-900/5"
+                            : "border-neutral-200 hover:bg-neutral-100"
+                        }`}
+                      >
+                        <label
+                          htmlFor={s.id}
+                          className="flex items-start gap-3 cursor-pointer"
+                        >
+                          <Checkbox
+                            id={s.id}
+                            checked={checked}
+                            onCheckedChange={(v) => toggleService(s.name, v)}
+                            className="mt-0.5"
+                          />
+                          <div>
+                            <p className="text-sm font-medium text-neutral-900">
+                              {s.name}
+                            </p>
+                            <p className="text-xs text-neutral-600">{s.desc}</p>
+                          </div>
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
 
-                {!!service && <p className="text-xs text-emerald-600">Dipilih: {service}</p>}
+                {selectedServices.length > 0 && (
+                  <p className="text-xs text-emerald-600">
+                    Dipilih: {selectedServices.join(", ")}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-neutral-800">
+                  Layanan Satuan (opsional)
+                </Label>
+                <div
+                  className={`rounded-2xl border ${
+                    useSatuan
+                      ? "border-neutral-900 bg-neutral-900/5"
+                      : "border-neutral-200"
+                  } p-3`}
+                >
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Checkbox
+                      checked={useSatuan}
+                      onCheckedChange={(v) => setUseSatuan(v === true)}
+                    />
+                    <span className="text-[13px] text-neutral-900 font-medium">
+                      Tambahkan item satuan
+                    </span>
+                  </label>
+
+                  {useSatuan && (
+                    <div className="mt-3 grid gap-2">
+                      <Input
+                        value={satuanName}
+                        onChange={(e) => setSatuanName(e.target.value)}
+                        placeholder="Contoh: Kemeja, Jas, Selimut"
+                        className="h-11 rounded-xl bg-white"
+                      />
+                      <p className="text-[11px] text-neutral-500">
+                        Tulis satu item (bebas). Jika lebih dari satu jenis,
+                        pisahkan dengan koma.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <Button
@@ -236,7 +349,9 @@ export default function CreateOrderPage() {
                 disabled={submitDisabled}
                 className="w-full h-12 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-50"
               >
-                {createPickUpOrderMutation.isPending ? "Membuat..." : "Buat Order"}
+                {createPickUpOrderMutation.isPending
+                  ? "Membuat..."
+                  : "Buat Order"}
               </Button>
             </CardContent>
           </Card>

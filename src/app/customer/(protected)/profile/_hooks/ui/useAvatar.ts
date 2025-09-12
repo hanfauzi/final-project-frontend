@@ -13,7 +13,6 @@ export function useAvatar(
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string>(initialPhotoUrl ?? "");
 
-  // Buat preview & revoke object URL kalau file berubah
   useEffect(() => {
     const v = formik.values.photoUrl;
     if (v instanceof File) {

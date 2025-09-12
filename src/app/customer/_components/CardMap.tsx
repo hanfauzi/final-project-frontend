@@ -1,4 +1,3 @@
-// components/CardMap.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -32,10 +31,10 @@ export type LocationPick = {
 };
 
 export type InitialLocation = {
-  lat: number;             // wajib: latitude tersimpan
-  lng: number;             // wajib: longitude tersimpan
-  addressLine?: string;    // optional: teks alamat yang sudah ada
-  city?: string;           // optional: kota yang sudah ada
+  lat: number;             
+  lng: number;             
+  addressLine?: string;  
+  city?: string;          
 };
 interface CardMapProps {
   onLocationSelect: (loc: LocationPick) => void;
@@ -48,7 +47,6 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const shouldCloseRef = useRef(false);
 
-  // simpan ref untuk fungsi agar efek tidak loop
   const onSelectRef = useRef(onLocationSelect);
   useEffect(() => { onSelectRef.current = onLocationSelect; }, [onLocationSelect]);
 
@@ -57,7 +55,6 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
 
   const handleOpen = () => setIsOpen(true);
 
-  // Geolokasi sekali saja
   useEffect(() => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) return;
     navigator.geolocation.getCurrentPosition(
@@ -67,15 +64,12 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
         void getLocationRef.current(next[0], next[1]);
       },
       () => {
-        // biarkan user memilih di peta kalau izin gagal
         setCurrentPosition(null);
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
-    // kosong: jalan sekali
   }, []);
 
-  // Saat data reverse geocode siap → kirim ke parent
   useEffect(() => {
     if (!data || !currentPosition) return;
     onSelectRef.current({
@@ -90,7 +84,6 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
     }
   }, [data, currentPosition]);
 
-  // Klik peta → update & reverse geocode → dialog ditutup setelah data masuk
   function ClickHandler() {
     useMapEvents({
       click: (evt) => {
