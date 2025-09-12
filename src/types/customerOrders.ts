@@ -14,4 +14,5 @@ export type CustomerOrder = {
   updatedAt: string;
   deletedAt: string | null;
   outlets: OutletLite | null;
+  invoiceNo: string | null;
 };

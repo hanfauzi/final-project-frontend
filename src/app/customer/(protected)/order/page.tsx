@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Package,
   RefreshCw,
+  Hash, // ⬅️ NEW
 } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
@@ -18,13 +19,7 @@ import useGetCustomerOrders from "./_hooks/useGetOrders";
 import { formatDate } from "./_components/FormatDate";
 
 export default function CustomerOrdersPage() {
-  const {
-    data: orders,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useGetCustomerOrders();
+  const { data: orders, isLoading, isError, refetch, isFetching } = useGetCustomerOrders();
   const router = useRouter();
 
   return (
@@ -53,9 +48,7 @@ export default function CustomerOrdersPage() {
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <div className="text-[15px] font-semibold text-neutral-900">
-                Order Saya
-              </div>
+              <div className="text-[15px] font-semibold text-neutral-900">Order Saya</div>
             </div>
             <Button
               variant="ghost"
@@ -64,13 +57,12 @@ export default function CustomerOrdersPage() {
               disabled={isFetching}
               className="gap-1"
             >
-              <RefreshCw
-                className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`}
-              />
+              <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
               <span className="text-sm">Refresh</span>
             </Button>
           </div>
         </div>
+
         <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
           {isLoading && (
             <div className="py-10 grid place-items-center text-neutral-600">
@@ -80,60 +72,67 @@ export default function CustomerOrdersPage() {
           )}
 
           {isError && !isLoading && (
-            <div className="py-10 text-center text-red-600">
-              Gagal memuat order.
-            </div>
+            <div className="py-10 text-center text-red-600">Gagal memuat order.</div>
           )}
 
           {!isLoading && !isError && (orders?.length ?? 0) === 0 && (
-            <div className="py-10 text-center text-neutral-600">
-              Belum ada order.
-            </div>
+            <div className="py-10 text-center text-neutral-600">Belum ada order.</div>
           )}
 
           {!isLoading &&
             !isError &&
-            (orders ?? []).map((o: CustomerOrder) => (
-              <Link
-                key={o.id}
-                href={`/customer/order/${o.id}`}
-                className="block focus:outline-none focus:ring-2 focus:ring-neutral-900/20 rounded-2xl"
-              >
-                <Card className="rounded-2xl border-neutral-200 hover:bg-white">
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <Package className="h-4 w-4 text-neutral-500" />
-                          <div className="text-[13px] font-medium text-neutral-900">
-                            {o.notes || "Tanpa catatan"}
+            (orders ?? []).map((o: CustomerOrder) => {
+              const inv = o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
+              return (
+                <Link
+                  key={o.id}
+                  href={`/customer/order/${o.id}`}
+                  className="block focus:outline-none focus:ring-2 focus:ring-neutral-900/20 rounded-2xl"
+                >
+                  <Card className="rounded-2xl border-neutral-200 hover:bg-white">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="space-y-1.5">
+                          {/* Invoice */}
+                          <div className="flex items-center gap-2 text-[12px] text-neutral-600">
+                            <Hash className="h-3.5 w-3.5 text-neutral-500" />
+                            <span className="font-medium text-neutral-800">{inv}</span>
+                          </div>
+
+                          {/* Notes / service */}
+                          <div className="flex items-center gap-2">
+                            <Package className="h-4 w-4 text-neutral-500" />
+                            <div className="text-[13px] font-medium text-neutral-900">
+                              {o.notes || "Tanpa catatan"}
+                            </div>
+                          </div>
+
+                          {/* Created at */}
+                          <div className="flex items-center gap-2">
+                            <CalendarClock className="h-4 w-4 text-neutral-500" />
+                            <div className="text-[12px] text-neutral-600">
+                              {formatDate(o.createdAt)}
+                            </div>
+                          </div>
+
+                          <div className="pt-1">
+                            <StatusBadge status={o.status} />
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <CalendarClock className="h-4 w-4 text-neutral-500" />
-                          <div className="text-[12px] text-neutral-600">
-                            {formatDate(o.createdAt)}
-                          </div>
-                        </div>
-
-                        <div className="pt-1">
-                          <StatusBadge status={o.status} />
-                        </div>
+                        <ChevronRight className="h-5 w-5 text-neutral-400" />
                       </div>
-
-                      <ChevronRight className="h-5 w-5 text-neutral-400" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
         </main>
 
-         <div className="sticky bottom-0 z-40 text-white ">
-          <div className="mx-auto w-full max-w-sm px-4 py-3 pb-[max(env(safe-area-inset-bottom),0px)]">
-            <Button asChild className="w-full h-12 rounded-xl   ">
+        {/* Sticky create button */}
+        <div className="sticky bottom-0 z-40">
+          <div className="mx-auto w-full max-w-sm px-4 py-3 text-white pb-[max(env(safe-area-inset-bottom),0px)] bg-white/90 backdrop-blur border-t border-neutral-200">
+            <Button asChild className="w-full h-12 rounded-xl bg-neutral-900  hover:bg-neutral-800">
               <Link href="/customer/order/create">Create Order</Link>
             </Button>
           </div>
