@@ -21,11 +21,11 @@ export default function useEditEmail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success(
-        "Update email successfully! Please check your email to verify"
+        "Email berhasil diperbarui! Silakan verifikasi email baru Anda",
       );
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal memperbarui email");
     },
   });
 

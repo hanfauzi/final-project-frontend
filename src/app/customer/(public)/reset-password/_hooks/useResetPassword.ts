@@ -21,11 +21,11 @@ export default function useResetPassword() {
     },
     onSuccess: () => {
       toast.success(
-        "Reset password succesfully! You can login with your new password!"
+        "Reset password berhasil. Silakan login dengan password baru Anda"
       );
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal mereset password.");
     },
   });
 

@@ -20,10 +20,10 @@ export default function useSetPassword() {
       );
     },
     onSuccess: () => {
-      toast.success("Set password successfully and your account has been verified. You can login now!");
+      toast.success("Atur password berhasil. Silakan login dengan password baru Anda");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal mengatur password");
     },
   });
 

@@ -16,10 +16,10 @@ export default function useResendVerifyEmail() {
       );
     },
     onSuccess: () => {
-      toast.success( "Verification email resent. Please verify your account! The link has been sent to your email");
+      toast.success( "Email verifikasi berhasil dikirim ulang. Silakan periksa email Anda!" );
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Resend email failed!");
+      toast.error(error.response?.data.message ?? "Gagal mengirim ulang email verifikasi");
     },
   });
 

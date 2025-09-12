@@ -21,10 +21,10 @@ export default function useDeleteCustomerAddress() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
-      toast.success("Alamat berhasil dihapus.");
+      toast.success("Alamat berhasil dihapus");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message ?? "Gagal menghapus alamat.");
+      toast.error(error.response?.data?.message ?? "Gagal menghapus alamat");
     },
   });
 

@@ -37,11 +37,11 @@ const useLoginHook = () => {
     },
     onSuccess: (data: CustomerStore) => {
       onCustomerAuthSuccess({ customer: data });
-      toast.success("Sign in success");
+      toast.success("Login berhasil");
       router.replace(next ?? "/");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Login gagal");
     },
   });
 

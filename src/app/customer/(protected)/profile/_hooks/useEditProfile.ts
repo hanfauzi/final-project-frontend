@@ -30,10 +30,10 @@ export default function useEditProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success("Update profile successfull!");
+      toast.success("Profil berhasil diperbarui!");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal memperbarui profil.");
     },
   });
 
