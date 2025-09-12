@@ -20,11 +20,11 @@ const useRegisterHook = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Register success");
+      toast.success("Regitrasi berhasil. Silakan verifikasi email Anda! Tautan telah dikirim ke email Anda");
       router.replace("/customer/login");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Registrasi gagal");
     },
   });
 

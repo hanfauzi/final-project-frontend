@@ -37,7 +37,7 @@ export default function useEditCustomerAddress(id: string) {
       toast.success("Alamat berhasil diperbarui!");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message ?? "Gagal memperbarui alamat.");
+      toast.error(error.response?.data?.message ?? "Gagal memperbarui alamat");
     },
   });
 

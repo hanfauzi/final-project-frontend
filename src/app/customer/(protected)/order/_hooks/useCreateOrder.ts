@@ -38,11 +38,11 @@ const router = useRouter();
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
 
-      toast.success("Your pickup order has been created successfully!");
+      toast.success("Pickup order berhasil dibuat");
       router.replace("/customer/order");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal membuat order");
     },
   });
 

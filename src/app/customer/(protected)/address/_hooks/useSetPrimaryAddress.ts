@@ -19,10 +19,10 @@ export default function useSetPrimaryCustomerAddress(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
       queryClient.invalidateQueries({ queryKey: ["address", id] });
-      toast.success("Alamat dijadikan utama.");
+      toast.success("Alamat dijadikan utama");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message ?? "Gagal menjadikan alamat utama.");
+      toast.error(error.response?.data?.message ?? "Gagal menjadikan alamat utama");
     },
   });
 

@@ -31,10 +31,10 @@ export default function useCreateCustomerAddress() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["address"] });
-      toast.success("Alamat berhasil ditambahkan.");
+      toast.success("Alamat berhasil ditambahkan");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(error.response?.data?.message ?? "Gagal menambahkan alamat.");
+      toast.error(error.response?.data?.message ?? "Gagal menambahkan alamat");
     },
   });
 

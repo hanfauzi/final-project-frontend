@@ -16,10 +16,10 @@ export default function useSendResetPasswordEmail() {
       );
     },
     onSuccess: () => {
-      toast.success("Reset password link has been sent to your email!");
+      toast.success("Email reset password berhasil dikirim. Silakan periksa email Anda!");
     },
     onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(error.response?.data.message ?? "Something went wrong!");
+      toast.error(error.response?.data.message ?? "Gagal mengirim email reset password.");
     },
   });
 
