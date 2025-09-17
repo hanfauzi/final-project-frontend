@@ -33,7 +33,7 @@ export default function RootLayout({
         >
           <ReactQueryProvider>{children}</ReactQueryProvider>
         </GoogleOAuthProvider>
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="top-center" />
 
        
         

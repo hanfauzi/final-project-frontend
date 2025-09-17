@@ -8,7 +8,8 @@ import {
   Clock,
   Hash,
   Package,
-  Store
+  Store,
+  CreditCard
 } from "lucide-react";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
@@ -16,24 +17,24 @@ import { formatDate } from "../_components/FormatDate";
 import { StatusBadge } from "../_components/StatusBadge";
 import useCancelOrder from "../_hooks/useCancelPickUpOrder";
 import useGetCustomerOrderById from "../_hooks/useGetOrderById";
+import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
 
 export default function OrderDetailPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
 
-  const { data: order, isLoading, isError } =
-    useGetCustomerOrderById(id);
-
-  const { cancelOrderMutation } = useCancelOrder(); 
+  const { data: order, isLoading, isError } = useGetCustomerOrderById(id);
+  const { cancelOrderMutation } = useCancelOrder();
+  const { mutate: createSnap, isPending: creatingSnap } = useCreateOrReusePayment(); // ← pakai hook
 
   const outletDisplay =
-    order?.outlets?.name ??
-    (order?.outletId ? `Outlet #${order.outletId}` : "-");
+    order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
 
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
   const canCancel = !!order && order.status === "WAITING_FOR_CONFIRMATION";
+  const canPay = !!order && order.status === "WAITING_FOR_PAYMENT"; // ← kondisi tampil tombol bayar
 
   return (
     <>
@@ -66,7 +67,6 @@ export default function OrderDetailPage() {
                 Detail Order
               </div>
             </div>
-
           </div>
         </div>
 
@@ -99,7 +99,6 @@ export default function OrderDetailPage() {
             <>
               <Card className="rounded-2xl border-neutral-200">
                 <CardContent className="p-4 space-y-4">
-                  {/* Invoice */}
                   <div className="flex items-start gap-2">
                     <Hash className="h-4 w-4 text-neutral-500 mt-0.5" />
                     <div>
@@ -161,6 +160,35 @@ export default function OrderDetailPage() {
                 </CardContent>
               </Card>
 
+              {canPay && (
+                <Card className="rounded-2xl border-neutral-200">
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4 text-neutral-600" />
+                      <div className="text-[13px] font-medium text-neutral-900">
+                        Pembayaran
+                      </div>
+                    </div>
+                    <p className="text-[12px] text-neutral-600">
+                      Silakan lanjutkan pembayaran untuk memproses pengantaran.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        className="w-full h-11 rounded-xl"
+                        disabled={creatingSnap}
+                        onClick={() => {
+                          if (!id) return;
+                          createSnap({ orderHeaderId: id });
+                        }}
+                      >
+                        {creatingSnap ? "Memproses" : "Bayar sekarang"}
+                      </Button>
+
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {canCancel && (
                 <div className="pt-2">
                   <Button
@@ -169,9 +197,7 @@ export default function OrderDetailPage() {
                     disabled={cancelOrderMutation.isPending}
                     onClick={() => cancelOrderMutation.mutate(order.id)}
                   >
-                    {cancelOrderMutation.isPending
-                      ? "Membatalkan…"
-                      : "Batalkan Order"}
+                    {cancelOrderMutation.isPending ? "Membatalkan…" : "Batalkan Order"}
                   </Button>
                 </div>
               )}

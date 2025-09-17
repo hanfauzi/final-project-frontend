@@ -29,7 +29,17 @@ export function StatusBadge({ status }: { status: string }) {
       case "CANCELLED":
         return {
           text: "Dibatalkan",
-          classes: "bg-neutral-200 text-neutral-700",
+          classes: "bg-red-200 text-neutral-700",
+        };
+        case "WAITING_FOR_PAYMENT":
+        return {
+          text: "Menunggu Pembayaran",
+          classes: "bg-yellow-100 text-yellow-800",
+        };
+        case "READY_FOR_DELIVERY":
+        return {
+          text: "Siap Diantar",
+          classes: "bg-purple-100 text-purple-800",
         };
       default:
         return { text: status, classes: "bg-neutral-200 text-neutral-700" };
