@@ -6,7 +6,11 @@ import { persist } from "zustand/middleware";
 export interface CustomerStore extends Customer {
   token: string;
 }
-export interface EmployeeStore extends Employee {
+export interface EmployeeStore {
+  id: string;
+  role: "SUPER_ADMIN" | "OUTLET_ADMIN";
+  email: string;
+  outletId?: string | null;
   token: string;
 }
 
