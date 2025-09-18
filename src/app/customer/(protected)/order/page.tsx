@@ -1,73 +1,104 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
+import useGetCustomerOrders from "./_hooks/useGetOrders";
+import { useDebounce } from "./_hooks/useDebounce";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CustomerOrder } from "@/types/customerOrders";
-import {
-  CalendarClock,
-  ChevronLeft,
-  ChevronRight,
-  Hash,
-  Package,
-  Plus,
-  RefreshCw,
-} from "lucide-react";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { formatDate } from "./_components/FormatDate";
+import { Input } from "@/components/ui/input";
 import { StatusBadge } from "./_components/StatusBadge";
-import useGetCustomerOrders from "./_hooks/useGetOrders";
+import { formatDate } from "./_components/FormatDate";
+import { DateSheet } from "./_components/DateSheet";
+import {
+  ChevronLeft, ChevronRight, Hash, Package,
+  CalendarClock, Plus, RefreshCw, X
+} from "lucide-react";
+import { StatusSheet } from "./_components/StatusSheet";
 
 export default function CustomerOrdersPage() {
-  const {
-    data: orders,
-    isLoading,
-    isError,
-  } = useGetCustomerOrders();
   const router = useRouter();
+
+  // state ketikan user (selalu tersimpan di UI)
+  const [page, setPage] = useState(1);
+  const [invoiceNo, setInvoiceNo] = useState("");       // <- user typing di sini
+  const [status, setStatus] = useState<string | undefined>();
+  const [dateFrom, setDateFrom] = useState<string | undefined>();
+  const [dateTo, setDateTo] = useState<string | undefined>();
+
+  // kirim ke server pakai nilai yang SUDAH didebounce (500ms)
+  const debouncedInvoice = useDebounce(invoiceNo, 500);
+
+  const { data, isLoading, isError, isFetching } = useGetCustomerOrders({
+    page,
+    take: 5,
+    status,
+    invoiceNo: debouncedInvoice || undefined, // <- ini yang dipakai query
+    dateFrom,
+    dateTo,
+  });
+
+  const orders = data?.data ?? [];
+  const meta = data?.meta;
 
   return (
     <>
-      <Head>
-        <title>Order Saya — Laundr</title>
-      </Head>
+      <Head><title>Order Saya — Laundr</title></Head>
 
       <div className="relative min-h-screen bg-neutral-50">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
-          }}
-        />
+        {/* topbar */}
         <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <div className="text-[15px] font-semibold text-neutral-900">
-                Order Saya
-              </div>
+              <div className="text-[15px] font-semibold">Order Saya</div>
             </div>
-            <Link
-              href="/customer/order/create"
-              className="inline-flex items-center gap-1.5 text-neutral-900"
-            >
-              <Plus className="h-4 w-4 cursor-pointer" />
-              <span className="text-sm font-medium">Create Order</span>
+            <Link href="/customer/order/create" className="inline-flex items-center gap-1.5 text-neutral-900">
+              <Plus className="h-4 w-4" /><span className="text-sm font-medium">Create Order</span>
             </Link>
           </div>
         </div>
 
-        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
+        {/* search + chips */}
+        <div className="mx-auto w-full max-w-sm px-4 py-3 space-y-2">
+          <div className="relative">
+            <Input
+              placeholder="Cari Invoice / Order ID…"
+              value={invoiceNo}                              // <- simpan ketikan user
+              onChange={(e) => { setInvoiceNo(e.target.value); setPage(1); }}
+              className="h-10 rounded-xl text-[13px] pr-20"
+            />
+            {/* clear + indikator fetching kecil */}
+            <div className="absolute inset-y-0 right-2 flex items-center gap-2">
+              {isFetching && !isLoading && (
+                <RefreshCw className="h-4 w-4 animate-spin text-neutral-500" />
+              )}
+              {invoiceNo && (
+                <Button variant="ghost" size="icon" className="h-7 w-7"
+                  onClick={() => { setInvoiceNo(""); setPage(1); }}>
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <StatusSheet value={status} onChange={(v) => { setStatus(v); setPage(1); }} />
+            <DateSheet
+              from={dateFrom}
+              to={dateTo}
+              onApply={(f, t) => { setDateFrom(f); setDateTo(t); setPage(1); }}
+              onClear={() => { setDateFrom(undefined); setDateTo(undefined); setPage(1); }}
+            />
+          </div>
+        </div>
+
+        {/* list */}
+        <main className="mx-auto w-full max-w-sm px-4 pb-6 space-y-3">
           {isLoading && (
             <div className="py-10 grid place-items-center text-neutral-600">
               <RefreshCw className="h-5 w-5 animate-spin mb-2" />
@@ -76,64 +107,62 @@ export default function CustomerOrdersPage() {
           )}
 
           {isError && !isLoading && (
-            <div className="py-10 text-center text-red-600">
-              Gagal memuat order.
-            </div>
+            <div className="py-10 text-center text-red-600">Gagal memuat order.</div>
           )}
 
-          {!isLoading && !isError && (orders?.length ?? 0) === 0 && (
-            <div className="py-10 text-center text-neutral-600">
-              Belum ada order.
-            </div>
+          {!isLoading && !isError && orders.length === 0 && (
+            <div className="py-10 text-center text-neutral-600">Belum ada order.</div>
           )}
 
-          {!isLoading &&
-            !isError &&
-            (orders ?? []).map((o: CustomerOrder) => {
-              const inv = o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
-              return (
-                <Link
-                  key={o.id}
-                  href={`/customer/order/${o.id}`}
-                  className="block focus:outline-none focus:ring-2 focus:ring-neutral-900/20 rounded-2xl"
-                >
-                  <Card className="rounded-2xl border-neutral-200 hover:bg-white">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1.5">
-                          <div className="flex items-center gap-2 text-[12px] text-neutral-600">
-                            <Hash className="h-3.5 w-3.5 text-neutral-500" />
-                            <span className="font-medium text-neutral-800">
-                              {inv}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <Package className="h-4 w-4 text-neutral-500" />
-                            <div className="text-[13px] font-medium text-neutral-900">
-                              {o.notes || "Tanpa catatan"}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <CalendarClock className="h-4 w-4 text-neutral-500" />
-                            <div className="text-[12px] text-neutral-600">
-                              {formatDate(o.createdAt)}
-                            </div>
-                          </div>
-
-                          <div className="pt-1">
-                            <StatusBadge status={o.status} />
-                          </div>
+          {orders.map((o) => {
+            const inv = o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
+            return (
+              <Link key={o.id} href={`/customer/order/${o.id}`} className="block">
+                <Card className="rounded-xl border-neutral-200 hover:bg-white">
+                  <CardContent className="p-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[12px] text-neutral-600">
+                          <Hash className="h-3.5 w-3.5 text-neutral-500" />
+                          <span className="font-medium text-neutral-800">{inv}</span>
                         </div>
-
-                        <ChevronRight className="h-5 w-5 text-neutral-400" />
+                        <div className="flex items-center gap-1.5">
+                          <Package className="h-4 w-4 text-neutral-500" />
+                          <div className="text-[13px] font-medium">{o.notes || "Tanpa catatan"}</div>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <CalendarClock className="h-4 w-4 text-neutral-500" />
+                          <div className="text-[12px] text-neutral-600">{formatDate(o.createdAt)}</div>
+                        </div>
+                        <StatusBadge status={o.status} />
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
+                      <ChevronRight className="h-5 w-5 text-neutral-400 mt-1" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+
+          {meta && meta.totalPages > 1 && (
+            <div className="flex justify-between items-center pt-2">
+              <Button
+                variant="outline" size="sm" className="rounded-full"
+                disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" /> Prev
+              </Button>
+              <span className="text-sm text-neutral-600">
+                {meta.page} / {meta.totalPages}
+              </span>
+              <Button
+                variant="outline" size="sm" className="rounded-full"
+                disabled={page >= meta.totalPages} onClick={() => setPage(p => Math.min(meta.totalPages, p + 1))}
+              >
+                Next <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          )}
         </main>
       </div>
     </>
