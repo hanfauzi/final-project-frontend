@@ -1,3 +1,4 @@
+import { Outlet } from "./outlet";
 import { EmployeeRole } from "./roles";
 import { Shift } from "./shift";
 
@@ -10,7 +11,8 @@ export interface Employee {
   role: EmployeeRole;
   phoneNumber: string;
   address: string;
-  photoUrl: string | null;
-
+  photoUrl: string | undefined;
+  
+  outlet? : Outlet
   shift?: Shift
 }
