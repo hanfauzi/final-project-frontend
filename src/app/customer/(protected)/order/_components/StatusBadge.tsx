@@ -41,6 +41,11 @@ export function StatusBadge({ status }: { status: string }) {
           text: "Siap Diantar",
           classes: "bg-purple-100 text-purple-800",
         };
+        case "DELIVERED_TO_CUSTOMER":
+        return {
+          text: "Pesanan Telah Dikirim",
+          classes: "bg-green-100 text-green-800",
+        };
       default:
         return { text: status, classes: "bg-neutral-200 text-neutral-700" };
     }
