@@ -9,7 +9,7 @@ import {
   Hash,
   Package,
   Store,
-  CreditCard
+  CreditCard,
 } from "lucide-react";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import { StatusBadge } from "../_components/StatusBadge";
 import useCancelOrder from "../_hooks/useCancelPickUpOrder";
 import useGetCustomerOrderById from "../_hooks/useGetOrderById";
 import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
+import useConfirmationOrder from "../_hooks/useConfirmationOrder";
 
 export default function OrderDetailPage() {
   const router = useRouter();
@@ -26,15 +27,19 @@ export default function OrderDetailPage() {
 
   const { data: order, isLoading, isError } = useGetCustomerOrderById(id);
   const { cancelOrderMutation } = useCancelOrder();
-  const { mutate: createSnap, isPending: creatingSnap } = useCreateOrReusePayment(); // ← pakai hook
+  const { mutate: createSnap, isPending: creatingSnap } =
+    useCreateOrReusePayment();
+  const { confirmationOrderMutation } = useConfirmationOrder();
 
   const outletDisplay =
-    order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
+    order?.outlets?.name ??
+    (order?.outletId ? `Outlet #${order.outletId}` : "-");
 
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
   const canCancel = !!order && order.status === "WAITING_FOR_CONFIRMATION";
-  const canPay = !!order && order.status === "WAITING_FOR_PAYMENT"; // ← kondisi tampil tombol bayar
+  const canPay = !!order && order.status === "WAITING_FOR_PAYMENT";
+  const canConfirm = !!order && order.status === "DELIVERED_TO_CUSTOMER";
 
   return (
     <>
@@ -102,7 +107,9 @@ export default function OrderDetailPage() {
                   <div className="flex items-start gap-2">
                     <Hash className="h-4 w-4 text-neutral-500 mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">Invoice</div>
+                      <div className="text-[12px] text-neutral-500">
+                        Invoice
+                      </div>
                       <div className="text-[13px] font-medium text-neutral-900">
                         {invoiceDisplay}
                       </div>
@@ -117,7 +124,9 @@ export default function OrderDetailPage() {
                   <div className="flex items-start gap-2">
                     <Package className="h-4 w-4 text-neutral-500 mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">Layanan</div>
+                      <div className="text-[12px] text-neutral-500">
+                        Layanan
+                      </div>
                       <div className="text-[13px] font-medium text-neutral-900">
                         {order.notes || "—"}
                       </div>
@@ -183,10 +192,23 @@ export default function OrderDetailPage() {
                       >
                         {creatingSnap ? "Memproses" : "Bayar sekarang"}
                       </Button>
-
                     </div>
                   </CardContent>
                 </Card>
+              )}
+
+              {canConfirm && (
+                <div className="pt-2">
+                  <Button
+                    className="w-full h-11 rounded-xl"
+                    disabled={confirmationOrderMutation.isPending}
+                    onClick={() => id && confirmationOrderMutation.mutate(id)}
+                  >
+                    {confirmationOrderMutation.isPending
+                      ? "Mengonfirmasi"
+                      : "Konfirmasi diterima"}
+                  </Button>
+                </div>
               )}
 
               {canCancel && (
@@ -197,7 +219,9 @@ export default function OrderDetailPage() {
                     disabled={cancelOrderMutation.isPending}
                     onClick={() => cancelOrderMutation.mutate(order.id)}
                   >
-                    {cancelOrderMutation.isPending ? "Membatalkan…" : "Batalkan Order"}
+                    {cancelOrderMutation.isPending
+                      ? "Membatalkan"
+                      : "Batalkan Order"}
                   </Button>
                 </div>
               )}
