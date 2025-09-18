@@ -11,6 +11,17 @@ import {
   Store,
   CreditCard,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
 import { formatDate } from "../_components/FormatDate";
@@ -213,16 +224,37 @@ export default function OrderDetailPage() {
 
               {canCancel && (
                 <div className="pt-2">
-                  <Button
-                    variant="destructive"
-                    className="w-full h-11 rounded-xl"
-                    disabled={cancelOrderMutation.isPending}
-                    onClick={() => cancelOrderMutation.mutate(order.id)}
-                  >
-                    {cancelOrderMutation.isPending
-                      ? "Membatalkan"
-                      : "Batalkan Order"}
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className="w-full h-11 rounded-xl"
+                      >
+                        Batalkan Order
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Batalkan Pesanan?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Kamu akan membatalkan pesanan. Pesanan yang telah
+                          dibatalkan tidak akan diproses.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          disabled={cancelOrderMutation.isPending}
+                          onClick={() => cancelOrderMutation.mutate(order.id)}
+                        >
+                          {cancelOrderMutation.isPending
+                            ? "Membatalkan"
+                            : "Batalkan Order"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               )}
             </>
@@ -234,3 +266,14 @@ export default function OrderDetailPage() {
     </>
   );
 }
+
+// <Button
+//   variant="destructive"
+//   className="w-full h-11 rounded-xl"
+//   disabled={cancelOrderMutation.isPending}
+//   onClick={() => cancelOrderMutation.mutate(order.id)}
+// >
+//   {cancelOrderMutation.isPending
+//     ? "Membatalkan"
+//     : "Batalkan Order"}
+// </Button>
