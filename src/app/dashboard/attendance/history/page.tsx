@@ -6,12 +6,16 @@ import useGetEmployee from '../../_hooks/useGetEmployee';
 import useGetAttendanceByEmployee from '../_hooks/useGetAttendanceByEmployee';
 
 const Attendance = () => {
-  const { employee } = useGetEmployee()
+  const { data: employee } = useGetEmployee();
   const now = new Date();
   const defaultYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const [yearMonth, setYearMonth] = useState<string>(defaultYearMonth);
   const monthlyQuery = useMemo(() => ({ yearMonth }), [yearMonth]);
-  const { attendances, loading, error } = useGetAttendanceByEmployee(monthlyQuery)
+  const {
+    data: attendances = [],
+    isLoading: attendanceLoading,
+    isError: isAttendancesError,
+  } = useGetAttendanceByEmployee(monthlyQuery);
   
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -19,7 +23,7 @@ const Attendance = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-4 px-3 pt-4 pb-20 min-h-[calc(100vh-48px)] bg-secondary">
+    <div className="flex flex-col gap-4 px-3 pt-4 pb-20 min-h-[calc(100vh-48px)] bg-neutral-50">
       <div>
         <h1>Hello, <span className="font-bold">{employee?.name ?? "User"}</span></h1>
         <h2>This is your attendance history</h2>
@@ -54,16 +58,16 @@ const Attendance = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
+                {attendanceLoading ? (
                   <tr>
                     <td colSpan={9} className="text-center py-6 text-gray-500">
                       Loading attendance history...
                     </td>
                   </tr>
-                ) : error ? (
+                ) : isAttendancesError ? (
                   <tr>
                     <td colSpan={9} className="text-center py-6 text-red-500">
-                      {error}
+                      {isAttendancesError}
                     </td>
                   </tr>
                 ) : attendances.length === 0 ? (

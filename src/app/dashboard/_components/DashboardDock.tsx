@@ -10,7 +10,7 @@ export default function DashboardDock() {
   const paths = [
     { href: "/dashboard", label: "Home", icon: Home },
     { href: "/dashboard/attendance", label: "Attendance", icon: CalendarClock },
-    { href: "#task", label: "Task", icon: NotebookPen },
+    { href: "/dashboard/task", label: "Task", icon: NotebookPen },
   ];
 
   return (
@@ -31,8 +31,8 @@ export default function DashboardDock() {
             <Link
               key={href}
               href={href}
-              className={`flex flex-col items-center py-2 px-3 ${
-                isActive ? "dock-active" : ""
+              className={`flex flex-col items-center py-2 px-3 relative ${
+                isActive ? "after:content-[''] after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-12 after:h-[3px] after:bg-black after:rounded-full" : "text-gray-500"
               }`}
             >
               <Icon className="size-[1.2em]" />

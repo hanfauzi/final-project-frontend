@@ -7,10 +7,8 @@ import { AttendanceStatus } from "@/types/attendance";
 interface AttendanceStatusProps {
   loading: boolean;
   error?: string | null;
-  todayAttendance?: {
-    status: AttendanceStatus;
-  } | null;
-  todayAttendances: any[];
+  todayAttendance?: { status: AttendanceStatus } | null;
+  todayAttendances?: any[];
 }
 
 const AttendanceStatusCard = ({
@@ -47,12 +45,14 @@ const AttendanceStatusCard = ({
         StatusIcon = CircleAlert;
         break;
     }
-  } else if (todayAttendances.length > 0) {
+  } else if (todayAttendances && todayAttendances.length === 0) {
     statusMessage = "You haven't clocked in yet";
     statusColor = "bg-red-100 shadow-md border-2 border-red-300";
     StatusIcon = CircleAlert;
   } else {
     statusMessage = <Skeleton className="h-4 my-1 w-70" />;
+    statusColor = "bg-white";
+    StatusIcon = Circle;
   }
 
   return (

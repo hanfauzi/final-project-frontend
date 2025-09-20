@@ -2,37 +2,39 @@
 
 import { axiosInstance } from "@/lib/axios";
 import { Employee } from "@/types/employee";
-import { useEffect, useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 const useGetEmployee = () => {
-  const [employee, setEmployee] = useState<Employee | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
-  const raw = typeof window !== "undefined" ? localStorage.getItem("laundr-store") : null;
-  const token = raw ? JSON.parse(raw).state?.employee?.token : null;
+  useEffect(() => {
+    const raw = localStorage.getItem("laundr-store");
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        setToken(parsed.state?.employee?.token ?? null);
+      } catch (err) {
+        console.error("Failed to parse token from storage", err);
+        setToken(null);
+      }
+    }
+    setHydrated(true);
+  }, []);
 
-  const fetchEmployee = useCallback(async () => {
-    setLoading(true);
-    try {
+  return useQuery<Employee, Error>({
+    queryKey: ["employee"],
+    queryFn: async () => {
+      if (!token) throw new Error("No token available");
       const response = await axiosInstance.get("/api/employee/get-employee", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      setEmployee(response.data.data);
-    } catch (err) {
-      console.error("Failed to fetch employee:", err);
-      setError("Failed to fetch employee");
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchEmployee();
-  }, [fetchEmployee]);
-
-  return { employee, loading, error, refetch: fetchEmployee };
+      return response.data.data;
+    },
+    enabled: hydrated && !!token,
+    retry: 1,
+  });
 };
 
 export default useGetEmployee;

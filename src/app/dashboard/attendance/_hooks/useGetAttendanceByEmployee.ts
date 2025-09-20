@@ -3,42 +3,46 @@
 import { axiosInstance } from "@/lib/axios";
 import { Attendance } from "@/types/attendance";
 import { PaginationQueries } from "@/types/pagination";
-import { useEffect, useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 interface GetAttendanceQuery extends PaginationQueries {
   yearMonth?: string;
 }
 
 const useGetAttendanceByEmployee = (query?: GetAttendanceQuery) => {
-  const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const raw = typeof window !== "undefined" ? localStorage.getItem("laundr-store") : null;
-  const token = raw ? JSON.parse(raw).state?.employee?.token : null;
-
-  const fetchAttendances = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/api/attendance/get-attendance-by-employee", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: query ?? {},
-      });
-      
-      setAttendances(response.data.data);
-    } catch (err) {
-      console.error("Failed to fetch attendances:", err);
-      setError("Failed to fetch attendances");
-    } finally {
-      setLoading(false);
-    }
-  }, [token, query])
+  const [token, setToken] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    fetchAttendances();
-  }, [fetchAttendances]);
+    const raw = localStorage.getItem("laundr-store");
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        setToken(parsed.state?.employee?.token ?? null);
+      } catch (err) {
+        console.error("Failed to parse token from storage", err);
+        setToken(null);
+      }
+    }
+    setHydrated(true);
+  }, []);
 
-  return { attendances, loading, error, refetch: fetchAttendances };
-}
+  return useQuery<Attendance[], Error>({
+    queryKey: ["attendances", query],
+    queryFn: async () => {
+      if (!token) throw new Error("No token available");
+      const response = await axiosInstance.get(
+        "/api/attendance/get-attendance-by-employee",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: query ?? {},
+        }
+      );
+      return response.data.data;
+    },
+    enabled: hydrated && !!token,
+  });
+};
 
 export default useGetAttendanceByEmployee;
