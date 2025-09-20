@@ -35,10 +35,10 @@ export function DateSheet({
           </Button>
 
           <div className="grid gap-2">
-            <div className="text-sm text-neutral-600">Pilih Tanggal Sendiri</div>
+            <div className="text-sm text-muted-foreground">Pilih Tanggal Sendiri</div>
             <div className="flex gap-2">
-              <Input type="date" value={start} onChange={e=>setStart(e.target.value)} />
-              <Input type="date" value={end} onChange={e=>setEnd(e.target.value)} />
+              <Input type="date" value={start} onChange={e=>setStart(e.target.value)} className="focus-visible:ring-ring" />
+              <Input type="date" value={end} onChange={e=>setEnd(e.target.value)} className="focus-visible:ring-ring" />
             </div>
           </div>
 

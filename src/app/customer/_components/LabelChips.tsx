@@ -6,6 +6,7 @@ const LABELS: { key: LabelEnum; ui: string }[] = [
   { key: "APARTMENT", ui: "Apartemen" },
   { key: "OTHER", ui: "Lainnya" },
 ];
+
 export function LabelChips({
   value,
   onChange,
@@ -21,10 +22,10 @@ export function LabelChips({
           key={opt.key}
           onClick={() => onChange(opt.key)}
           className={[
-            "h-8 px-3 rounded-full border text-sm",
+            "h-8 px-3 rounded-full border text-sm transition",
             value === opt.key
-              ? "bg-neutral-900 text-white border-neutral-900"
-              : "bg-white text-neutral-800 border-neutral-300 hover:bg-neutral-50",
+              ? "bg-primary text-primary-foreground border-primary"
+              : "bg-card text-foreground border-border hover:bg-accent",
           ].join(" ")}
         >
           {opt.ui}

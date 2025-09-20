@@ -3,23 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  CalendarClock,
-  ChevronLeft,
-  Clock,
-  Hash,
-  Package,
-  Store,
-  CreditCard,
+  CalendarClock, ChevronLeft, Clock, Hash, Package, Store, CreditCard,
 } from "lucide-react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Head from "next/head";
@@ -38,14 +26,10 @@ export default function OrderDetailPage() {
 
   const { data: order, isLoading, isError } = useGetCustomerOrderById(id);
   const { cancelOrderMutation } = useCancelOrder();
-  const { mutate: createSnap, isPending: creatingSnap } =
-    useCreateOrReusePayment();
+  const { mutate: createSnap, isPending: creatingSnap } = useCreateOrReusePayment();
   const { confirmationOrderMutation } = useConfirmationOrder();
 
-  const outletDisplay =
-    order?.outlets?.name ??
-    (order?.outletId ? `Outlet #${order.outletId}` : "-");
-
+  const outletDisplay = order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
   const canCancel = !!order && order.status === "WAITING_FOR_CONFIRMATION";
@@ -54,11 +38,9 @@ export default function OrderDetailPage() {
 
   return (
     <>
-      <Head>
-        <title>Detail Order — Laundr</title>
-      </Head>
+      <Head><title>Detail Order — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -68,44 +50,37 @@ export default function OrderDetailPage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={() => router.back()}
-              >
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <div className="text-[15px] font-semibold text-neutral-900">
-                Detail Order
-              </div>
+              <div className="text-[15px] font-semibold text-foreground">Detail Order</div>
             </div>
           </div>
         </div>
 
         <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
           {isLoading && (
-            <Card className="rounded-2xl border-neutral-200">
-              <CardContent className="p-5 text-neutral-600">
+            <Card className="rounded-2xl border border-border bg-card">
+              <CardContent className="p-5 text-muted-foreground">
                 Memuat detail order…
               </CardContent>
             </Card>
           )}
 
           {isError && !isLoading && (
-            <Card className="rounded-2xl border-neutral-200">
-              <CardContent className="p-5 text-red-600">
+            <Card className="rounded-2xl border border-border bg-card">
+              <CardContent className="p-5 text-destructive">
                 Gagal memuat detail order.
               </CardContent>
             </Card>
           )}
 
           {!isLoading && !isError && !order && (
-            <Card className="rounded-2xl border-neutral-200">
-              <CardContent className="p-5 text-neutral-600">
+            <Card className="rounded-2xl border border-border bg-card">
+              <CardContent className="p-5 text-muted-foreground">
                 Order tidak ditemukan.
               </CardContent>
             </Card>
@@ -113,93 +88,72 @@ export default function OrderDetailPage() {
 
           {!isLoading && !isError && order && (
             <>
-              <Card className="rounded-2xl border-neutral-200">
+              <Card className="rounded-2xl border border-border bg-card text-card-foreground">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-start gap-2">
-                    <Hash className="h-4 w-4 text-neutral-500 mt-0.5" />
+                    <Hash className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">
-                        Invoice
-                      </div>
-                      <div className="text-[13px] font-medium text-neutral-900">
-                        {invoiceDisplay}
-                      </div>
+                      <div className="text-[12px] text-muted-foreground">Invoice</div>
+                      <div className="text-[13px] font-medium text-foreground">{invoiceDisplay}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="text-[12px] text-neutral-500">Status</div>
+                    <div className="text-[12px] text-muted-foreground">Status</div>
                     <StatusBadge status={order.status} />
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <Package className="h-4 w-4 text-neutral-500 mt-0.5" />
+                    <Package className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">
-                        Layanan
-                      </div>
-                      <div className="text-[13px] font-medium text-neutral-900">
-                        {order.notes || "—"}
-                      </div>
+                      <div className="text-[12px] text-muted-foreground">Layanan</div>
+                      <div className="text-[13px] font-medium text-foreground">{order.notes || "—"}</div>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-2">
-                    <CalendarClock className="h-4 w-4 text-neutral-500 mt-0.5" />
+                    <CalendarClock className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">Dibuat</div>
-                      <div className="text-[13px] text-neutral-900">
-                        {formatDate(order.createdAt)}
-                      </div>
+                      <div className="text-[12px] text-muted-foreground">Dibuat</div>
+                      <div className="text-[13px] text-foreground">{formatDate(order.createdAt)}</div>
                     </div>
                   </div>
 
                   {order.estHours !== null && (
                     <div className="flex items-start gap-2">
-                      <Clock className="h-4 w-4 text-neutral-500 mt-0.5" />
+                      <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div>
-                        <div className="text-[12px] text-neutral-500">
-                          Estimasi Selesai
-                        </div>
-                        <div className="text-[13px] text-neutral-900">
-                          ± {order.estHours} jam
-                        </div>
+                        <div className="text-[12px] text-muted-foreground">Estimasi Selesai</div>
+                        <div className="text-[13px] text-foreground">± {order.estHours} jam</div>
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-start gap-2">
-                    <Store className="h-4 w-4 text-neutral-500 mt-0.5" />
+                    <Store className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
-                      <div className="text-[12px] text-neutral-500">Outlet</div>
-                      <div className="text-[13px] text-neutral-900">
-                        {outletDisplay}
-                      </div>
+                      <div className="text-[12px] text-muted-foreground">Outlet</div>
+                      <div className="text-[13px] text-foreground">{outletDisplay}</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {canPay && (
-                <Card className="rounded-2xl border-neutral-200">
+                <Card className="rounded-2xl border border-border bg-card">
                   <CardContent className="p-4 space-y-3">
                     <div className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-neutral-600" />
-                      <div className="text-[13px] font-medium text-neutral-900">
-                        Pembayaran
-                      </div>
+                      <CreditCard className="h-4 w-4 text-muted-foreground" />
+                      <div className="text-[13px] font-medium text-foreground">Pembayaran</div>
                     </div>
-                    <p className="text-[12px] text-neutral-600">
+                    <p className="text-[12px] text-muted-foreground">
                       Silakan lanjutkan pembayaran untuk memproses pengantaran.
                     </p>
                     <div className="flex gap-2">
                       <Button
                         className="w-full h-11 rounded-xl"
                         disabled={creatingSnap}
-                        onClick={() => {
-                          if (!id) return;
-                          createSnap({ orderHeaderId: id });
-                        }}
+                        onClick={() => { if (!id) return; createSnap({ orderHeaderId: id }); }}
                       >
                         {creatingSnap ? "Memproses" : "Bayar sekarang"}
                       </Button>
@@ -215,9 +169,7 @@ export default function OrderDetailPage() {
                     disabled={confirmationOrderMutation.isPending}
                     onClick={() => id && confirmationOrderMutation.mutate(id)}
                   >
-                    {confirmationOrderMutation.isPending
-                      ? "Mengonfirmasi"
-                      : "Konfirmasi diterima"}
+                    {confirmationOrderMutation.isPending ? "Mengonfirmasi" : "Konfirmasi diterima"}
                   </Button>
                 </div>
               )}
@@ -226,11 +178,7 @@ export default function OrderDetailPage() {
                 <div className="pt-2">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        className="w-full h-11 rounded-xl"
-                      >
+                      <Button type="button" variant="destructive" className="w-full h-11 rounded-xl">
                         Batalkan Order
                       </Button>
                     </AlertDialogTrigger>
@@ -238,19 +186,16 @@ export default function OrderDetailPage() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Batalkan Pesanan?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Kamu akan membatalkan pesanan. Pesanan yang telah
-                          dibatalkan tidak akan diproses.
+                          Kamu akan membatalkan pesanan. Pesanan yang telah dibatalkan tidak akan diproses.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
                         <AlertDialogAction
                           disabled={cancelOrderMutation.isPending}
-                          onClick={() => cancelOrderMutation.mutate(order.id)}
+                          onClick={() => order?.id && cancelOrderMutation.mutate(order.id)}
                         >
-                          {cancelOrderMutation.isPending
-                            ? "Membatalkan"
-                            : "Batalkan Order"}
+                          {cancelOrderMutation.isPending ? "Membatalkan" : "Batalkan Order"}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -266,14 +211,3 @@ export default function OrderDetailPage() {
     </>
   );
 }
-
-// <Button
-//   variant="destructive"
-//   className="w-full h-11 rounded-xl"
-//   disabled={cancelOrderMutation.isPending}
-//   onClick={() => cancelOrderMutation.mutate(order.id)}
-// >
-//   {cancelOrderMutation.isPending
-//     ? "Membatalkan"
-//     : "Batalkan Order"}
-// </Button>

@@ -32,13 +32,13 @@ export function HomeCarousel() {
       <div
         ref={containerRef}
         className="w-full overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar"
-      >
+    >
         <div className="flex w-full">
           {slides.map((s, i) => (
             <div key={s.id} className="min-w-full snap-start px-4">
-              <Card className="rounded-2xl overflow-hidden border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+              <Card className="rounded-2xl overflow-hidden border border-border shadow-[0_8px_30px_rgba(0,0,0,.06)]">
                 <CardContent className="p-0">
-                  <div className="h-44 w-full bg-neutral-200 grid place-items-center text-neutral-600 text-sm">
+                  <div className="h-44 w-full bg-muted grid place-items-center text-muted-foreground text-sm">
                     Gambar Carousel {i + 1}
                   </div>
                 </CardContent>
@@ -52,7 +52,9 @@ export function HomeCarousel() {
         {slides.map((s, i) => (
           <span
             key={s.id}
-            className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-neutral-900" : "w-1.5 bg-neutral-300"}`}
+            className={`h-1.5 rounded-full transition-all ${
+              i === index ? "w-6 bg-primary" : "w-1.5 bg-muted"
+            }`}
           />
         ))}
       </div>

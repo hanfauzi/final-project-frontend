@@ -13,19 +13,19 @@ export function InfoBox({
   copyable?: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4">
-      <div className="flex items-center gap-2 text-neutral-500">
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-2 text-muted-foreground">
         {icon}
         <span className="text-xs">{label}</span>
       </div>
       <div className="mt-1 flex items-center justify-between gap-2">
-        <span className="text-sm font-medium text-neutral-900 break-all">{value || "—"}</span>
+        <span className="text-sm font-medium text-foreground break-all">{value || "—"}</span>
         {copyable ? (
           <Button
             type="button"
             size="icon"
             variant="ghost"
-            className="h-8 w-8 text-neutral-500 hover:text-neutral-900"
+            className="h-8 w-8 hover:bg-accent"
             onClick={() => navigator.clipboard.writeText(value)}
             aria-label={`Salin ${label}`}
             title="Salin"

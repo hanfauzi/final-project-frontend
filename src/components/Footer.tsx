@@ -1,54 +1,58 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-neutral-200 bg-neutral-50">
-      <div className="mx-auto w-full max-w-sm px-4 py-6">
-        <div className="text-lg font-black text-neutral-900">Laundr</div>
-        <div className="mt-1 text-sm text-neutral-600">
-          Bikin urusan laundry jadi gampang.
-        </div>
+    <footer className="mt-12 border-t border-border bg-background">
+      <div className="mx-auto w-full max-w-sm px-4 py-8">
+        <Link
+          href="/"
+          aria-label="Ke beranda"
+          className="inline-flex items-center px-2 py-1 -mx-2"
+        >
+          <div className="relative h-7 w-[112px] sm:h-8 sm:w-[128px]">
+            <Image
+              src="/logo-text-laundr.png"
+              alt="Laundr"
+              fill
+              className="object-contain"
+              sizes="(max-width: 640px) 112px, 128px"
+              priority
+            />
+          </div>
+        </Link>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <p className="mt-2 text-base text-muted-foreground">
+          Bikin urusan laundry jadi gampang.
+        </p>
+
+        <div className="mt-6 grid grid-cols-2 gap-6">
           <div>
-            <div className="text-sm font-semibold text-neutral-900 mb-1">
+            <h3 className="text-[15px] font-semibold text-foreground mb-2">
               Navigasi
-            </div>
-            <ul className="space-y-1 text-sm text-neutral-600">
-              <li>
-                <Link href="/">Home</Link>
-              </li>
-              <li>
-                <a href="#about">About Us</a>
-              </li>
-              <li>
-                <a href="#services">Service</a>
-              </li>
-              <li>
-                <Link href="/contact">Contact Us</Link>
-              </li>
+            </h3>
+            <ul className="space-y-1.5 text-[15px] text-muted-foreground">
+              <li><Link href="/" className="hover:text-foreground">Home</Link></li>
+              <li><a href="#about" className="hover:text-foreground">About Us</a></li>
+              <li><a href="#services" className="hover:text-foreground">Service</a></li>
+              <li><Link href="/contact" className="hover:text-foreground">Contact Us</Link></li>
             </ul>
           </div>
+
           <div>
-            <div className="text-sm font-semibold text-neutral-900 mb-1">
+            <h3 className="text-[15px] font-semibold text-foreground mb-2">
               Kontak
-            </div>
-            <ul className="space-y-1 text-sm text-neutral-600">
+            </h3>
+            <ul className="space-y-1.5 text-[15px] text-muted-foreground">
               <li>
                 Telp:{" "}
-                <a
-                  href="tel:+62081234567890"
-                  className="underline underline-offset-2"
-                >
+                <a href="tel:+62081234567890" className="underline underline-offset-2 hover:text-foreground">
                   0812-3456-7890
                 </a>
               </li>
               <li>
                 Email:{" "}
-                <a
-                  href="mailto:hello@laundr.id"
-                  className="underline underline-offset-2"
-                >
+                <a href="mailto:hello@laundr.id" className="underline underline-offset-2 hover:text-foreground">
                   hello@laundr.id
                 </a>
               </li>
@@ -56,10 +60,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div id="about" className="mt-5 text-[11px] text-neutral-500">
+        <div id="about" className="mt-6 text-xs text-muted-foreground/90">
           © {new Date().getFullYear()} Laundr. All rights reserved.
         </div>
       </div>
+
       <div className="h-6" />
     </footer>
   );

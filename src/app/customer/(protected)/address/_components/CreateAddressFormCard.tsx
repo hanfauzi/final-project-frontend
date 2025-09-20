@@ -28,75 +28,67 @@ type Props = {
   coordsReady: boolean;
 };
 
-export default function CreateAddressFormCard({ formik}: Props) {
+export default function CreateAddressFormCard({ formik }: Props) {
   return (
-    <Card className="rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
-
+    <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">Label Alamat</UILabel>
-          <LabelChips
-            value={formik.values.label}
-            onChange={(v) => formik.setFieldValue("label", v)}
-          />
+          <UILabel className="text-foreground">Label Alamat</UILabel>
+          <LabelChips value={formik.values.label} onChange={(v) => formik.setFieldValue("label", v)} />
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">Alamat Lengkap</UILabel>
+          <UILabel className="text-foreground">Alamat Lengkap</UILabel>
           <Textarea
             placeholder="Nama jalan, nomor rumah, RT/RW, dsb"
             value={formik.values.address}
             onChange={(e) => formik.setFieldValue("address", e.target.value)}
-            className="min-h-24 rounded-xl bg-white border-neutral-300"
+            className="min-h-24 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
             maxLength={200}
           />
-          <div className="text-xs text-neutral-500 text-right">
+          <div className="text-xs text-muted-foreground text-right">
             {formik.values.address.length}/200
           </div>
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">
-            Catatan Untuk Kurir (Opsional)
-          </UILabel>
+          <UILabel className="text-foreground">Catatan Untuk Kurir (Opsional)</UILabel>
           <Input
             placeholder="Warna rumah, patokan, pesan khusus, dll."
             value={formik.values.notes ?? ""}
             onChange={(e) => formik.setFieldValue("notes", e.target.value)}
-            className="h-11 rounded-xl bg-white border-neutral-300"
+            className="h-11 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
             maxLength={200}
           />
-          <div className="text-xs text-neutral-500 text-right">
+          <div className="text-xs text-muted-foreground text-right">
             {formik.values.notes?.length ?? 0}/200
           </div>
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">Kota/Kabupaten</UILabel>
+          <UILabel className="text-foreground">Kota/Kabupaten</UILabel>
           <Input
             value={formik.values.city}
             onChange={(e) => formik.setFieldValue("city", e.target.value)}
-            className="h-11 rounded-xl bg-white border-neutral-300"
+            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">Kode Pos</UILabel>
+          <UILabel className="text-foreground">Kode Pos</UILabel>
           <Input
             value={formik.values.postalCode}
             onChange={(e) => formik.setFieldValue("postalCode", e.target.value)}
-            className="h-11 rounded-xl bg-white border-neutral-300"
+            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-neutral-900">Nomor HP</UILabel>
+          <UILabel className="text-foreground">Nomor HP</UILabel>
           <Input
             value={formik.values.phoneNumber}
-            onChange={(e) =>
-              formik.setFieldValue("phoneNumber", e.target.value)
-            }
-            className="h-11 rounded-xl bg-white border-neutral-300"
+            onChange={(e) => formik.setFieldValue("phoneNumber", e.target.value)}
+            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
         </div>
 
@@ -113,7 +105,7 @@ export default function CreateAddressFormCard({ formik}: Props) {
               formik.setFieldValue("longitude", loc.longitude);
               formik.setFieldValue("pinpoint", loc.addressLine ?? "");
               formik.setFieldValue("city", loc.city ?? "");
-              formik.setFieldValue("address", loc.addressLine ?? ""); // ← hapus guard
+              formik.setFieldValue("address", loc.addressLine ?? "");
             }}
           />
         </div>
@@ -123,13 +115,9 @@ export default function CreateAddressFormCard({ formik}: Props) {
             <Checkbox
               id="makePrimary"
               checked={formik.values.makePrimary}
-              onCheckedChange={(v) =>
-                formik.setFieldValue("makePrimary", Boolean(v))
-              }
+              onCheckedChange={(v) => formik.setFieldValue("makePrimary", Boolean(v))}
             />
-            <UILabel htmlFor="makePrimary" className="text-sm">
-              Jadikan alamat utama
-            </UILabel>
+            <UILabel htmlFor="makePrimary" className="text-sm">Jadikan alamat utama</UILabel>
           </div>
         </div>
       </CardContent>

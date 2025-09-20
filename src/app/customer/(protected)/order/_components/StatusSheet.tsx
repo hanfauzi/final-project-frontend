@@ -15,8 +15,7 @@ const STATUSES = [
 ];
 
 export function StatusSheet({
-  value,
-  onChange,
+  value, onChange,
 }: { value?: string; onChange: (v?: string) => void }) {
   const [open, setOpen] = useState(false);
   const current = STATUSES.find(s => s.v === (value ?? ""))?.l ?? "Semua Status";
@@ -42,8 +41,11 @@ export function StatusSheet({
             </Button>
           ))}
           {value && (
-            <Button variant="ghost" className="justify-start h-10 text-red-600"
-              onClick={() => { onChange(undefined); setOpen(false); }}>
+            <Button
+              variant="ghost"
+              className="justify-start h-10 text-destructive"
+              onClick={() => { onChange(undefined); setOpen(false); }}
+            >
               Hapus filter
             </Button>
           )}

@@ -13,6 +13,7 @@ export function ProfileForm() {
   const profile = (data ?? null) as CustomerProfile | null;
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
+
   const {
     profileFormik: formik,
     emailFormik,
@@ -21,22 +22,23 @@ export function ProfileForm() {
     pending,
     pendingEmail,
   } = useProfileForms(profile);
+
   const { copied, copy } = useClipboardMap({ email: false, phone: false });
 
   return (
     <>
       {isLoading ? (
-        <div className="py-14 grid place-items-center text-neutral-600">
+        <div className="py-14 grid place-items-center text-muted-foreground">
           <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
           Memuat profil...
         </div>
       ) : isError ? (
-        <div className="py-14 text-center text-red-600">
+        <div className="py-14 text-center text-destructive">
           Gagal memuat profil
           {error?.message ? `: ${error.message}` : "."}
         </div>
       ) : !profile ? (
-        <div className="py-14 text-center text-neutral-600">
+        <div className="py-14 text-center text-muted-foreground">
           Profil tidak ditemukan.
         </div>
       ) : (
@@ -46,11 +48,8 @@ export function ProfileForm() {
           aria-busy={pending}
         >
           <div className="space-y-2">
-            <Label
-              htmlFor="name"
-              className="text-neutral-900 flex items-center gap-2"
-            >
-              <User className="h-4 w-4 text-neutral-500" />
+            <Label htmlFor="name" className="text-foreground flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
               Nama
             </Label>
             {!isEditing ? (
@@ -63,12 +62,12 @@ export function ProfileForm() {
                   disabled={pending}
                   {...formik.getFieldProps("name")}
                   placeholder="Nama kamu"
-                  className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                    hasErr("name") ? "border-red-400" : ""
+                  className={`h-11 rounded-xl ${
+                    hasErr("name") ? "border-destructive" : ""
                   }`}
                 />
                 {hasErr("name") && (
-                  <p className="text-xs text-red-500" role="alert">
+                  <p className="text-xs text-destructive" role="alert">
                     {formik.errors.name}
                   </p>
                 )}
@@ -77,8 +76,8 @@ export function ProfileForm() {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-neutral-900 flex items-center gap-2">
-              <Mail className="h-4 w-4 text-neutral-500" />
+            <Label className="text-foreground flex items-center gap-2">
+              <Mail className="h-4 w-4 text-muted-foreground" />
               Email
             </Label>
 
@@ -90,7 +89,7 @@ export function ProfileForm() {
                   variant="secondary"
                   size="sm"
                   onClick={() => copy(profile.email, "email")}
-                  className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                  className="h-9 rounded-lg"
                 >
                   {copied.email ? "Copied!" : "Copy"}
                 </Button>
@@ -103,7 +102,7 @@ export function ProfileForm() {
                     emailFormik.setFieldValue("email", profile.email ?? "");
                     setIsEditingEmail(true);
                   }}
-                  className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
+                  className="h-9 rounded-lg"
                 >
                   <Pencil className="h-3.5 w-3.5 mr-1" />
                   Edit
@@ -118,8 +117,8 @@ export function ProfileForm() {
                     disabled={pendingEmail}
                     {...emailFormik.getFieldProps("email")}
                     placeholder="you@example.com"
-                    className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                      hasErrEmail ? "border-red-400" : ""
+                    className={`h-11 rounded-xl ${
+                      hasErrEmail ? "border-destructive" : ""
                     }`}
                   />
                   <Button
@@ -131,7 +130,7 @@ export function ProfileForm() {
                       setIsEditingEmail(false);
                       emailFormik.resetForm();
                     }}
-                    className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                    className="h-9 rounded-lg"
                   >
                     Batal
                   </Button>
@@ -140,7 +139,7 @@ export function ProfileForm() {
                     size="sm"
                     disabled={pendingEmail}
                     onClick={() => emailFormik.handleSubmit()}
-                    className="h-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
+                    className="h-9 rounded-lg"
                   >
                     {pendingEmail ? (
                       <span className="inline-flex items-center gap-2">
@@ -153,7 +152,7 @@ export function ProfileForm() {
                   </Button>
                 </div>
                 {hasErrEmail && (
-                  <p className="text-xs text-red-500" role="alert">
+                  <p className="text-xs text-destructive" role="alert">
                     {emailFormik.errors.email}
                   </p>
                 )}
@@ -161,12 +160,10 @@ export function ProfileForm() {
             )}
           </div>
 
+          {/* Phone */}
           <div className="space-y-2">
-            <Label
-              htmlFor="phoneNumber"
-              className="text-neutral-900 flex items-center gap-2"
-            >
-              <Phone className="h-4 w-4 text-neutral-500" />
+            <Label htmlFor="phoneNumber" className="text-foreground flex items-center gap-2">
+              <Phone className="h-4 w-4 text-muted-foreground" />
               No. Telepon
             </Label>
             {!isEditing ? (
@@ -180,7 +177,7 @@ export function ProfileForm() {
                   onClick={() =>
                     profile.phoneNumber && copy(profile.phoneNumber, "phone")
                   }
-                  className="h-9 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200 disabled:opacity-50"
+                  className="h-9 rounded-lg disabled:opacity-50"
                 >
                   {copied.phone ? "Copied!" : "Copy"}
                 </Button>
@@ -193,12 +190,12 @@ export function ProfileForm() {
                   disabled={pending}
                   {...formik.getFieldProps("phoneNumber")}
                   placeholder="08xxxxxxxxxx"
-                  className={`h-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                    hasErr("phoneNumber") ? "border-red-400" : ""
+                  className={`h-11 rounded-xl ${
+                    hasErr("phoneNumber") ? "border-destructive" : ""
                   }`}
                 />
                 {hasErr("phoneNumber") && (
-                  <p className="text-xs text-red-500" role="alert">
+                  <p className="text-xs text-destructive" role="alert">
                     {formik.errors.phoneNumber}
                   </p>
                 )}
@@ -207,7 +204,7 @@ export function ProfileForm() {
           </div>
 
           {isEditing && (
-            <p className="text-[11px] text-neutral-500">
+            <p className="text-[11px] text-muted-foreground">
               Foto maksimal 1MB • Format: PNG/JPG/JPEG
             </p>
           )}

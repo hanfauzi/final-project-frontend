@@ -2,9 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  ChevronLeft
-} from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { AvatarForm } from "./_components/AvatarForm";
@@ -17,10 +15,10 @@ function CustomerProfilePage() {
   return (
     <>
       <Head>
-        <title>Profil • Laundr</title>
+        <title>Profile • Laundr</title>
       </Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -30,7 +28,7 @@ function CustomerProfilePage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button
               variant="ghost"
@@ -40,13 +38,14 @@ function CustomerProfilePage() {
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="text-[15px] font-semibold text-neutral-900">
+            <div className="text-[15px] font-semibold text-foreground">
               Profile
             </div>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24 ">
-          <Card className="overflow-hidden rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+
+        <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24">
+          <Card className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
             <CardContent className="pt-5">
               <AvatarForm />
               <VerifiedForm />

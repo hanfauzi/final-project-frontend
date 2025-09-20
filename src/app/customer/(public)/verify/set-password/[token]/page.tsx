@@ -32,7 +32,7 @@ export default function SetPasswordPage() {
         <title>Setel Kata Sandi • Laundr</title>
       </Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -45,21 +45,21 @@ export default function SetPasswordPage() {
         <div className="mx-auto w-full max-w-sm px-4 py-6">
           <div className="mb-4 flex items-center justify-center">
             <div className="inline-flex items-center gap-2">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-neutral-900 text-white font-bold">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground font-bold">
                 L
               </span>
-              <div className="text-2xl font-black tracking-tight text-neutral-900">
+              <div className="text-2xl font-black tracking-tight text-foreground">
                 Laundr
               </div>
             </div>
           </div>
 
-          <Card className="rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
             <CardHeader className="pb-2 text-center">
-              <CardTitle className="text-lg font-semibold text-neutral-800">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Setel kata sandi
               </CardTitle>
-              <p className="mt-1 text-sm text-neutral-500">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Buat password baru untuk akunmu
               </p>
             </CardHeader>
@@ -71,7 +71,7 @@ export default function SetPasswordPage() {
                 aria-busy={pending}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-neutral-900">
+                  <Label htmlFor="password" className="text-foreground">
                     Password Baru
                   </Label>
                   <div className="relative">
@@ -82,9 +82,9 @@ export default function SetPasswordPage() {
                       autoComplete="new-password"
                       disabled={pending}
                       {...formik.getFieldProps("password")}
-                      className={`h-12 pr-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                      className={`h-12 pr-11 rounded-xl focus-visible:ring-ring ${
                         formik.touched.password && formik.errors.password
-                          ? "border-red-400"
+                          ? "border-destructive"
                           : ""
                       }`}
                     />
@@ -92,7 +92,7 @@ export default function SetPasswordPage() {
                       type="button"
                       onClick={() => setShowNew((v) => !v)}
                       disabled={pending}
-                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-neutral-500 hover:text-neutral-800"
+                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-muted-foreground hover:text-foreground"
                       aria-label={
                         showNew
                           ? "Sembunyikan password baru"
@@ -107,14 +107,14 @@ export default function SetPasswordPage() {
                     </button>
                   </div>
                   {formik.touched.password && formik.errors.password && (
-                    <p className="text-xs text-red-500" role="alert">
+                    <p className="text-xs text-destructive" role="alert">
                       {formik.errors.password}
                     </p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-neutral-900">
+                  <Label htmlFor="confirmPassword" className="text-foreground">
                     Konfirmasi Password
                   </Label>
                   <div className="relative">
@@ -125,10 +125,10 @@ export default function SetPasswordPage() {
                       autoComplete="new-password"
                       disabled={pending}
                       {...formik.getFieldProps("confirmPassword")}
-                      className={`h-12 pr-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                      className={`h-12 pr-11 rounded-xl focus-visible:ring-ring ${
                         formik.touched.confirmPassword &&
                         formik.errors.confirmPassword
-                          ? "border-red-400"
+                          ? "border-destructive"
                           : ""
                       }`}
                     />
@@ -136,7 +136,7 @@ export default function SetPasswordPage() {
                       type="button"
                       onClick={() => setShowConfirm((v) => !v)}
                       disabled={pending}
-                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-neutral-500 hover:text-neutral-800"
+                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-muted-foreground hover:text-foreground"
                       aria-label={
                         showConfirm
                           ? "Sembunyikan konfirmasi password"
@@ -152,7 +152,7 @@ export default function SetPasswordPage() {
                   </div>
                   {formik.touched.confirmPassword &&
                     formik.errors.confirmPassword && (
-                      <p className="text-xs text-red-500" role="alert">
+                      <p className="text-xs text-destructive" role="alert">
                         {formik.errors.confirmPassword}
                       </p>
                     )}
@@ -161,7 +161,7 @@ export default function SetPasswordPage() {
                 <Button
                   type="submit"
                   disabled={pending}
-                  className="h-12 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-70"
+                  className="h-12 w-full rounded-xl active:scale-[.99] disabled:opacity-70"
                 >
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
@@ -174,11 +174,11 @@ export default function SetPasswordPage() {
                 </Button>
 
                 <div className="space-y-2 pt-2">
-                  <p className="text-center text-sm text-neutral-600">
+                  <p className="text-center text-sm text-muted-foreground">
                     Sudah ingat password?{" "}
                     <Link
                       href="/customer/login"
-                      className="font-medium text-neutral-900 underline underline-offset-2"
+                      className="font-medium text-primary underline underline-offset-2"
                     >
                       Kembali masuk
                     </Link>
