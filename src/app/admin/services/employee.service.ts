@@ -19,28 +19,13 @@ interface EmployeesParams {
 }
 
 export const employeeService = {
-  getAll: async (params? : EmployeesParams): Promise<Employee[]> => {
-    const res = await axiosInstance.get<EmployeeApiResponse>("/api/admin/employees");
-    return res.data.data;
-  },
 
   getById: async (id: string): Promise<Employee> => {
     const res = await axiosInstance.get<EmployeeResponse>(`/api/admin/employees/${id}`);
     return res.data.data;
   },
 
-  create: async (data: CreateEmployeeDTO): Promise<Employee> => {
-    const res = await axiosInstance.post<EmployeeResponse>("/api/admin/employees", data);
-    return res.data.data;
-  },
+  
 
-  update: async (id: string, data: UpdateEmployeeDTO): Promise<Employee> => {
-    const res = await axiosInstance.patch<EmployeeResponse>(`/api/admin/employees/${id}`, data);
-    return res.data.data;
-  },
-
-  delete: async (id: string): Promise<Employee> => {
-    const res = await axiosInstance.delete<EmployeeResponse>(`/api/admin/employees/${id}`);
-    return res.data.data;
-  },
+  
 };

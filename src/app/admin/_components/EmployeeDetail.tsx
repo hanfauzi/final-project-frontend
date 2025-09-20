@@ -1,33 +1,24 @@
 "use client";
 
-import { FC, useState } from "react";
 import {
   useDeleteEmployee,
   useEmployee,
   useUpdateEmployee,
 } from "@/app/admin/_hooks/useEmployees";
+import ConfirmDeleteDialog from "@/components/ConfirmDeleteDialog";
 import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { UpdateEmployeeForm } from "./UpdateEmployeeForm";
-import { UpdateEmployeeFormValues } from "../schema/update-employee.schema";
+import { FC, useState } from "react";
 import { useShifts } from "../_hooks/useShifts";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { UpdateEmployeeFormValues } from "../schema/update-employee.schema";
+import { UpdateEmployeeForm } from "./UpdateEmployeeForm";
 
 interface EmployeeDetailProps {
   id: string;
@@ -97,7 +88,7 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
     const data = preparePayload(values);
 
     updateMutation.mutate(
-      { id: employee.id, data }, // <-- fix: kirim id dan data
+      { id: employee.id, data }, 
       {
         onSuccess: () => {
           setIsEditing(false);
@@ -152,33 +143,11 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
               Edit
             </Button>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="cursor-pointer mt-2">
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Employee</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this employee? This action
-                    cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <div className="flex justify-end gap-2 mt-4">
-                  <AlertDialogCancel className="cursor-pointer">
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    className="cursor-pointer bg-red-600 hover:bg-red-700"
-                    onClick={() => deleteMutation.mutate(employee.id)}
-                  >
-                    {deleteMutation.isPending ? <Loading /> : "Delete"}
-                  </AlertDialogAction>
-                </div>
-              </AlertDialogContent>
-            </AlertDialog>
+            <ConfirmDeleteDialog
+              itemName="Employee"
+              onConfirm={() => deleteMutation.mutate(employee.id)}
+              isPending={deleteMutation.isPending}
+            />
           </>
         )}
       </CardContent>

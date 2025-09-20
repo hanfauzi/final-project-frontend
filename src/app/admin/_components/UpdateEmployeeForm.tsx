@@ -197,7 +197,7 @@ export const UpdateEmployeeForm: FC<UpdateEmployeeFormProps> = ({
                 </AlertDialogHeader>
                 <div className="flex justify-end gap-2 mt-4">
                   <AlertDialogCancel className="cursor-pointer" disabled={isPending}>Cancel</AlertDialogCancel>
-                  <AlertDialogAction className="cursor-pointer" onClick={() => onSubmit(values)} disabled={isPending}>
+                  <AlertDialogAction className="cursor-pointer disabled:cursor-not-allowed" onClick={() => onSubmit(values)} disabled={isPending}>
                     {isPending? <Loading /> : "Confirm"}
                   </AlertDialogAction>
                 </div>

@@ -19,7 +19,7 @@ interface EmployeesParams {
   limit?: number;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
-  search?: string
+  search?: string;
 }
 interface EmployeeResponse {
   data: Employee[];
@@ -31,21 +31,20 @@ interface EmployeeResponse {
   };
 }
 
-
-
-
-export function useEmployees(params?: EmployeesParams & {search?: string}) {
+export function useEmployees(params?: EmployeesParams & { search?: string }) {
   return useQuery({
     queryKey: ["employees", params],
     queryFn: async () => {
-      const res = await axiosInstance.get<EmployeeResponse>("/api/admin/employees", { params });
-      return res.data; 
+      const res = await axiosInstance.get<EmployeeResponse>(
+        "/api/admin/employees",
+        { params }
+      );
+      return res.data;
     },
     select: (response) => ({
-      employees: response.data, 
-      meta: response.meta,      
+      employees: response.data,
+      meta: response.meta,
     }),
-  
   });
 }
 
@@ -53,15 +52,15 @@ export function useEmployee(id: string) {
   return useQuery<Employee>({
     queryKey: [...EMPLOYEES_KEY, id],
     queryFn: async () => {
-    const res =  await employeeService.getById(id)
-    return res
+      const res = await employeeService.getById(id);
+      return res;
     },
-    enabled: !!id, // biar ga jalan kalau id kosong
+    enabled: !!id,
   });
 }
 
 export function useCreateEmployee() {
-  const router = useRouter()
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (values: EmployeeFormValues) => {
@@ -87,12 +86,14 @@ export function useCreateEmployee() {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: EMPLOYEES_KEY });
-      toast.success(`Employee created sucessfully`)
-      router.replace(`/admin/employees`)
+      toast.success(`Employee created sucessfully`);
+      router.replace(`/admin/employees`);
     },
     onError: async (error: any) => {
       if (error.response) {
-        toast.error(error.response.data?.message ?? "Failed to create employee");
+        toast.error(
+          error.response.data?.message ?? "Failed to create employee"
+        );
       } else {
         toast.error(error.message ?? "Unexpected error");
       }
@@ -106,9 +107,13 @@ export function useUpdateEmployee() {
   return useMutation({
     mutationFn: async ({ id, data }: UpdatePayload) => {
       if (data instanceof FormData) {
-        const res = await axiosInstance.patch(`/api/admin/employees/${id}`, data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const res = await axiosInstance.patch(
+          `/api/admin/employees/${id}`,
+          data,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
         return res.data;
       }
 
@@ -121,15 +126,18 @@ export function useUpdateEmployee() {
       toast.success("Employee updated successfully!");
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message ?? error.message ?? "Failed to update employee");
+      toast.error(
+        error?.response?.data?.message ??
+          error.message ??
+          "Failed to update employee"
+      );
     },
   });
 }
 
-
 export const useDeleteEmployee = () => {
   const queryClient = useQueryClient();
-  const router = useRouter()
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async (id: string) => {
@@ -137,8 +145,8 @@ export const useDeleteEmployee = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
-      toast.success("Employee deleted successfully")
-      router.push("/admin/employees")
+      toast.success("Employee deleted successfully");
+      router.push("/admin/employees");
     },
   });
 };
