@@ -7,7 +7,7 @@ type CancelOrderResponse = {
   message: string;
 };
 
-export default function useCancelOrder() {
+export default function useCancelPickUpOrder() {
   const qc = useQueryClient();
 
   const cancelOrderMutation = useMutation({

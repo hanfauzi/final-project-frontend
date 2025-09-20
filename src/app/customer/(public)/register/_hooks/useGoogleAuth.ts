@@ -21,8 +21,7 @@ export function useGoogleAuth() {
     mutationFn: async (idToken: string) => {
       const { data } = await axiosInstance.post<GoogleResp>(
         "/api/auth/customer/google",
-        undefined,
-        { headers: { Authorization: `Bearer ${idToken}` } }
+        { idToken }  
       );
       return data;
     },

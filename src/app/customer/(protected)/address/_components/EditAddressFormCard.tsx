@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label as UILabel } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FormikContextType } from "formik";
-import { MapPin } from "lucide-react";
+import { LoaderCircle, MapPin } from "lucide-react";
 import type { LabelEnum } from "../_hooks/useEditAddress";
 
 export type AddressFormValues = {
@@ -27,15 +27,33 @@ export type AddressFormValues = {
 type Props = {
   formik: FormikContextType<AddressFormValues>;
   coordsReady: boolean;
+  isInitialPrimary?: boolean;
+  isLoading?: boolean;
+  isError?: boolean;
 };
 
-export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
+export default function EditAddressFormCard({
+  formik,
+  coordsReady,
+  isInitialPrimary,
+  isLoading,
+  isError,
+}: Props) {
   return (
     <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
 
 
       <CardContent className="space-y-4">
-      
+        {isLoading && (
+          <div className="text-sm text-muted-foreground inline-flex items-center gap-2">
+            <LoaderCircle className="h-4 w-4 animate-spin" /> Memuat data…
+          </div>
+        )}
+        {isError && (
+          <div className="text-sm text-destructive">Gagal mengambil alamat.</div>
+        )}
+
+
 
         <div className="flex items-center gap-2 text-xs">
           <span
@@ -62,6 +80,11 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             value={formik.values.label}
             onChange={(v) => formik.setFieldValue("label", v)}
           />
+          {formik.touched.label && formik.errors.label && (
+            <p className="text-xs text-destructive">
+              {String(formik.errors.label)}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -76,6 +99,11 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
           <div className="text-xs text-muted-foreground text-right">
             {formik.values.address.length}/200
           </div>
+          {formik.touched.address && formik.errors.address && (
+            <p className="text-xs text-destructive">
+              {String(formik.errors.address)}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -121,7 +149,7 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
           />
         </div>
 
-          <CardMap
+        <CardMap
           initial={{
             lat: formik.values.latitude,
             lng: formik.values.longitude,
@@ -133,7 +161,14 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             formik.setFieldValue("longitude", loc.longitude);
             formik.setFieldValue("pinpoint", loc.addressLine ?? "");
             formik.setFieldValue("city", loc.city ?? "");
-            formik.setFieldValue("address", loc.addressLine ?? "");
+
+            const shouldFillAddress =
+              (!formik.touched.address && !formik.values.address) ||
+              formik.values.address.trim().length === 0;
+
+            if (shouldFillAddress) {
+              formik.setFieldValue("address", loc.addressLine ?? "");
+            }
           }}
         />
 
@@ -142,6 +177,7 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             <Checkbox
               id="makePrimary"
               checked={formik.values.makePrimary}
+              disabled={isInitialPrimary === true}
               onCheckedChange={(v) =>
                 formik.setFieldValue("makePrimary", Boolean(v))
               }
@@ -149,6 +185,11 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             <UILabel htmlFor="makePrimary" className="text-sm">
               Jadikan alamat utama
             </UILabel>
+            {isInitialPrimary && (
+              <span className="text-xs text-muted-foreground">
+                (Alamat ini sudah utama)
+              </span>
+            )}
           </div>
         </div>
       </CardContent>
