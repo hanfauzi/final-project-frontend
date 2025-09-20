@@ -3,21 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  CalendarClock, ChevronLeft, Clock, Hash, Package, Store, CreditCard,
+  CalendarClock, ChevronLeft, Clock,
+  CreditCard,
+  Hash, Package, Store,
 } from "lucide-react";
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
+import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
 import { formatDate } from "../_components/FormatDate";
 import { StatusBadge } from "../_components/StatusBadge";
-import useCancelOrder from "../_hooks/useCancelPickUpOrder";
-import useGetCustomerOrderById from "../_hooks/useGetOrderById";
-import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
 import useConfirmationOrder from "../_hooks/useConfirmationOrder";
+import useGetCustomerOrderById from "../_hooks/useGetOrderById";
 
 export default function OrderDetailPage() {
   const router = useRouter();
@@ -25,14 +21,12 @@ export default function OrderDetailPage() {
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
 
   const { data: order, isLoading, isError } = useGetCustomerOrderById(id);
-  const { cancelOrderMutation } = useCancelOrder();
   const { mutate: createSnap, isPending: creatingSnap } = useCreateOrReusePayment();
   const { confirmationOrderMutation } = useConfirmationOrder();
 
   const outletDisplay = order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
-  const canCancel = !!order && order.status === "WAITING_FOR_CONFIRMATION";
   const canPay = !!order && order.status === "WAITING_FOR_PAYMENT";
   const canConfirm = !!order && order.status === "DELIVERED_TO_CUSTOMER";
 
@@ -174,34 +168,7 @@ export default function OrderDetailPage() {
                 </div>
               )}
 
-              {canCancel && (
-                <div className="pt-2">
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button type="button" variant="destructive" className="w-full h-11 rounded-xl">
-                        Batalkan Order
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Batalkan Pesanan?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Kamu akan membatalkan pesanan. Pesanan yang telah dibatalkan tidak akan diproses.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction
-                          disabled={cancelOrderMutation.isPending}
-                          onClick={() => order?.id && cancelOrderMutation.mutate(order.id)}
-                        >
-                          {cancelOrderMutation.isPending ? "Membatalkan" : "Batalkan Order"}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              )}
+
             </>
           )}
         </main>

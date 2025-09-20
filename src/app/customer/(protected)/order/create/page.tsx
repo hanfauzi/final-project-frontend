@@ -16,7 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import useGetCustomerAddressById from "../../address/_hooks/useGetAddressById";
 import useGetCustomerAddresses, { CustomerAddress } from "../../address/_hooks/useGetAddresses";
-import useCreatePickupOrder from "../_hooks/useCreateOrder";
+import useCreatePickupOrder from "../_hooks/useCreatePickUpOrder";
 import useSuggestOutlet from "../_hooks/useSuggestOutlet";
 
 const services = [

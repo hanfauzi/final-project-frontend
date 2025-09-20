@@ -53,14 +53,20 @@ interface CardMapProps {
 
 const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
   const { getLocation, data, isLoading } = useGetLocationByCoord();
-  const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
+  const [currentPosition, setCurrentPosition] = useState<
+    [number, number] | null
+  >(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onSelectRef = useRef(onLocationSelect);
-  useEffect(() => { onSelectRef.current = onLocationSelect; }, [onLocationSelect]);
+  useEffect(() => {
+    onSelectRef.current = onLocationSelect;
+  }, [onLocationSelect]);
 
   const getLocationRef = useRef(getLocation);
-  useEffect(() => { getLocationRef.current = getLocation; }, [getLocation]);
+  useEffect(() => {
+    getLocationRef.current = getLocation;
+  }, [getLocation]);
 
   const handleOpen = () => setIsOpen(true);
 
@@ -68,11 +74,16 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const next: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        const next: [number, number] = [
+          pos.coords.latitude,
+          pos.coords.longitude,
+        ];
         setCurrentPosition(next);
         void getLocationRef.current(next[0], next[1]);
       },
-      () => { setCurrentPosition(null); },
+      () => {
+        setCurrentPosition(null);
+      },
       { enableHighAccuracy: true, timeout: 8000 }
     );
   }, []);
