@@ -1,7 +1,7 @@
 import { FC } from "react";
 import SidebarItem from "./SidebarItem";
 import { Separator } from "@/components/ui/separator";
-import { Users, Home, Box, ClipboardList } from "lucide-react";
+import { Users, Home, Box, ClipboardList, CalendarArrowUp } from "lucide-react";
 
 const Sidebar: FC = () => {
   return (
@@ -11,6 +11,7 @@ const Sidebar: FC = () => {
         <SidebarItem title="Dashboard" href="/admin" icon={<Home size={18} />} />
         <SidebarItem title="Manage Employees" href="/admin/employees" icon={<Users size={18} />} />
         <SidebarItem title="Manage Outlets" href="/admin/outlets" icon={<Box size={18} />} />
+        <SidebarItem title="Manage Orders" href="/admin/orders" icon={<CalendarArrowUp size={18} />} />
         <SidebarItem title="Laundry Items" href="/admin/laundry-items" icon={<ClipboardList size={18} />} />
       </div>
 
