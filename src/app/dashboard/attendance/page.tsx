@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMemo, useState } from "react";
@@ -13,14 +12,22 @@ import useGetAttendanceByEmployee from "./_hooks/useGetAttendanceByEmployee";
 import useGetEmployee from "../_hooks/useGetEmployee";
 
 const AttendancePage = () => {
-  const { employee, loading: employeeLoading, error: employeeError } = useGetEmployee()
+  const { data: employee, isLoading: employeeLoading, error: employeeError } = useGetEmployee();
   const [month, setMonth] = useState(new Date());
   const yearMonth = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, "0")}`;
   const monthlyQuery = useMemo(() => ({ yearMonth }), [yearMonth]);
-  const { attendances, loading, error } = useGetAttendanceByEmployee(monthlyQuery)
+  const {
+    data: attendances,
+    isLoading: attendanceLoading,
+    isError: isAttendancesError,
+    error: attendancesError,
+  } = useGetAttendanceByEmployee(monthlyQuery);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const [today] = useState(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
 
   const todayYearMonth = `${today.getFullYear()}-${String(
     today.getMonth() + 1
@@ -28,12 +35,12 @@ const AttendancePage = () => {
   const todayQuery = useMemo(() => ({ yearMonth: todayYearMonth }), [todayYearMonth]);
 
   const {
-    attendances: todayAttendances,
-    loading: todayAttendanceLoading,
-    error: todayAttendanceError,
+    data: todayAttendances,
+    isLoading: todayAttendanceLoading,
+    isError: todayAttendanceError,
   } = useGetAttendanceByEmployee(todayQuery);
 
-  const todayAttendance = todayAttendances.find((a) => {
+  const todayAttendance = todayAttendances?.find((a) => {
     const d = new Date(a.date);
     d.setHours(0, 0, 0, 0);
     return d.getTime() === today.getTime();
@@ -48,7 +55,7 @@ const AttendancePage = () => {
       <div className="flex flex-col gap-4">
         <AttendanceStatusCard
           loading={todayAttendanceLoading}
-          error={todayAttendanceError}
+          error={todayAttendanceError ? "Failed to load attendance" : null}
           todayAttendance={todayAttendance ?? null}
           todayAttendances={todayAttendances}
         />
@@ -105,22 +112,22 @@ const AttendancePage = () => {
 
         <div className="flex flex-col items-center bg-white border-1 rounded-md shadow-sm">
           <AttendanceCalendar
-            data={attendances}
+            data={attendances ?? []}
             month={month}
             onMonthChange={setMonth}
-            loading={loading}
+            loading={attendanceLoading}
           />
-          {loading && (
+          {attendanceLoading && (
             <div className="pb-4 text-center text-gray-500">
               Loading attendance...
             </div>
           )}
-          {error && (
+          {isAttendancesError && (
             <div className="pb-4 text-center text-red-500">
-              {error}
+              {attendancesError?.message ?? "Failed to load attendance"}
             </div>
           )}
-          {!loading && !error && attendances.length === 0 && (
+          {!attendanceLoading && !isAttendancesError && (attendances?.length ?? 0) === 0 && (
             <div className="pb-4 text-center text-gray-500">
               No attendance records found in this month
             </div>
@@ -132,13 +139,15 @@ const AttendancePage = () => {
           </div>
         </div>
 
-        {!todayAttendanceLoading && !todayAttendanceError && todayAttendances.length > 0 && (
+        {!todayAttendanceLoading && !todayAttendanceError && todayAttendances && (
           <div className="flex flex-col items-center gap-2">
             {!todayAttendance ? (
               <ClockInButton />
             ) : !todayAttendance.clockOutAt ? (
               <ClockOutButton />
-            ) : null}
+            ) : (
+              <div>You have already clocked out ✅</div>
+            )}
           </div>
         )}
       </div>
