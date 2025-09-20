@@ -17,64 +17,49 @@ export function AddressCard({
   onMore: () => void;
 }) {
   const labelText =
-    data.label === "HOME"
-      ? "Rumah"
-      : data.label === "WORK"
-      ? "Kantor"
-      : "Lainnya";
-  const pinpointed =
-    Number.isFinite(data.latitude) && Number.isFinite(data.longitude);
+    data.label === "HOME" ? "Rumah" : data.label === "WORK" ? "Kantor" : "Lainnya";
+  const pinpointed = Number.isFinite(data.latitude) && Number.isFinite(data.longitude);
 
   return (
     <Card
       onClick={onSelect}
       className={[
-        "relative transition cursor-pointer border-neutral-200",
-        active
-          ? "ring-1 ring-neutral-900 border-neutral-900 bg-neutral-50"
-          : "",
+        "relative transition cursor-pointer border border-border bg-card text-card-foreground",
+        active ? "ring-1 ring-ring border-ring bg-accent" : "",
       ].join(" ")}
     >
       <span
         className={`absolute left-0 top-4 h-5 w-1.5 rounded-r ${
-          data.isPrimary ? "bg-neutral-900" : "bg-neutral-300"
+          data.isPrimary ? "bg-primary" : "bg-border"
         }`}
       />
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1 pr-2">
             <div className="flex items-center gap-2">
-              <Badge
-                variant="outline"
-                className="border-neutral-300 text-neutral-800"
-              >
+              <Badge variant="outline" className="border-border text-foreground">
                 {labelText}
               </Badge>
               {data.isPrimary && (
-                <Badge className="bg-neutral-900 text-white">Utama</Badge>
+                <Badge className="bg-primary text-primary-foreground">Utama</Badge>
               )}
             </div>
-            <div className="text-sm text-neutral-700">{data.phoneNumber}</div>
-            <div className="text-sm text-neutral-600 leading-snug">
+            <div className="text-sm text-foreground">{data.phoneNumber}</div>
+            <div className="text-sm text-muted-foreground leading-snug">
               {data.address}, {data.city} {data.postalCode}
             </div>
-            <div className="flex items-center gap-2 text-xs text-neutral-700 pt-1">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
               <MapPin className="h-4 w-4" />
               {pinpointed ? "Sudah Pinpoint" : "Belum Pinpoint"}
             </div>
             {data.notes && (
-              <div className="text-xs text-neutral-500">{data.notes}</div>
+              <div className="text-xs text-muted-foreground">{data.notes}</div>
             )}
             <div className="pt-3">
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="h-9 rounded-xl border-neutral-300 text-neutral-900 hover:bg-neutral-100"
-              >
+              <Button asChild variant="outline" size="sm" className="h-9 rounded-xl border-border hover:bg-accent">
                 <Link
                   href={`/customer/address/edit/${data.id}`}
-                  onClick={(e) => e.stopPropagation()} 
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-2"
                 >
                   <Pencil className="h-4 w-4" />
@@ -85,14 +70,14 @@ export function AddressCard({
           </div>
           <div className="flex flex-col items-end gap-3 shrink-0">
             {active ? (
-              <CheckCircle2 className="h-6 w-6 text-neutral-900" />
+              <CheckCircle2 className="h-6 w-6 text-primary" />
             ) : (
               <div className="h-6 w-6" />
             )}
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full hover:bg-neutral-100"
+              className="rounded-full hover:bg-accent"
               onClick={(e) => {
                 e.stopPropagation();
                 onMore();

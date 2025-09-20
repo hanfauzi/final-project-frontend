@@ -53,43 +53,30 @@ interface CardMapProps {
 
 const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
   const { getLocation, data, isLoading } = useGetLocationByCoord();
-  const [currentPosition, setCurrentPosition] = useState<
-    [number, number] | null
-  >(null);
+  const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onSelectRef = useRef(onLocationSelect);
-  useEffect(() => {
-    onSelectRef.current = onLocationSelect;
-  }, [onLocationSelect]);
+  useEffect(() => { onSelectRef.current = onLocationSelect; }, [onLocationSelect]);
 
   const getLocationRef = useRef(getLocation);
-  useEffect(() => {
-    getLocationRef.current = getLocation;
-  }, [getLocation]);
+  useEffect(() => { getLocationRef.current = getLocation; }, [getLocation]);
 
   const handleOpen = () => setIsOpen(true);
 
-  // dapatkan posisi awal pengguna untuk preview (tanpa kirim ke parent)
   useEffect(() => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const next: [number, number] = [
-          pos.coords.latitude,
-          pos.coords.longitude,
-        ];
+        const next: [number, number] = [pos.coords.latitude, pos.coords.longitude];
         setCurrentPosition(next);
         void getLocationRef.current(next[0], next[1]);
       },
-      () => {
-        setCurrentPosition(null);
-      },
+      () => { setCurrentPosition(null); },
       { enableHighAccuracy: true, timeout: 8000 }
     );
   }, []);
 
-  // klik peta hanya update preview (tanpa menutup & tanpa kirim ke parent)
   function ClickHandler() {
     useMapEvents({
       click: (evt) => {
@@ -101,7 +88,6 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
     return null;
   }
 
-  // konfirmasi: baru kirim ke parent & tutup dialog
   const handleConfirm = () => {
     if (!currentPosition) return;
     onSelectRef.current({
@@ -116,16 +102,11 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {/* Trigger lebih clean */}
         <Button
           type="button"
           variant="outline"
           onClick={handleOpen}
-          className="
-            w-full sm:w-48 rounded-xl justify-center
-            border-neutral-200 bg-white hover:bg-teal-50 hover:border-teal-200
-            text-neutral-800 gap-2
-          "
+          className="w-full sm:w-48 rounded-xl justify-center border-border bg-card hover:bg-accent hover:border-border text-foreground gap-2"
         >
           <MapPin className="h-4 w-4" />
           Pilih lokasi
@@ -133,40 +114,28 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
       </DialogTrigger>
 
       <DialogContent
-        className="
-          max-w-3xl rounded-3xl p-0 overflow-hidden
-          border border-neutral-200/70
-          bg-white/90 backdrop-blur
-          shadow-[0_20px_60px_-20px_rgba(13,148,136,0.25)]
-        "
+        className="max-w-3xl rounded-3xl p-0 overflow-hidden border border-border bg-card/90 backdrop-blur"
       >
-        {/* Bubbles dekoratif */}
+        {/* dekorasi pakai token */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-16 -left-10 h-44 w-44 rounded-full bg-teal-100/50 blur-3xl" />
-          <div className="absolute top-8 right-0 h-56 w-56 rounded-full bg-sky-100/60 blur-3xl" />
+          <div className="absolute -top-16 -left-10 h-44 w-44 rounded-full bg-primary/15 blur-3xl" />
+          <div className="absolute top-8 right-0 h-56 w-56 rounded-full bg-accent/40 blur-3xl" />
         </div>
 
         <DialogHeader className="px-6 pt-5 pb-3">
-          <DialogTitle className="flex items-center gap-2 text-lg font-semibold text-neutral-800">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-neutral-900 text-white">
+          <DialogTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-primary-foreground">
               <Crosshair className="h-4 w-4" />
             </span>
             Pilih Lokasi di Peta
           </DialogTitle>
-          <DialogDescription className="mt-2 text-[13px] text-neutral-500">
-            Klik peta untuk menetapkan titik. Periksa preview di bawah, lalu
-            konfirmasi.
+          <DialogDescription className="mt-2 text-[13px] text-muted-foreground">
+            Klik peta untuk menetapkan titik. Periksa preview di bawah, lalu konfirmasi.
           </DialogDescription>
 
-          {/* Info strip preview */}
-          <div
-            className="
-            mt-4 rounded-2xl border border-neutral-200 bg-white
-            px-4 py-3 text-sm text-neutral-700 shadow-sm
-          "
-          >
+          <div className="mt-4 rounded-2xl border border-border bg-card px-4 py-3 text-sm text-foreground shadow-sm">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <span className="inline-flex items-center gap-1 text-neutral-500">
+              <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
                 Alamat:
               </span>
@@ -178,20 +147,12 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
         </DialogHeader>
 
         <div className="px-6 pb-6">
-          <div className="h-96 relative rounded-2xl overflow-hidden ring-1 ring-neutral-200">
+          <div className="h-96 relative rounded-2xl overflow-hidden ring-1 ring-border">
             {currentPosition ? (
               <>
                 <div className="absolute inset-0">
-                  <MapContainer
-                    center={currentPosition}
-                    zoom={15}
-                    scrollWheelZoom
-                    className="h-full w-full"
-                  >
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution="© OpenStreetMap contributors"
-                    />
+                  <MapContainer center={currentPosition} zoom={15} scrollWheelZoom className="h-full w-full">
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
                     <ClickHandler />
                     <Marker position={currentPosition}>
                       <Popup>Klik peta untuk mengubah titik.</Popup>
@@ -200,18 +161,8 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
                 </div>
 
                 <div className="pointer-events-none absolute right-3 top-3">
-                  <div
-                    className="
-                    inline-flex items-center gap-1.5 rounded-full
-                    bg-white/90 px-3 py-1.5 text-xs text-neutral-700
-                    shadow ring-1 ring-neutral-200 backdrop-blur
-                  "
-                  >
-                    <span
-                      className={`h-2 w-2 rounded-full ${
-                        isLoading ? "bg-amber-500" : "bg-emerald-500"
-                      } ${isLoading ? "animate-pulse" : ""}`}
-                    />
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-card/90 px-3 py-1.5 text-xs text-muted-foreground shadow ring-1 ring-border backdrop-blur">
+                    <span className={`h-2 w-2 rounded-full ${isLoading ? "bg-yellow-500 animate-pulse" : "bg-emerald-500"}`} />
                     {isLoading ? "Mencari alamat" : "Preview siap"}
                   </div>
                 </div>
@@ -219,14 +170,14 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
             ) : (
               <div className="h-full grid place-items-center">
                 <div className="flex flex-col items-center gap-2">
-                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-neutral-100">
+                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-muted">
                     {isLoading ? (
-                      <Loader2 className="h-5 w-5 animate-spin text-neutral-500" />
+                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                     ) : (
-                      <Crosshair className="h-5 w-5 text-neutral-500" />
+                      <Crosshair className="h-5 w-5 text-muted-foreground" />
                     )}
                   </div>
-                  <p className="text-sm text-neutral-600 text-center">
+                  <p className="text-sm text-muted-foreground text-center">
                     Aktifkan izin lokasi, lalu buka peta.
                   </p>
                 </div>
@@ -235,24 +186,14 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
           </div>
 
           <div className="mt-4 flex items-center justify-between gap-3">
-            <div className="text-[11px] text-neutral-500">
+            <div className="text-[11px] text-muted-foreground">
               Geocoding by OpenCage. Map © OpenStreetMap contributors.
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="ghost"
-                className="rounded-xl"
-                onClick={() => setIsOpen(false)}
-              >
+              <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setIsOpen(false)}>
                 Batal
               </Button>
-              <Button
-                type="button"
-                className="rounded-xl"
-                onClick={handleConfirm}
-                disabled={!currentPosition || isLoading}
-              >
+              <Button type="button" className="rounded-xl" onClick={handleConfirm} disabled={!currentPosition || isLoading}>
                 Gunakan titik ini
               </Button>
             </div>

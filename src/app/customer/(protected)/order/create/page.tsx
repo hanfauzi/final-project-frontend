@@ -4,47 +4,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+  Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,
 } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
-  Check,
-  ChevronDown,
-  ChevronLeft,
-  MapPin,
-  Package,
-  Store,
+  Check, ChevronDown, ChevronLeft, MapPin, Package, Store,
 } from "lucide-react";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import useGetCustomerAddressById from "../../address/_hooks/useGetAddressById";
-import useGetCustomerAddresses, {
-  CustomerAddress,
-} from "../../address/_hooks/useGetAddresses";
+import useGetCustomerAddresses, { CustomerAddress } from "../../address/_hooks/useGetAddresses";
 import useCreatePickupOrder from "../_hooks/useCreateOrder";
 import useSuggestOutlet from "../_hooks/useSuggestOutlet";
 
 const services = [
   { id: "express-wash", name: "Cuci Kiloan Express", desc: "Selesai 1×24 jam" },
   { id: "reguler-wash", name: "Cuci Kiloan Reguler", desc: "Selesai 2–3 hari" },
-  {
-    id: "express-dry",
-    name: "Cuci Kering Express",
-    desc: "Selesai dalam 6 jam",
-  },
+  { id: "express-dry", name: "Cuci Kering Express", desc: "Selesai dalam 6 jam" },
 ];
 
 export default function CreateOrderPage() {
   const router = useRouter();
 
-  const { data: addresses = [], isLoading: addrListLoading } =
-    useGetCustomerAddresses();
+  const { data: addresses = [], isLoading: addrListLoading } = useGetCustomerAddresses();
   const [addressId, setAddressId] = useState<string | undefined>(undefined);
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -55,22 +39,13 @@ export default function CreateOrderPage() {
     }
   }, [addresses, addressId]);
 
-  const { data: addressDetail, isLoading: addrLoading } =
-    useGetCustomerAddressById(addressId);
-  const {
-    data: suggest,
-    isFetching: suggestLoading,
-    isError: suggestError,
-  } = useSuggestOutlet(addressId);
+  const { data: addressDetail, isLoading: addrLoading } = useGetCustomerAddressById(addressId);
+  const { data: suggest, isFetching: suggestLoading, isError: suggestError } = useSuggestOutlet(addressId);
 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const toggleService = (name: string, checked: boolean | string) => {
     const isOn = checked === true || checked === "true";
-    setSelectedServices((curr) =>
-      isOn
-        ? Array.from(new Set([...curr, name]))
-        : curr.filter((s) => s !== name)
-    );
+    setSelectedServices((curr) => (isOn ? Array.from(new Set([...curr, name])) : curr.filter((s) => s !== name)));
   };
 
   const [useSatuan, setUseSatuan] = useState(false);
@@ -92,30 +67,23 @@ export default function CreateOrderPage() {
 
     const parts: string[] = [];
     if (selectedServices.length) parts.push(selectedServices.join(", "));
-    if (useSatuan && satuanName.trim())
-      parts.push(`Satuan: ${satuanName.trim()}`);
+    if (useSatuan && satuanName.trim()) parts.push(`Satuan: ${satuanName.trim()}`);
 
     const notes = parts.join(" | ");
-    if (!notes) return; 
+    if (!notes) return;
 
-    createPickUpOrderMutation.mutate({
-      customerAddressId: addressId,
-      notes,
-    });
+    createPickUpOrderMutation.mutate({ customerAddressId: addressId, notes });
   }
 
   const submitDisabled =
     (!selectedServices.length && !(useSatuan && satuanName.trim())) ||
-    !addressId ||
-    createPickUpOrderMutation.isPending;
+    !addressId || createPickUpOrderMutation.isPending;
 
   return (
     <>
-      <Head>
-        <title>Buat Order — Laundr</title>
-      </Head>
+      <Head><title>Buat Order — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-neutral-50 flex flex-col">
+      <div className="relative min-h-screen bg-background flex flex-col">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden
@@ -124,28 +92,22 @@ export default function CreateOrderPage() {
               "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
           }}
         />
-        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="text-[15px] font-semibold text-neutral-900">
-              Buat Order
-            </div>
+            <div className="text-[15px] font-semibold text-foreground">Buat Order</div>
           </div>
         </div>
 
         <main className="flex-1 mx-auto w-full max-w-sm px-4 py-6">
-          <Card className="rounded-2xl shadow-sm border-neutral-200">
+          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-sm">
             <CardContent className="space-y-5">
+              {/* Alamat */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
-                  <MapPin className="h-4 w-4 text-neutral-500" />
+                <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
                   Alamat Penjemputan
                 </Label>
 
@@ -153,14 +115,12 @@ export default function CreateOrderPage() {
                   <button
                     type="button"
                     onClick={() => setSheetOpen(true)}
-                    className="h-11 flex-1 rounded-xl border border-neutral-300 bg-white px-3 text-left text-[13px] text-neutral-800 hover:bg-neutral-100"
+                    className="h-11 flex-1 rounded-xl border border-border bg-card px-3 text-left text-[13px] text-foreground hover:bg-accent"
                   >
                     {addrListLoading || addrLoading
                       ? "Memuat alamat…"
                       : addressDetail
-                      ? `${addressDetail.label ?? "Alamat"} — ${
-                          addressDetail.address
-                        }`
+                      ? `${addressDetail.label ?? "Alamat"} — ${addressDetail.address}`
                       : addresses.length === 0
                       ? "Belum ada alamat. Tambah dulu."
                       : "Pilih alamat"}
@@ -172,10 +132,8 @@ export default function CreateOrderPage() {
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="max-h-[70vh]">
-                      <SheetHeader>
-                        <SheetTitle>Pilih Alamat</SheetTitle>
-                      </SheetHeader>
+                    <SheetContent side="bottom" className="max-h-[70vh] rounded-t-2xl">
+                      <SheetHeader><SheetTitle>Pilih Alamat</SheetTitle></SheetHeader>
 
                       <div className="mt-4 space-y-2">
                         {addresses.map((a) => {
@@ -185,32 +143,23 @@ export default function CreateOrderPage() {
                               key={a.id}
                               type="button"
                               onClick={() => handleChooseAddress(a)}
-                              className={`w-full text-left rounded-xl border p-3 hover:bg-neutral-100 transition ${
-                                active
-                                  ? "border-neutral-900 bg-neutral-900/5"
-                                  : "border-neutral-200"
+                              className={`w-full text-left rounded-xl border p-3 transition ${
+                                active ? "border-ring bg-ring/5" : "border-border hover:bg-accent"
                               }`}
                             >
                               <div className="flex items-start gap-2">
                                 <div
                                   className={`mt-0.5 h-4 w-4 rounded-full border ${
-                                    active
-                                      ? "bg-neutral-900 border-neutral-900"
-                                      : "border-neutral-400"
+                                    active ? "bg-ring border-ring" : "border-muted-foreground/40"
                                   }`}
                                 >
-                                  {active && (
-                                    <Check className="h-4 w-4 text-white" />
-                                  )}
+                                  {active && <Check className="h-4 w-4 text-primary-foreground" />}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-medium text-neutral-900">
-                                    {a.label ?? "Alamat"}
-                                    {a.isPrimary ? " · Utama" : ""}
+                                  <p className="text-sm font-medium text-foreground">
+                                    {a.label ?? "Alamat"}{a.isPrimary ? " · Utama" : ""}
                                   </p>
-                                  <p className="text-xs text-neutral-600">
-                                    {a.address}
-                                  </p>
+                                  <p className="text-xs text-muted-foreground">{a.address}</p>
                                 </div>
                               </div>
                             </button>
@@ -218,7 +167,7 @@ export default function CreateOrderPage() {
                         })}
 
                         {addresses.length === 0 && (
-                          <p className="text-sm text-neutral-500">
+                          <p className="text-sm text-muted-foreground">
                             Belum ada alamat. Silakan tambahkan terlebih dulu.
                           </p>
                         )}
@@ -228,12 +177,13 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
+              {/* Outlet */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
-                  <Store className="h-4 w-4 text-neutral-500" />
+                <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Store className="h-4 w-4 text-muted-foreground" />
                   Outlet Terdekat
                 </Label>
-                <div className="h-11 rounded-xl border border-neutral-300 bg-white px-3 grid items-center text-[13px] text-neutral-800">
+                <div className="h-11 rounded-xl border border-border bg-card px-3 grid items-center text-[13px] text-foreground">
                   {!addressId
                     ? "Pilih alamat dulu untuk menghitung outlet"
                     : suggestLoading
@@ -246,21 +196,23 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
+              {/* Outlet terpilih */}
               {!!outletNameAfterCreate && (
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
-                    <Store className="h-4 w-4 text-neutral-500" />
+                  <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                    <Store className="h-4 w-4 text-muted-foreground" />
                     Outlet Terpilih
                   </Label>
-                  <div className="h-11 rounded-xl border border-neutral-300 bg-white px-3 grid items-center text-[13px] text-neutral-800">
+                  <div className="h-11 rounded-xl border border-border bg-card px-3 grid items-center text-[13px] text-foreground">
                     {outletNameAfterCreate}
                   </div>
                 </div>
               )}
 
+              {/* Layanan */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium text-neutral-800">
-                  <Package className="h-4 w-4 text-neutral-500" />
+                <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Package className="h-4 w-4 text-muted-foreground" />
                   Pilih Layanan
                 </Label>
 
@@ -271,15 +223,10 @@ export default function CreateOrderPage() {
                       <div
                         key={s.id}
                         className={`rounded-xl border p-3 transition ${
-                          checked
-                            ? "border-neutral-900 bg-neutral-900/5"
-                            : "border-neutral-200 hover:bg-neutral-100"
+                          checked ? "border-ring bg-ring/5" : "border-border hover:bg-accent"
                         }`}
                       >
-                        <label
-                          htmlFor={s.id}
-                          className="flex items-start gap-3 cursor-pointer"
-                        >
+                        <label htmlFor={s.id} className="flex items-start gap-3 cursor-pointer">
                           <Checkbox
                             id={s.id}
                             checked={checked}
@@ -287,10 +234,8 @@ export default function CreateOrderPage() {
                             className="mt-0.5"
                           />
                           <div>
-                            <p className="text-sm font-medium text-neutral-900">
-                              {s.name}
-                            </p>
-                            <p className="text-xs text-neutral-600">{s.desc}</p>
+                            <p className="text-sm font-medium text-foreground">{s.name}</p>
+                            <p className="text-xs text-muted-foreground">{s.desc}</p>
                           </div>
                         </label>
                       </div>
@@ -299,31 +244,19 @@ export default function CreateOrderPage() {
                 </div>
 
                 {selectedServices.length > 0 && (
-                  <p className="text-xs text-emerald-600">
+                  <p className="text-xs text-primary">
                     Dipilih: {selectedServices.join(", ")}
                   </p>
                 )}
               </div>
 
+              {/* Satuan */}
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-neutral-800">
-                  Layanan Satuan (opsional)
-                </Label>
-                <div
-                  className={`rounded-2xl border ${
-                    useSatuan
-                      ? "border-neutral-900 bg-neutral-900/5"
-                      : "border-neutral-200"
-                  } p-3`}
-                >
+                <Label className="text-sm font-medium text-foreground">Layanan Satuan (opsional)</Label>
+                <div className={`rounded-2xl border p-3 ${useSatuan ? "border-ring bg-ring/5" : "border-border"}`}>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox
-                      checked={useSatuan}
-                      onCheckedChange={(v) => setUseSatuan(v === true)}
-                    />
-                    <span className="text-[13px] text-neutral-900 font-medium">
-                      Tambahkan item satuan
-                    </span>
+                    <Checkbox checked={useSatuan} onCheckedChange={(v) => setUseSatuan(v === true)} />
+                    <span className="text-[13px] text-foreground font-medium">Tambahkan item satuan</span>
                   </label>
 
                   {useSatuan && (
@@ -332,11 +265,10 @@ export default function CreateOrderPage() {
                         value={satuanName}
                         onChange={(e) => setSatuanName(e.target.value)}
                         placeholder="Contoh: Kemeja, Jas, Selimut"
-                        className="h-11 rounded-xl bg-white"
+                        className="h-11 rounded-xl focus-visible:ring-ring"
                       />
-                      <p className="text-[11px] text-neutral-500">
-                        Tulis satu item (bebas). Jika lebih dari satu jenis,
-                        pisahkan dengan koma.
+                      <p className="text-[11px] text-muted-foreground">
+                        Tulis satu item (bebas). Jika lebih dari satu jenis, pisahkan dengan koma.
                       </p>
                     </div>
                   )}
@@ -347,11 +279,9 @@ export default function CreateOrderPage() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={submitDisabled}
-                className="w-full h-12 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-50"
+                className="w-full h-12 rounded-xl disabled:opacity-50"
               >
-                {createPickUpOrderMutation.isPending
-                  ? "Membuat..."
-                  : "Buat Order"}
+                {createPickUpOrderMutation.isPending ? "Membuat..." : "Buat Order"}
               </Button>
             </CardContent>
           </Card>

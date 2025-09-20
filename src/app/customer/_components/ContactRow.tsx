@@ -13,14 +13,14 @@ export function ContactRow({
   copyable?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-4 py-3">
+    <div className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="h-8 w-8 grid place-items-center rounded-lg bg-neutral-100 text-neutral-700">
+        <div className="h-8 w-8 grid place-items-center rounded-lg bg-muted text-muted-foreground">
           {icon}
         </div>
         <div className="min-w-0">
-          <div className="text-xs text-neutral-500">{label}</div>
-          <div className="text-sm font-medium text-neutral-900 break-all">{value || "—"}</div>
+          <div className="text-xs text-muted-foreground">{label}</div>
+          <div className="text-sm font-medium text-foreground break-all">{value || "—"}</div>
         </div>
       </div>
       {copyable ? (
@@ -28,7 +28,7 @@ export function ContactRow({
           type="button"
           size="icon"
           variant="ghost"
-          className="h-8 w-8 text-neutral-500 hover:text-neutral-900"
+          className="h-8 w-8 hover:bg-accent"
           onClick={() => navigator.clipboard.writeText(value)}
           aria-label={`Salin ${label}`}
           title="Salin"

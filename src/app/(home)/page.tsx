@@ -9,11 +9,9 @@ import Head from "next/head";
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>Laundr — Mudah, Bersih, Cepat</title>
-      </Head>
+      <Head><title>Laundr — Mudah, Bersih, Cepat</title></Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"

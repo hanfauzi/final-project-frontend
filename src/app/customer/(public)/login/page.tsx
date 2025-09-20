@@ -36,7 +36,7 @@ export default function LoginPage() {
         <title>Masuk • Laundr</title>
       </Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -49,21 +49,21 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-sm px-4 py-6">
           <div className="mb-4 flex items-center justify-center">
             <div className="inline-flex items-center gap-2">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-neutral-900 text-white font-bold">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground font-bold">
                 L
               </span>
-              <div className="text-2xl font-black tracking-tight text-neutral-900">
+              <div className="text-2xl font-black tracking-tight text-foreground">
                 Laundr
               </div>
             </div>
           </div>
 
-          <Card className="rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
             <CardHeader className="pb-2 text-center">
-              <CardTitle className="text-lg font-semibold text-neutral-800">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Selamat datang kembali
               </CardTitle>
-              <p className="mt-1 text-sm text-neutral-500">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Masuk untuk melanjutkan pesananmu
               </p>
             </CardHeader>
@@ -75,7 +75,7 @@ export default function LoginPage() {
                 aria-busy={pending}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-neutral-900">
+                  <Label htmlFor="email" className="text-foreground">
                     Email
                   </Label>
                   <Input
@@ -86,14 +86,14 @@ export default function LoginPage() {
                     autoComplete="email"
                     disabled={pending}
                     {...formik.getFieldProps("email")}
-                    className={`h-12 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                    className={`h-12 rounded-xl focus-visible:ring-ring ${
                       formik.touched.email && formik.errors.email
-                        ? "border-red-400"
+                        ? "border-destructive"
                         : ""
                     }`}
                   />
                   {formik.touched.email && formik.errors.email && (
-                    <p className="text-xs text-red-500" role="alert">
+                    <p className="text-xs text-destructive" role="alert">
                       {formik.errors.email}
                     </p>
                   )}
@@ -101,12 +101,12 @@ export default function LoginPage() {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-neutral-900">
+                    <Label htmlFor="password" className="text-foreground">
                       Password
                     </Label>
                     <Link
                       href="/customer/reset-password"
-                      className="text-xs text-neutral-500 underline underline-offset-2 hover:text-neutral-700"
+                      className="text-xs text-primary underline underline-offset-2 hover:opacity-90"
                     >
                       Lupa password?
                     </Link>
@@ -119,9 +119,9 @@ export default function LoginPage() {
                       autoComplete="current-password"
                       disabled={pending}
                       {...formik.getFieldProps("password")}
-                      className={`h-12 pr-11 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
+                      className={`h-12 pr-11 rounded-xl focus-visible:ring-ring ${
                         formik.touched.password && formik.errors.password
-                          ? "border-red-400"
+                          ? "border-destructive"
                           : ""
                       }`}
                     />
@@ -129,7 +129,7 @@ export default function LoginPage() {
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
                       disabled={pending}
-                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-neutral-500 hover:text-neutral-800"
+                      className="absolute inset-y-0 right-0 grid w-11 place-items-center text-muted-foreground hover:text-foreground"
                       aria-label={
                         showPassword
                           ? "Sembunyikan password"
@@ -144,7 +144,7 @@ export default function LoginPage() {
                     </button>
                   </div>
                   {formik.touched.password && formik.errors.password && (
-                    <p className="text-xs text-red-500" role="alert">
+                    <p className="text-xs text-destructive" role="alert">
                       {formik.errors.password}
                     </p>
                   )}
@@ -153,7 +153,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   disabled={pending}
-                  className="h-12 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-70"
+                  className="h-12 w-full rounded-xl active:scale-[.99] disabled:opacity-70"
                 >
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
@@ -166,9 +166,9 @@ export default function LoginPage() {
                 </Button>
 
                 <div className="my-2 flex items-center gap-3">
-                  <span className="h-px flex-1 bg-neutral-200" />
-                  <span className="text-xs text-neutral-500">atau</span>
-                  <span className="h-px flex-1 bg-neutral-200" />
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="text-xs text-muted-foreground">atau</span>
+                  <span className="h-px flex-1 bg-border" />
                 </div>
 
                 <div className="grid place-items-center">
@@ -191,11 +191,11 @@ export default function LoginPage() {
                 </div>
               </form>
 
-              <p className="mt-4 text-center text-sm text-neutral-500">
+              <p className="mt-4 text-center text-sm text-muted-foreground">
                 Belum punya akun?{" "}
                 <Link
                   href="/customer/register"
-                  className="font-medium text-neutral-900 underline underline-offset-2"
+                  className="font-medium text-primary underline underline-offset-2"
                 >
                   Daftar
                 </Link>

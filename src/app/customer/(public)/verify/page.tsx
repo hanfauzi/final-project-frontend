@@ -30,7 +30,7 @@ export default function ResendVerificationPage() {
         <title>Kirim Ulang Verifikasi • Laundr</title>
       </Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -43,19 +43,19 @@ export default function ResendVerificationPage() {
         <div className="mx-auto w-full max-w-sm px-4 py-6">
           <div className="mb-4 flex items-center justify-center">
             <div className="inline-flex items-center gap-2">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-neutral-900 text-white font-bold">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground font-bold">
                 L
               </span>
-              <div className="text-2xl font-black tracking-tight text-neutral-900">Laundr</div>
+              <div className="text-2xl font-black tracking-tight text-foreground">Laundr</div>
             </div>
           </div>
 
-          <Card className="rounded-2xl border border-neutral-200 shadow-[0_8px_30px_rgba(0,0,0,.06)]">
+          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
             <CardHeader className="pb-2 text-center">
-              <CardTitle className="text-lg font-semibold text-neutral-800">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Kirim ulang verifikasi
               </CardTitle>
-              <p className="mt-1 text-sm text-neutral-500">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Masukkan email yang kamu daftarkan untuk menerima tautan baru.
               </p>
             </CardHeader>
@@ -63,7 +63,7 @@ export default function ResendVerificationPage() {
             <CardContent className="pt-2">
               <form onSubmit={formik.handleSubmit} className="space-y-4" aria-busy={pending}>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-neutral-900">
+                  <Label htmlFor="email" className="text-foreground">
                     Email
                   </Label>
                   <Input
@@ -74,12 +74,12 @@ export default function ResendVerificationPage() {
                     autoComplete="email"
                     disabled={pending}
                     {...formik.getFieldProps("email")}
-                    className={`h-12 rounded-xl bg-white text-neutral-900 placeholder:text-neutral-400 border-neutral-300 focus-visible:ring-neutral-900 ${
-                      formik.touched.email && formik.errors.email ? "border-red-400" : ""
+                    className={`h-12 rounded-xl focus-visible:ring-ring ${
+                      formik.touched.email && formik.errors.email ? "border-destructive" : ""
                     }`}
                   />
                   {formik.touched.email && formik.errors.email && (
-                    <p className="text-xs text-red-500" role="alert">
+                    <p className="text-xs text-destructive" role="alert">
                       {formik.errors.email}
                     </p>
                   )}
@@ -88,7 +88,7 @@ export default function ResendVerificationPage() {
                 <Button
                   type="submit"
                   disabled={pending}
-                  className="h-12 w-full rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-70"
+                  className="h-12 w-full rounded-xl active:scale-[.99] disabled:opacity-70"
                 >
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
@@ -101,12 +101,12 @@ export default function ResendVerificationPage() {
                 </Button>
 
                 <div className="space-y-2 pt-2">
-                  <p className="text-center text-xs text-neutral-500">
+                  <p className="text-center text-xs text-muted-foreground">
                     Tidak menerima email? Cek folder <span className="font-medium">Spam</span> atau <span className="font-medium">Promotions</span>.
                   </p>
-                  <p className="text-center text-sm text-neutral-600">
+                  <p className="text-center text-sm text-muted-foreground">
                     Sudah verifikasi?{" "}
-                    <Link href="/customer/login" className="font-medium text-neutral-900 underline underline-offset-2">
+                    <Link href="/customer/login" className="font-medium text-primary underline underline-offset-2">
                       Masuk
                     </Link>
                   </p>

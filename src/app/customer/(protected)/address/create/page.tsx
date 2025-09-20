@@ -65,11 +65,9 @@ function CreateAddressPage() {
 
   return (
     <>
-      <Head>
-        <title>Tambah Alamat • Laundr</title>
-      </Head>
+      <Head><title>Tambah Alamat • Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-neutral-50">
+      <div className="relative min-h-screen bg-background">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -79,19 +77,12 @@ function CreateAddressPage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onClick={() => router.back()}
-            >
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <div className="text-[15px] font-semibold text-neutral-900">
-              Tambah Alamat
-            </div>
+            <div className="text-[15px] font-semibold text-foreground">Tambah Alamat</div>
           </div>
         </div>
 
@@ -99,21 +90,15 @@ function CreateAddressPage() {
           <CreateAddressFormCard formik={formik} coordsReady={coordsReady} />
         </div>
 
-        <div className="sticky bottom-0 z-40 border-t border-neutral-200 bg-white/90 backdrop-blur">
+        <div className="sticky bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 py-3 grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 rounded-xl"
-              onClick={() => router.back()}
-              disabled={pending}
-            >
+            <Button type="button" variant="outline" className="h-12 rounded-xl" onClick={() => router.back()} disabled={pending}>
               Batal
             </Button>
             <Button
               type="submit"
               onClick={() => formik.handleSubmit()}
-              className="h-12 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 active:scale-[.99] disabled:opacity-60"
+              className="h-12 rounded-xl disabled:opacity-60"
               disabled={!formik.isValid || !coordsReady || pending}
             >
               {pending ? (
