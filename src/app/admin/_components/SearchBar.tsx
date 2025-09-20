@@ -8,9 +8,10 @@ interface SearchBarProps {
   value?: string;
   onChange: (val: string) => void;
   debounceMs?: number;
+  placeholder?: string;
 }
 
-const SearchBar: FC<SearchBarProps> = ({ value = "", onChange, debounceMs = 500 }) => {
+const SearchBar: FC<SearchBarProps> = ({ value = "", onChange, debounceMs = 500, placeholder = "search..." }) => {
   const [inputValue, setInputValue] = useState(value);
 
   // Debounce
@@ -26,7 +27,7 @@ const SearchBar: FC<SearchBarProps> = ({ value = "", onChange, debounceMs = 500 
     <div className="flex items-center gap-2">
       <LucideSearch className="w-4 h-4 text-gray-500" />
       <Input
-        placeholder="Search employees..."
+        placeholder={placeholder}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         className="w-64"

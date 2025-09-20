@@ -223,7 +223,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
             />
           </div>
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" className="disabled:cursor-not-allowed" disabled={isSubmitting}>
             {isSubmitting ? <Loading /> : "Create Employee"}
           </Button>
         </Form>

@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import DashboardLayout from "./_components/DashboardLayout";
 
 export default function AdminDashboardPage() {
   return (
