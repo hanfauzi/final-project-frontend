@@ -12,6 +12,8 @@ export interface Employee {
   phoneNumber: string;
   address: string;
   photoUrl: string | undefined;
+  takenTaskId: string | null;
+  takenTaskType: string | null;
   
   outlet? : Outlet
   shift?: Shift
