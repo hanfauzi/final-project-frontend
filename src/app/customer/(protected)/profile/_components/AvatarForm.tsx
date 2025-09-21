@@ -86,7 +86,7 @@ export function AvatarForm() {
               }}
               className="h-12 w-full rounded-xl"
             >
-              <Pencil className="h-4 w-4 mr-2" /> Edit Profile
+              <Pencil className="h-4 w-4 mr-2" /> Ubah Profil
             </Button>
           </div>
         ) : (
@@ -113,7 +113,6 @@ export function AvatarForm() {
               {pending ? (
                 <span className="inline-flex items-center gap-2">
                   <LoaderCircle className="h-4 w-4 animate-spin" />
-                  Menyimpan...
                 </span>
               ) : (
                 <>

@@ -44,12 +44,11 @@ export function Navbar() {
       ] as const;
     }
     return [
-      { label: "Home", href: "/" },
-      { label: "Profile", href: "/customer/profile" },
-      { label: "Service", href: "#services" },
-      { label: "Address", href: "/customer/address" },
-      { label: "Order", href: "/customer/order" },
-      { label: "About Us", href: "#about" },
+      { label: "Beranda", href: "/" },
+      { label: "Profil", href: "/customer/profile" },
+      { label: "Layanan", href: "#services" },
+      { label: "Alamat", href: "/customer/address" },
+      { label: "Transaksi", href: "/customer/order" },
     ] as const;
   }, [loggedIn]);
 
@@ -101,10 +100,10 @@ export function Navbar() {
               {!loggedIn ? (
                 <div className="px-3 pt-2 pb-3 grid grid-cols-2 gap-2">
                   <Button asChild variant="outline" className="h-11 rounded-xl">
-                    <Link href="/customer/login">Login</Link>
+                    <Link href="/customer/login">Masuk</Link>
                   </Button>
                   <Button asChild variant="outline" className="h-11 rounded-xl">
-                    <Link href="/customer/register">Register</Link>
+                    <Link href="/customer/register">Daftar</Link>
                   </Button>
                 </div>
               ) : (

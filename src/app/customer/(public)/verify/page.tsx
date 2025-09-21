@@ -69,7 +69,7 @@ export default function ResendVerificationPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="nama@email.com"
+                    placeholder="Masukan Email"
                     inputMode="email"
                     autoComplete="email"
                     disabled={pending}
@@ -93,7 +93,6 @@ export default function ResendVerificationPage() {
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
                       <LoaderCircle className="h-4 w-4 animate-spin" />
-                      Mengirim...
                     </span>
                   ) : (
                     "Kirim Ulang Email Verifikasi"

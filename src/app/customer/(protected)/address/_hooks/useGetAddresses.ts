@@ -21,7 +21,6 @@ const useGetCustomerAddresses = () => {
     queryFn: async () => {
       const { data } = await axiosInstance.get<CustomerAddress[]>(
         "/api/address/",
-
       );
       return data;
     },

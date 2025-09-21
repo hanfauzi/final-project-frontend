@@ -30,7 +30,6 @@ export function ProfileForm() {
       {isLoading ? (
         <div className="py-14 grid place-items-center text-muted-foreground">
           <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
-          Memuat profil...
         </div>
       ) : isError ? (
         <div className="py-14 text-center text-destructive">
@@ -105,7 +104,7 @@ export function ProfileForm() {
                   className="h-9 rounded-lg"
                 >
                   <Pencil className="h-3.5 w-3.5 mr-1" />
-                  Edit
+                  Ubah
                 </Button>
               </div>
             ) : (

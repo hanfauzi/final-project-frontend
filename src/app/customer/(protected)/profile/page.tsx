@@ -39,7 +39,7 @@ function CustomerProfilePage() {
               <ChevronLeft className="h-5 w-5" />
             </Button>
             <div className="text-[15px] font-semibold text-foreground">
-              Profile
+              Profil
             </div>
           </div>
         </div>

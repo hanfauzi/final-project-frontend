@@ -56,7 +56,6 @@ export default function VerifyEmailPage() {
               {pending && (
                 <div className="grid place-items-center gap-3" role="status" aria-live="polite">
                   <LoaderCircle className="h-7 w-7 animate-spin text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">Memverifikasi email…</p>
                 </div>
               )}
 

@@ -72,7 +72,7 @@ function RegisterPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="nama@email.com"
+                    placeholder="Masukan Email"
                     inputMode="email"
                     autoComplete="email"
                     disabled={pending}
@@ -96,7 +96,6 @@ function RegisterPage() {
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
                       <LoaderCircle className="h-4 w-4 animate-spin" />
-                      Mendaftar...
                     </span>
                   ) : (
                     "Daftar"
@@ -139,12 +138,6 @@ function RegisterPage() {
                     <Link href="/customer/verify" className="text-primary font-medium underline underline-offset-2">
                       Kirim ulang
                     </Link>
-                  </p>
-                  <p className="text-center text-xs text-muted-foreground">
-                    Dengan mendaftar, kamu menyetujui{" "}
-                    <Link href="/terms" className="text-primary underline underline-offset-2">Ketentuan Layanan</Link>
-                    {" "}dan{" "}
-                    <Link href="/privacy" className="text-primary underline underline-offset-2">Kebijakan Privasi</Link>.
                   </p>
                 </div>
               </form>

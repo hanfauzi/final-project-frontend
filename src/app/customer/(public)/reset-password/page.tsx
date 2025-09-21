@@ -75,7 +75,7 @@ export default function ResetPasswordRequestPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="nama@email.com"
+                    placeholder="Masukan Email"
                     inputMode="email"
                     autoComplete="email"
                     disabled={pending}
@@ -101,7 +101,6 @@ export default function ResetPasswordRequestPage() {
                   {pending ? (
                     <span className="inline-flex items-center gap-2">
                       <LoaderCircle className="h-4 w-4 animate-spin" />
-                      Mengirim...
                     </span>
                   ) : (
                     "Kirim Link Reset"

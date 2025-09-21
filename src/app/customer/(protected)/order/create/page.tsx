@@ -177,7 +177,6 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
-              {/* Outlet */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Store className="h-4 w-4 text-muted-foreground" />
@@ -196,7 +195,6 @@ export default function CreateOrderPage() {
                 </div>
               </div>
 
-              {/* Outlet terpilih */}
               {!!outletNameAfterCreate && (
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
@@ -209,7 +207,6 @@ export default function CreateOrderPage() {
                 </div>
               )}
 
-              {/* Layanan */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Package className="h-4 w-4 text-muted-foreground" />
@@ -250,7 +247,6 @@ export default function CreateOrderPage() {
                 )}
               </div>
 
-              {/* Satuan */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-foreground">Layanan Satuan (opsional)</Label>
                 <div className={`rounded-2xl border p-3 ${useSatuan ? "border-ring bg-ring/5" : "border-border"}`}>

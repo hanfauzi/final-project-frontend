@@ -1,4 +1,3 @@
-// src/hooks/usePayment.ts
 import { axiosInstance } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";

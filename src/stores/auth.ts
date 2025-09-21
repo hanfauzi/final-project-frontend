@@ -1,5 +1,4 @@
 import type { Customer } from "@/types/customer";
-import type { Employee } from "@/types/employee";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

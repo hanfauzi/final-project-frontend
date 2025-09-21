@@ -32,11 +32,7 @@ type Props = {
 export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
   return (
     <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
-
-
       <CardContent className="space-y-4">
-      
-
         <div className="flex items-center gap-2 text-xs">
           <span
             className={[

@@ -23,12 +23,12 @@ export function VerifiedForm() {
           )}
           <div>
             <p className="text-sm font-semibold text-foreground">
-              {profile.isVerified ? "Email verified" : "Email not verified"}
+              {profile.isVerified ? "Email terverifikasi" : "Email belum terverifikasi"}
             </p>
             <p className="text-xs text-muted-foreground">
               {profile.isVerified
-                ? "Your email address has been verified."
-                : "Please verify your email to secure your account and unlock all features."}
+                ? "Email anda telah terverifikasi"
+                : "Tolong verifikasi email anda untuk keamanan akun"}
             </p>
           </div>
         </div>

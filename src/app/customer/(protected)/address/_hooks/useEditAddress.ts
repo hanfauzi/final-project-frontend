@@ -1,4 +1,3 @@
-// src/app/customer/_hooks/useEditAddress.ts
 import { axiosInstance } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -27,7 +26,6 @@ export default function useEditCustomerAddress(id: string) {
       const { data } = await axiosInstance.patch(
         `/api/address/edit/${id}`,
         payload,
-  
       );
       return data; 
     },
