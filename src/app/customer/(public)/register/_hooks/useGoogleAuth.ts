@@ -27,15 +27,15 @@ export function useGoogleAuth() {
     },
     onSuccess: (data) => {
       if (data.mode === "LOGIN") {
-        toast.success("Login with Google succesfully!");
+        toast.success("Masuk dengan Google berhasil!");
         router.replace("/"); 
       } else {
-        toast.success("Create account succesfully. Please set your password! The link has been sent to your email!");
+        toast.success("Pendaftaran dengan Google berhasil! Silakan cek email dan atur kata sandi Anda.");
         router.replace("/customer/login");
       }
     },
        onError: (error: AxiosError<{ message: string }>) => {
-         toast.error(error.response?.data.message ?? "Register/Login with Google failed!");
+         toast.error(error.response?.data.message ?? "Registrasi/Masuk gagal");
        },
   });
 }

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
 
 export const validationCustomerRegisterSchema = Yup.object().shape({
-  email: Yup.string().email().required("Email is required!"),
+  email: Yup.string().email().required("Email wajib diisi"),
 });

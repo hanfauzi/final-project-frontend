@@ -24,7 +24,6 @@ export default function useEditProfile() {
       await axiosInstance.patch<EditProfilePayload>("/api/profile/edit", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          
         },
       });
     },

@@ -115,7 +115,6 @@ function EditAddressPage() {
           }}
         />
 
-        {/* Topbar */}
         <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button
@@ -134,8 +133,6 @@ function EditAddressPage() {
             </div>
           </div>
         </div>
-
-        {/* FORM CARD (sudah dibungkus di komponen) */}
         <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24">
           <EditAddressFormCard
             formik={formik}
@@ -146,7 +143,6 @@ function EditAddressPage() {
           />
         </div>
 
-        {/* Bottom actions */}
         <div className="sticky bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 py-3 grid grid-cols-2 gap-2">
             <Button

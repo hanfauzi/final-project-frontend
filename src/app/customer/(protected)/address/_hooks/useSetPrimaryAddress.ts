@@ -1,4 +1,3 @@
-// src/app/customer/_hooks/useSetPrimaryAddress.ts
 import { axiosInstance } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";

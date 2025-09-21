@@ -3,13 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CalendarClock,
@@ -29,16 +22,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DateSheet } from "./_components/DateSheet";
 import { formatDate } from "./_components/FormatDate";
+import { OrderStatusSheet } from "./_components/OrderStatusSheet";
+import { PickUpStatusSheet } from "./_components/PickUpOrderStatusSheet";
 import { StatusBadge } from "./_components/StatusBadge";
 import { useDebounce } from "./_hooks/useDebounce";
-import useGetCustomerOrders from "./_hooks/useGetOrders";
 import useGetCustomerPickUpOrders from "./_hooks/useGetCustomerPickUpOrders";
-// import { StatusSheet } from "./_components/StatusSheet"; // untuk Orders
+import useGetCustomerOrders from "./_hooks/useGetOrders";
+import { PickUpStatusBadge } from "./_components/PickUpStatusBadge";
 
 export default function CustomerOrdersPage() {
   const router = useRouter();
 
-  // ===== Orders (existing)
   const [pageO, setPageO] = useState(1);
   const [invoiceNo, setInvoiceNo] = useState("");
   const [statusO, setStatusO] = useState<string | undefined>();
@@ -55,7 +49,6 @@ export default function CustomerOrdersPage() {
     dateTo: dateToO,
   });
 
-  // ===== Pickups
   const [pageP, setPageP] = useState(1);
   const [statusP, setStatusP] = useState<string | undefined>();
   const [dateFromP, setDateFromP] = useState<string | undefined>();
@@ -99,7 +92,6 @@ export default function CustomerOrdersPage() {
       </Head>
 
       <div className="relative min-h-screen bg-background">
-        {/* topbar */}
         <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
@@ -133,39 +125,13 @@ export default function CustomerOrdersPage() {
               <TabsTrigger value="orders">Orders</TabsTrigger>
             </TabsList>
 
-            {/* ===================== PICKUPS ===================== */}
             <TabsContent value="pickups" className="mt-4 space-y-3">
-              {/* filters */}
               <div className="flex gap-2">
-                <Select
-                  value={statusP}
-                  onValueChange={(v) => {
-                    setStatusP(v === "ALL" ? undefined : v);
-                    setPageP(1);
-                  }}
-                >
-                  <SelectTrigger className="h-10 rounded-xl text-[13px]">
-                    <SelectValue placeholder="Status Pickup" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">Semua status</SelectItem>
-                    <SelectItem value="WAITING_FOR_DRIVER">
-                      Waiting for Driver
-                    </SelectItem>
-                    <SelectItem value="ON_THE_WAY_TO_CUSTOMER">
-                      On the way to Customer
-                    </SelectItem>
-                    <SelectItem value="ON_THE_WAY_TO_OUTLET">
-                      On the way to Outlet
-                    </SelectItem>
-                    <SelectItem value="RECEIVED_BY_OUTLET">
-                      Received by Outlet
-                    </SelectItem>
-                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
+                <PickUpStatusSheet  value={statusP}
+                  onChange={(v) => { setStatusP(v); setPageP(1); }}/>
+ 
 
-                <DateSheet
+                <DateSheet separateFields
                   from={dateFromP}
                   to={dateToP}
                   onApply={(f, t) => {
@@ -181,7 +147,6 @@ export default function CustomerOrdersPage() {
                 />
               </div>
 
-              {/* list */}
               <main className="space-y-3 pb-6">
                 {pickupsQ.isLoading && (
                   <div className="py-10 grid place-items-center text-muted-foreground">
@@ -241,10 +206,9 @@ export default function CustomerOrdersPage() {
                                 </div>
                               </div>
 
-                              <StatusBadge status={p.status} />
+                              <PickUpStatusBadge status={p.status} />
                             </div>
 
-                            {/* Jangan pakai Link di dalam Link; jadikan badge/info biasa */}
                             {p._count.orderHeaders > 0 && (
                               <span className="text-sm text-primary underline underline-offset-2">
                                 {p._count.orderHeaders} order
@@ -394,9 +358,7 @@ export default function CustomerOrdersPage() {
               </main>
             </TabsContent> */}
 
-            {/* ===================== ORDERS ===================== */}
             <TabsContent value="orders" className="mt-4 space-y-3">
-              {/* search + chips */}
               <div className="space-y-2">
                 <div className="relative">
                   <Input
@@ -429,58 +391,8 @@ export default function CustomerOrdersPage() {
                 </div>
 
                 <div className="flex gap-2">
-                  {/* Kalau StatusSheet-mu khusus OrderStatus, tetap pakai ini */}
-                  {/* <StatusSheet value={statusO} onChange={(v) => { setStatusO(v); setPageO(1); }} /> */}
-                  {/* Atau pakai Select: */}
-                  <Select
-                    value={statusO}
-                    onValueChange={(v) => {
-                      setStatusO(v === "ALL" ? undefined : v);
-                      setPageO(1);
-                    }}
-                  >
-                    <SelectTrigger className="h-10 rounded-xl text-[13px]">
-                      <SelectValue placeholder="Status Order" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ALL">Semua status</SelectItem>
-                      <SelectItem value="WAITING_FOR_CONFIRMATION">
-                        Waiting for Confirmation
-                      </SelectItem>
-                      <SelectItem value="WAITING_FOR_DRIVER_PICKUP">
-                        Waiting for Driver Pickup
-                      </SelectItem>
-                      <SelectItem value="ON_THE_WAY_TO_OUTLET">
-                        On the way to Outlet
-                      </SelectItem>
-                      <SelectItem value="ARRIVED_AT_OUTLET">
-                        Arrived at Outlet
-                      </SelectItem>
-                      <SelectItem value="WASHING_IN_PROGRESS">
-                        Washing
-                      </SelectItem>
-                      <SelectItem value="IRONING_IN_PROGRESS">
-                        Ironing
-                      </SelectItem>
-                      <SelectItem value="PACKING_IN_PROGRESS">
-                        Packing
-                      </SelectItem>
-                      <SelectItem value="WAITING_FOR_PAYMENT">
-                        Waiting for Payment
-                      </SelectItem>
-                      <SelectItem value="READY_FOR_DELIVERY">
-                        Ready for Delivery
-                      </SelectItem>
-                      <SelectItem value="OUT_FOR_DELIVERY">
-                        Out for Delivery
-                      </SelectItem>
-                      <SelectItem value="DELIVERED_TO_CUSTOMER">
-                        Delivered
-                      </SelectItem>
-                      <SelectItem value="COMPLETED">Completed</SelectItem>
-                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <OrderStatusSheet value={statusO} onChange={(v) => { setStatusO(v); setPageO(1); }} />
+ 
 
                   <DateSheet
                     from={dateFromO}
@@ -499,7 +411,6 @@ export default function CustomerOrdersPage() {
                 </div>
               </div>
 
-              {/* list */}
               <main className="space-y-3 pb-6">
                 {ordersQ.isLoading && (
                   <div className="py-10 grid place-items-center text-muted-foreground">

@@ -59,7 +59,6 @@ export default function PickupOrderDetailPage() {
           }}
         />
 
-        {/* Topbar */}
         <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
@@ -92,7 +91,6 @@ export default function PickupOrderDetailPage() {
 
           {!isLoading && !isError && pickup && (
             <>
-              {/* Info utama */}
               <Card className="rounded-2xl border border-border bg-card text-card-foreground">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-start gap-2">
@@ -171,7 +169,6 @@ export default function PickupOrderDetailPage() {
                 </CardContent>
               </Card>
 
-              {/* Driver (opsional) */}
               {pickup.driver && (
                 <Card className="rounded-2xl border border-border bg-card">
                   <CardContent className="p-4 space-y-2">
@@ -192,7 +189,6 @@ export default function PickupOrderDetailPage() {
                 </Card>
               )}
 
-              {/* Notes (opsional) */}
               {pickup.notes && (
                 <Card className="rounded-2xl border border-border bg-card">
                   <CardContent className="p-4">
@@ -202,7 +198,6 @@ export default function PickupOrderDetailPage() {
                 </Card>
               )}
 
-              {/* Aksi: Cancel */}
               {canCancel && (
                 <div className="pt-2">
                   <AlertDialog>

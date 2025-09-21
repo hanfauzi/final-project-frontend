@@ -19,8 +19,8 @@ export default function useCancelPickUpOrder() {
     },
     onSuccess: (res, orderId) => {
       toast.success(res?.message ?? "Order berhasil dibatalkan.");
-      qc.invalidateQueries({ queryKey: ["orders"] });
-      qc.invalidateQueries({ queryKey: ["order", orderId] });
+      qc.invalidateQueries({ queryKey: ["pickup-orders"] });
+      qc.invalidateQueries({ queryKey: ["pickup-orders", orderId] });
     },
     onError: (err: AxiosError<{ message?: string }>) => {
       toast.error(err.response?.data?.message ?? "Gagal membatalkan order.");

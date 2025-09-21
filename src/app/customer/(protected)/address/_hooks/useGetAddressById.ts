@@ -1,4 +1,3 @@
-// features/address/_hooks/useGetAddressById.ts
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { CustomerAddress } from "./useGetAddresses";

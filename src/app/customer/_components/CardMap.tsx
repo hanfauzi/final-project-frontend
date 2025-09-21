@@ -127,7 +127,6 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
       <DialogContent
         className="max-w-3xl rounded-3xl p-0 overflow-hidden border border-border bg-card/90 backdrop-blur"
       >
-        {/* dekorasi pakai token */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -top-16 -left-10 h-44 w-44 rounded-full bg-primary/15 blur-3xl" />
           <div className="absolute top-8 right-0 h-56 w-56 rounded-full bg-accent/40 blur-3xl" />

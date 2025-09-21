@@ -15,7 +15,6 @@ const useGetCustomerProfile = () => {
     queryFn: async () => {
       const { data } = await axiosInstance.get<CustomerProfile>(
         "/api/profile/customer", 
-        
       );
       return data;
     },

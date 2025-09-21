@@ -32,10 +32,10 @@ export function Footer() {
               Navigasi
             </h3>
             <ul className="space-y-1.5 text-[15px] text-muted-foreground">
-              <li><Link href="/" className="hover:text-foreground">Home</Link></li>
-              <li><a href="#about" className="hover:text-foreground">About Us</a></li>
-              <li><a href="#services" className="hover:text-foreground">Service</a></li>
-              <li><Link href="/contact" className="hover:text-foreground">Contact Us</Link></li>
+              <li><Link href="/" className="hover:text-foreground">Beranda</Link></li>
+              <li><a href="#about" className="hover:text-foreground">Tentang Kami</a></li>
+              <li><a href="#services" className="hover:text-foreground">Layanan</a></li>
+              <li><Link href="/contact" className="hover:text-foreground">Kontak Kami</Link></li>
             </ul>
           </div>
 
@@ -52,8 +52,8 @@ export function Footer() {
               </li>
               <li>
                 Email:{" "}
-                <a href="mailto:hello@laundr.id" className="underline underline-offset-2 hover:text-foreground">
-                  hello@laundr.id
+                <a href="laundrproject@gmail.com" className="underline underline-offset-2 hover:text-foreground">
+                  laundrproject@gmail.com
                 </a>
               </li>
             </ul>

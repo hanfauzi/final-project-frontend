@@ -27,14 +27,12 @@ export function ActionSheet({
 
   return (
     <div className="fixed inset-0 z-[40]">
-      {/* backdrop */}
       <div
         className="absolute inset-0 bg-black/50 dark:bg-black/60"
         onClick={onClose}
         aria-hidden
       />
 
-      {/* sheet */}
       <div
         role="dialog"
         aria-modal="true"
