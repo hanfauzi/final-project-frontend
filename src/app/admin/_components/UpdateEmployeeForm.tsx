@@ -29,6 +29,7 @@ import {
 import { Shift, useShifts } from "../_hooks/useShifts";
 import { EMPLOYEE_ROLES } from "@/types/roles";
 import Loading from "@/components/Loading";
+import { Textarea } from "@/components/ui/textarea";
 
 interface UpdateEmployeeFormProps {
   initialValues: UpdateEmployeeFormValues;
@@ -87,7 +88,7 @@ export const UpdateEmployeeForm: FC<UpdateEmployeeFormProps> = ({
 
           <div>
             <label className="block font-semibold mb-1">Address</label>
-            <Field as={Input} name="address" placeholder="Address" />
+            <Field as={Textarea} name="address" placeholder="Address" />
             <ErrorMessage
               name="address"
               component="p"

@@ -15,6 +15,7 @@ import {
   useUpdateLaundryItem,
 } from "../_hooks/useLaundryItems";
 import CreateLaundryItemForm from "./CreateLaundryItem";
+import Loading from "@/components/Loading";
 
 export default function GetAllLaundryItems() {
   const { data, isLoading } = useLaundryItems();
@@ -25,7 +26,7 @@ export default function GetAllLaundryItems() {
   const [editValue, setEditValue] = useState("");
   const [showForm, setShowForm] = useState(false);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
 
   const handleSave = (id: string) => {
     updateMutation.mutate(

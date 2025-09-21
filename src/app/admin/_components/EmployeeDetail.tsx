@@ -88,7 +88,7 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
     const data = preparePayload(values);
 
     updateMutation.mutate(
-      { id: employee.id, data }, 
+      { id: employee.id, data },
       {
         onSuccess: () => {
           setIsEditing(false);
@@ -115,39 +115,38 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
         ) : (
           <>
             {employee.photoUrl && (
-              <img
-                src={employee.photoUrl}
-                alt={employee.name}
-                className="w-32 h-32 rounded-full object-cover mb-2"
-              />
+              <div className="flex justify-center mb-4">
+                <img
+                  src={employee.photoUrl}
+                  alt={employee.name}
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              </div>
             )}
-            <p>
-              <span className="font-semibold">Email:</span> {employee.email}
-            </p>
-            <p>
-              <span className="font-semibold">Phone:</span>{" "}
-              {employee.phoneNumber}
-            </p>
-            <p>
-              <span className="font-semibold">Address:</span> {employee.address}
-            </p>
-            <p>
-              <span className="font-semibold">Outlet:</span>{" "}
-              {employee.outlet?.name || "-"}
-            </p>
 
-            <Button
-              className="mt-4 cursor-pointer"
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
+            <div className="grid grid-cols-3 gap-2 text-sm">
+              <span className="font-semibold">Email:</span>
+              <span className="col-span-2">{employee.email}</span>
 
-            <ConfirmDeleteDialog
-              itemName="Employee"
-              onConfirm={() => deleteMutation.mutate(employee.id)}
-              isPending={deleteMutation.isPending}
-            />
+              <span className="font-semibold">Phone:</span>
+              <span className="col-span-2">{employee.phoneNumber}</span>
+
+              <span className="font-semibold">Address:</span>
+              <span className="col-span-2">{employee.address}</span>
+
+              <span className="font-semibold">Outlet:</span>
+              <span className="col-span-2">{employee.outlet?.name || "-"}</span>
+            </div>
+
+            <div className="flex justify-between gap-2 mt-4">
+              
+              <ConfirmDeleteDialog
+                itemName="Employee"
+                onConfirm={() => deleteMutation.mutate(employee.id)}
+                isPending={deleteMutation.isPending}
+              />
+              <Button className="cursor-pointer" onClick={() => setIsEditing(true)}>Edit</Button>
+            </div>
           </>
         )}
       </CardContent>

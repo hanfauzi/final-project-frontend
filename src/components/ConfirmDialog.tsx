@@ -21,7 +21,8 @@ interface ConfirmDialogProps {
   cancelText?: string;
   onConfirm: () => void;
   isPending?: boolean;
-  trigger?: ReactNode; 
+  trigger?: ReactNode;
+  children?: ReactNode;
 }
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({
@@ -32,12 +33,13 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
   onConfirm,
   isPending = false,
   trigger,
+  children,
 }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {trigger ?? (
-          <Button type="button" disabled={isPending}>
+          <Button className="cursor-pointer" type="button" disabled={isPending}>
             {isPending ? <Loading /> : "Open"}
           </Button>
         )}
@@ -47,8 +49,11 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {children && <div className="mt-4">{children}</div>}
         <div className="flex justify-end gap-2 mt-4">
-          <AlertDialogCancel disabled={isPending}>{cancelText}</AlertDialogCancel>
+          <AlertDialogCancel className="cursor-pointer" disabled={isPending}>
+            {cancelText}
+          </AlertDialogCancel>
           <AlertDialogAction
             className="cursor-pointer disabled:cursor-not-allowed"
             onClick={onConfirm}
