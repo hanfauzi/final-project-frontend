@@ -33,7 +33,7 @@ const ConfirmDeleteDialog: FC<ConfirmDeleteDialogProps> = ({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {trigger ?? (
-          <Button variant="destructive" className="cursor-pointer mt-2">
+          <Button variant="destructive" className="cursor-pointer ">
             Delete
           </Button>
         )}

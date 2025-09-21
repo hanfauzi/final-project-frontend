@@ -14,8 +14,6 @@ const OutletPage: FC<OutletPageProps> = () => {
     const params = useParams()
     const id = params?.id as string
 
-    console.log("ID >>>", id)
-
   return (
     <div className="p-4">
       <OutletDetail id={id} />
