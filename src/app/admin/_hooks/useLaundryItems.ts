@@ -36,7 +36,7 @@ export function useCreateLaundryItem() {
       return res.data;
     },
     onSuccess: () => {
-        toast.success("New laundry items created successfully!")
+        toast.success("New laundry item created successfully!")
       queryClient.invalidateQueries({ queryKey: ["laundry-items"] });
     },
   });

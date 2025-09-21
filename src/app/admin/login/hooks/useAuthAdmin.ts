@@ -22,7 +22,7 @@ export function useSuperAdminLogin() {
     onSuccess: (data) => {
       onEmployeeAuthSuccess({ employee: { ...data.payload, token: data.token } });
       toast.success("Login berhasil");
-      router.replace(next ?? "/dashboard");
+      router.replace("/admin");
     },
     onError: (error) => {
       toast.error(error.response?.data.message ?? "Login gagal");
