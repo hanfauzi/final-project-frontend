@@ -19,6 +19,7 @@ type OrderListItem = {
   estHours: number | null;
   outlets: { id: string; name: string };                 
   deliveryOrder?: { id: string; status: string } | null; 
+  serviceLabel: string;
 };
 
 type ApiListResponse<T> = {
