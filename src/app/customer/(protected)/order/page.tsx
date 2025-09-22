@@ -488,7 +488,7 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <Package className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {o.notes || "Tanpa catatan"}
+                                  {o.serviceLabel }
                                 </div>
                               </div>
                               <div className="flex items-center gap-1.5">

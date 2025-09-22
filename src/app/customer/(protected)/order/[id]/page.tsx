@@ -98,7 +98,7 @@ export default function OrderDetailPage() {
                     <Package className="h-4 w-4 text-muted-foreground mt-0.5" />
                     <div>
                       <div className="text-[12px] text-muted-foreground">Layanan</div>
-                      <div className="text-[13px] font-medium text-foreground">{order.notes || "—"}</div>
+                      <div className="text-[13px] font-medium text-foreground">{order.serviceLabel}</div>
                     </div>
                   </div>
 
