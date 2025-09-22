@@ -4,15 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 import Head from "next/head";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { AvatarForm } from "./_components/AvatarForm";
 import { ProfileForm } from "./_components/ProfileForm";
 import { VerifiedForm } from "./_components/VerifiedForm";
-import Link from "next/link";
 
 function CustomerProfilePage() {
   const router = useRouter();
-  const pathname = usePathname();
 
   return (
     <>
