@@ -7,10 +7,17 @@ import { useState } from "react";
 const STATUSES = [
   { v: "", l: "Semua Status" },
   { v: "WAITING_FOR_CONFIRMATION", l: "Menunggu Konfirmasi" },
+  { v: "WAITING_FOR_DRIVER_PICKUP", l: "Menunggu Driver Pickup" },
+  { v: "ON_THE_WAY_TO_OUTLET", l: "Kurir Menuju Outlet" },
+  { v: "ARRIVED_AT_OUTLET", l: "Tiba di Outlet" },
+  { v: "WASHING_IN_PROGRESS", l: "Pencucian Berlangsung" },
+  { v: "IRONING_IN_PROGRESS", l: "Penyetrikaan Berlangsung" },
+  { v: "PACKING_IN_PROGRESS", l: "Pengemasan Berlangsung" },
   { v: "WAITING_FOR_PAYMENT", l: "Menunggu Pembayaran" },
   { v: "READY_FOR_DELIVERY", l: "Siap Dikirim" },
+  { v: "OUT_FOR_DELIVERY", l: "Sedang Dikirim" },
   { v: "DELIVERED_TO_CUSTOMER", l: "Tiba di Tujuan" },
-  { v: "COMPLETED", l: "Berhasil" },
+  { v: "COMPLETED", l: "Selesai" },
   { v: "CANCELLED", l: "Dibatalkan" },
 ];
 

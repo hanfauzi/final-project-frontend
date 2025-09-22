@@ -8,7 +8,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
 import { formatDate } from "../_components/FormatDate";
 import { StatusBadge } from "../_components/StatusBadge";
-import useConfirmationOrder from "../_hooks/useConfirmationOrder";
 import useGetCustomerOrderById from "../_hooks/useGetOrderById";
 
 export default function OrderDetailPage() {
@@ -18,13 +17,11 @@ export default function OrderDetailPage() {
 
   const { data: order, isLoading, isError } = useGetCustomerOrderById(id);
   const { mutate: createSnap, isPending: creatingSnap } = useCreateOrReusePayment();
-  const { confirmationOrderMutation } = useConfirmationOrder();
 
   const outletDisplay = order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
   const canPay = !!order && order.status === "WAITING_FOR_PAYMENT";
-  const canConfirm = !!order && order.status === "DELIVERED_TO_CUSTOMER";
 
   return (
     <>
@@ -156,17 +153,7 @@ export default function OrderDetailPage() {
                 </Card>
               )}
 
-              {canConfirm && (
-                <div className="pt-2">
-                  <Button
-                    className="w-full h-11 rounded-xl"
-                    disabled={confirmationOrderMutation.isPending}
-                    onClick={() => id && confirmationOrderMutation.mutate(id)}
-                  >
-                    {confirmationOrderMutation.isPending ? "Mengonfirmasi" : "Konfirmasi diterima"}
-                  </Button>
-                </div>
-              )}
+
             </>
           )}
         </main>
