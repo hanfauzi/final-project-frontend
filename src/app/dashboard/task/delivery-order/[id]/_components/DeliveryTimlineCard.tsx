@@ -1,63 +1,63 @@
 "use client";
 
-import { PickUpOrder } from "@/types/pickUpOrder";
+import { DeliveryOrder } from "@/types/deliveryOrder";
 import { format } from "date-fns";
-import { Check, ChevronDown, CircleCheck } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
-type PickUpTimelineCardProps = {
-  pickUpOrder: PickUpOrder;
+type DeliveryTimelineCardProps = {
+  deliveryOrder: DeliveryOrder;
 };
 
-export default function PickUpTimelineCard({ pickUpOrder }: PickUpTimelineCardProps) {
+export default function DeliveryTimelineCard({ deliveryOrder }: DeliveryTimelineCardProps) {
 
   return (
     <div className="collapse bg-card border-1 rounded-md">
       <input type="checkbox" />
       <div className="collapse-title font-semibold flex justify-between gap-2 px-4">
-        <div>Pick-up Timeline</div>
+        <div>Delivery Timeline</div>
         <ChevronDown />
       </div>
       <div className="collapse-content text-sm">
         <ul className="relative ml-4 border-l-2 border-gray-300 flex flex-col justify-center">
-          {pickUpOrder.arrivedAtOutlet && (
+          {deliveryOrder.deliveredAt && (
             <li className="mb-10 ml-6">
               <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
                 <Check className="h-4 w-4 text-white" />
               </span>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
-                  <div>{format(new Date(pickUpOrder.arrivedAtOutlet), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.arrivedAtOutlet), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.deliveredAt), "EEE, dd MMMM yyyy")}</div>
+                  <div>{format(new Date(deliveryOrder.deliveredAt), "hh:mm")}</div>
                 </div>
-                <div className="font-semibold text-[16px]">Arrived At Outlet</div>
+                <div className="font-semibold text-[16px]">Delivered To The Customer</div>
               </div>
             </li>
           )}
-          {pickUpOrder.pickedUpAt && (
+          {deliveryOrder.takenByDriverAt && (
             <li className="mb-10 ml-6">
               <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
                 <Check className="h-4 w-4 text-white" />
               </span>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
-                  <div>{format(new Date(pickUpOrder.pickedUpAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.pickedUpAt), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.takenByDriverAt), "EEE, dd MMMM yyyy")}</div>
+                  <div>{format(new Date(deliveryOrder.takenByDriverAt), "hh:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Picked Up By Driver</div>
               </div>
             </li>
           )}
-          {pickUpOrder.createdAt && (
+          {deliveryOrder.createdAt && (
             <li className="ml-6">
               <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
                 <Check className="h-4 w-4 text-white" />
               </span>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
-                  <div>{format(new Date(pickUpOrder.createdAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.createdAt), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.createdAt), "EEE, dd MMMM yyyy")}</div>
+                  <div>{format(new Date(deliveryOrder.createdAt), "hh:mm")}</div>
                 </div>
-                <div className="font-semibold text-[16px]">Pick-up Order Requested</div>
+                <div className="font-semibold text-[16px]">Delivery Order Requested</div>
               </div>
             </li>
           )}

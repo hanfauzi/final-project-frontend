@@ -12,28 +12,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import useGetPickUpOrderById from "../../_hooks/useGetPickUpOrderById";
 import { useParams } from "next/navigation";
 import { isAxiosError } from "axios";
 import { Button } from "@/components/ui/button";
-import PickUpOrderDetailCard from "./_components/PickUpOrderDetailCard";
-import PickUpTimelineCard from "./_components/PickUpTimlineCard";
-import useProcessPickUpOrder from "../../_hooks/useProcessPickUpOrder";
+import useGetDeliveryOrderById from "../../_hooks/useGetDeliveryOrderById";
+import useProcessDeliveryOrder from "../../_hooks/useProcessDeliveryOrder";
+import DeliveryOrderDetailCard from "./_components/DeliveryOrderDetailCard";
+import DeliveryTimelineCard from "./_components/DeliveryTimlineCard";
 
-export default function PickUpOrderDetail() {
+export default function DeliveryOrderDetail() {
   const { id } = useParams<{ id: string }>();
 
   const {
-    data: pickUpOrder,
+    data: deliveryOrder,
     isLoading,
     isError,
     error,
-  } = useGetPickUpOrderById(id);
+  } = useGetDeliveryOrderById(id);
 
   const {
-    mutate: processPickUpOrder,
+    mutate: processDeliveryOrder,
     isPending: isUpdating,
-  } = useProcessPickUpOrder();
+  } = useProcessDeliveryOrder();
 
   if (isLoading) return <Skeleton className="h-10 w-full" />;
   if (isError) {
@@ -45,21 +45,21 @@ export default function PickUpOrderDetail() {
     }
     return <div className="text-destructive">Error: {errorMessage}</div>;
   }
-  if (!pickUpOrder) return <div>No order found</div>;
+  if (!deliveryOrder) return <div>No order found</div>;
 
   return (
     <div className="flex flex-col gap-4 pb-14">
-      <PickUpOrderDetailCard pickUpOrder={pickUpOrder} />
-      <PickUpTimelineCard pickUpOrder={pickUpOrder} />
+      <DeliveryOrderDetailCard deliveryOrder={deliveryOrder} />
+      <DeliveryTimelineCard deliveryOrder={deliveryOrder} />
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button
             className="shadow-lg hover:cursor-pointer"
-            disabled={isUpdating || pickUpOrder.status === "RECEIVED_BY_OUTLET"}
+            disabled={isUpdating || deliveryOrder.status === "RECEIVED_BY_CUSTOMER"}
           >
             {isUpdating
               ? "Loading..."
-              : pickUpOrder.status === "RECEIVED_BY_OUTLET"
+              : deliveryOrder.status === "RECEIVED_BY_CUSTOMER"
               ? "This pickup order is already completed ✅"
               : "Process this pickup order"}
           </Button>
@@ -74,7 +74,7 @@ export default function PickUpOrderDetail() {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => processPickUpOrder(id)}
+              onClick={() => processDeliveryOrder(id)}
               disabled={isUpdating}
             >
               Continue

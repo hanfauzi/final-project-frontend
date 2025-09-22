@@ -45,7 +45,7 @@ const AttendanceStatusCard = ({
         StatusIcon = CircleAlert;
         break;
     }
-  } else if (todayAttendances && todayAttendances.length === 0) {
+  } else if (todayAttendances && !todayAttendance) {
     statusMessage = "You haven't clocked in yet";
     statusColor = "bg-red-100 shadow-md border-2 border-red-300";
     StatusIcon = CircleAlert;

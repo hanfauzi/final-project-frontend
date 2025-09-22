@@ -12,7 +12,7 @@ export interface OrderHeader {
 
   createdAt: string;
   
-  customer?: Customer
+  customers?: Customer
   handledByAdmin?: Employee
   outlet?: Outlet
 }
