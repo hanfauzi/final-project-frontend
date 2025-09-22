@@ -6,7 +6,7 @@ import { CustomerProfile } from "@/types/customerProfile";
 import { useMemo, useState } from "react";
 import { useProfileForms } from "../_hooks/ui/useProfileForms";
 import { useAvatar } from "../_hooks/ui/useAvatar";
-import { makeInitials } from "@/app/customer/_components/MakeInitals";
+import { makeInitials } from "@/app/customer/(protected)/profile/_components/MakeInitals";
 
 export function AvatarForm() {
   const { data, isLoading, isError } = useGetCustomerProfile();

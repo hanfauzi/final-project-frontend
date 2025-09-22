@@ -1,7 +1,7 @@
 "use client";
 
-import CardMap from "@/app/customer/_components/CardMap";
-import { LabelChips } from "@/app/customer/_components/LabelChips";
+import CardMap from "@/app/customer/(protected)/address/_components/CardMap";
+import { LabelChips } from "@/app/customer/(protected)/address/_components/LabelChips";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";

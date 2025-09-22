@@ -1,4 +1,4 @@
-import { LabelEnum } from "../(protected)/address/_hooks/useEditAddress";
+import { LabelEnum } from "../_hooks/useEditAddress";
 
 const LABELS: { key: LabelEnum; ui: string }[] = [
   { key: "HOME", ui: "Rumah" },
