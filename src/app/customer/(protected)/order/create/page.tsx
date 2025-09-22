@@ -3,14 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import {
-  Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import {
-  Check, ChevronDown, ChevronLeft, MapPin, Package, Store,
-} from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, MapPin, Package, Store } from "lucide-react";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -83,7 +79,7 @@ export default function CreateOrderPage() {
     <>
       <Head><title>Buat Order — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-background flex flex-col">
+      <div className="relative min-h-screen bg-transparent"> 
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden
@@ -92,7 +88,8 @@ export default function CreateOrderPage() {
               "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
           }}
         />
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden"> 
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
@@ -101,10 +98,15 @@ export default function CreateOrderPage() {
           </div>
         </div>
 
-        <main className="flex-1 mx-auto w-full max-w-sm px-4 py-6">
+        <div className="hidden md:block"> 
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <h1 className="text-xl font-semibold text-foreground">Buat Order</h1>
+          </div>
+        </div>
+
+        <main className="mx-auto w-full max-w-sm px-4 py-6 md:max-w-5xl md:px-6 md:py-8"> 
           <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-sm">
             <CardContent className="space-y-5">
-              {/* Alamat */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <MapPin className="h-4 w-4 text-muted-foreground" />

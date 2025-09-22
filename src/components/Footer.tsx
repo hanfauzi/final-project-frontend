@@ -3,35 +3,35 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="mt-12 border-t border-border bg-background">
-      <div className="mx-auto w-full max-w-sm px-4 py-8">
+    <footer className="mt-12 border-t border-border bg-background md:mt-16"> 
+      <div className="mx-auto w-full max-w-sm px-4 py-8 md:max-w-5xl md:px-6 md:py-10"> 
         <Link
           href="/"
           aria-label="Ke beranda"
           className="inline-flex items-center px-2 py-1 -mx-2"
         >
-          <div className="relative h-7 w-[112px] sm:h-8 sm:w-[128px]">
+          <div className="relative h-7 w-[112px] sm:h-8 sm:w-[128px] md:h-9 md:w-[150px]"> 
             <Image
               src="/logo-text-laundr.png"
               alt="Laundr"
               fill
               className="object-contain"
-              sizes="(max-width: 640px) 112px, 128px"
+              sizes="(max-width: 640px) 128px, 150px" 
               priority
             />
           </div>
         </Link>
 
-        <p className="mt-2 text-base text-muted-foreground">
+        <p className="mt-2 text-base text-muted-foreground md:text-[17px]"> 
           Bikin urusan laundry jadi gampang.
         </p>
 
-        <div className="mt-6 grid grid-cols-2 gap-6">
+        <div className="mt-6 grid grid-cols-2 gap-6 md:mt-8 md:grid-cols-3 md:gap-8"> 
           <div>
-            <h3 className="text-[15px] font-semibold text-foreground mb-2">
+            <h3 className="text-[15px] font-semibold text-foreground mb-2 md:text-base"> 
               Navigasi
             </h3>
-            <ul className="space-y-1.5 text-[15px] text-muted-foreground">
+            <ul className="space-y-1.5 text-[15px] text-muted-foreground md:text-[15px]">
               <li><Link href="/" className="hover:text-foreground">Beranda</Link></li>
               <li><a href="#about" className="hover:text-foreground">Tentang Kami</a></li>
               <li><a href="#services" className="hover:text-foreground">Layanan</a></li>
@@ -40,7 +40,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-[15px] font-semibold text-foreground mb-2">
+            <h3 className="text-[15px] font-semibold text-foreground mb-2 md:text-base"> 
               Kontak
             </h3>
             <ul className="space-y-1.5 text-[15px] text-muted-foreground">
@@ -52,15 +52,24 @@ export function Footer() {
               </li>
               <li>
                 Email:{" "}
-                <a href="laundrproject@gmail.com" className="underline underline-offset-2 hover:text-foreground">
+                <a href="mailto:laundrproject@gmail.com" className="underline underline-offset-2 hover:text-foreground"> 
                   laundrproject@gmail.com
                 </a>
               </li>
             </ul>
           </div>
+
+          <div className="hidden md:block"> 
+            <h3 className="text-[15px] font-semibold text-foreground mb-2 md:text-base">Kenapa Laundr?</h3>
+            <ul className="space-y-1.5 text-[15px] text-muted-foreground">
+              <li>Cepat & tepat waktu</li>
+              <li>Harga transparan</li>
+              <li>Dukungan pelanggan ramah</li>
+            </ul>
+          </div>
         </div>
 
-        <div id="about" className="mt-6 text-xs text-muted-foreground/90">
+        <div id="about" className="mt-6 text-xs text-muted-foreground/90 md:mt-8 md:text-sm"> 
           © {new Date().getFullYear()} Laundr. All rights reserved.
         </div>
       </div>

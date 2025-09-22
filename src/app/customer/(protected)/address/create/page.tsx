@@ -15,41 +15,20 @@ function CreateAddressPage() {
   const { createAddressMutation } = useCreateCustomerAddress();
 
   const formik = useFormik<{
-    label: LabelEnum;
-    address: string;
-    notes: string | null;
-    city: string;
-    postalCode: string;
-    phoneNumber: string;
-    latitude: number;
-    longitude: number;
-    pinpoint: string;
-    makePrimary: boolean;
+    label: LabelEnum; address: string; notes: string | null; city: string; postalCode: string;
+    phoneNumber: string; latitude: number; longitude: number; pinpoint: string; makePrimary: boolean;
   }>({
     initialValues: {
-      label: "HOME",
-      address: "",
-      notes: "",
-      city: "",
-      postalCode: "",
-      phoneNumber: "",
-      latitude: 0,
-      longitude: 0,
-      pinpoint: "",
-      makePrimary: false,
+      label: "HOME", address: "", notes: "", city: "", postalCode: "",
+      phoneNumber: "", latitude: 0, longitude: 0, pinpoint: "", makePrimary: false,
     },
     validationSchema: EditAddressCustomerSchema,
     onSubmit: async (values) => {
       try {
         await createAddressMutation.mutateAsync({
-          label: values.label,
-          address: values.address,
-          city: values.city,
-          postalCode: values.postalCode,
-          phoneNumber: values.phoneNumber,
-          latitude: values.latitude,
-          longitude: values.longitude,
-          notes: values.notes,
+          label: values.label, address: values.address, city: values.city,
+          postalCode: values.postalCode, phoneNumber: values.phoneNumber,
+          latitude: values.latitude, longitude: values.longitude, notes: values.notes,
           isPrimary: values.makePrimary,
         });
         router.back();
@@ -67,17 +46,8 @@ function CreateAddressPage() {
     <>
       <Head><title>Tambah Alamat • Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-background">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
-          }}
-        />
-
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+      <div className="relative min-h-screen bg-transparent">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center gap-2">
             <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
@@ -86,19 +56,25 @@ function CreateAddressPage() {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24">
+        <div className="hidden md:block">
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <h1 className="text-xl font-semibold text-foreground">Tambah Alamat</h1>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-sm px-4 py-4 pb-24 md:max-w-5xl md:px-6 md:py-6 md:pb-8">
           <CreateAddressFormCard formik={formik} coordsReady={coordsReady} />
         </div>
 
-        <div className="sticky bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur">
-          <div className="mx-auto w-full max-w-sm px-4 py-3 grid grid-cols-2 gap-2">
-            <Button type="button" variant="outline" className="h-12 rounded-xl" onClick={() => router.back()} disabled={pending}>
+        <div className="sticky bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur md:static md:bg-transparent md:border-t-0">
+          <div className="mx-auto w-full max-w-sm px-4 py-3 grid grid-cols-2 gap-2 md:max-w-5xl md:px-6 md:py-0 md:flex md:justify-end md:gap-3">
+            <Button type="button" variant="outline" className="h-12 rounded-xl md:h-11" onClick={() => router.back()} disabled={pending}>
               Batal
             </Button>
             <Button
               type="submit"
               onClick={() => formik.handleSubmit()}
-              className="h-12 rounded-xl disabled:opacity-60"
+              className="h-12 rounded-xl disabled:opacity-60 md:h-11"
               disabled={!formik.isValid || !coordsReady || pending}
             >
               {pending ? (

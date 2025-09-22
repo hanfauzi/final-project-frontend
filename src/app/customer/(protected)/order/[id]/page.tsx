@@ -2,11 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  CalendarClock, ChevronLeft, Clock,
-  CreditCard,
-  Hash, Package, Store,
-} from "lucide-react";
+import { CalendarClock, ChevronLeft, Clock, CreditCard, Hash, Package, Store } from "lucide-react";
 import Head from "next/head";
 import { useParams, useRouter } from "next/navigation";
 import { useCreateOrReusePayment } from "../../payment/_hooks/useCreateOrReusePayment";
@@ -34,7 +30,7 @@ export default function OrderDetailPage() {
     <>
       <Head><title>Detail Order — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen bg-transparent"> 
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -44,18 +40,22 @@ export default function OrderDetailPage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
-          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-              <div className="text-[15px] font-semibold text-foreground">Detail Order</div>
-            </div>
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden"> 
+          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center">
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <div className="ml-1.5 text-[15px] font-semibold text-foreground">Detail Order</div>
           </div>
         </div>
 
-        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
+        <div className="hidden md:block"> 
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <h1 className="text-xl font-semibold text-foreground">Detail Order</h1>
+          </div>
+        </div>
+
+        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8"> 
           {isLoading && (
             <Card className="rounded-2xl border border-border bg-card">
               <CardContent className="p-5 text-muted-foreground">
@@ -167,8 +167,6 @@ export default function OrderDetailPage() {
                   </Button>
                 </div>
               )}
-
-
             </>
           )}
         </main>
