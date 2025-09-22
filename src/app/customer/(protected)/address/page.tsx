@@ -31,7 +31,6 @@ function AddressListPage() {
     setSelectedId(sorted[0]?.id ?? null);
   }, [sorted]);
 
-
   function openSheetFor(id: string) {
     setSheetTargetId(id);
     setSheetOpen(true);
@@ -57,17 +56,8 @@ function AddressListPage() {
     <>
       <Head><title>Detail Alamat • Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-background">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
-          }}
-        />
-
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+      <div className="relative min-h-screen bg-transparent">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
@@ -82,7 +72,18 @@ function AddressListPage() {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
+        <div className="hidden md:block">
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-semibold text-foreground">Detail Alamat</h1>
+              <Button asChild className="h-10 rounded-xl">
+                <Link href="/customer/address/create"><Plus className="h-4 w-4 mr-2" />Tambah</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-6">
           {isLoading && (
             <div className="py-10 grid place-items-center text-muted-foreground">
               <LoaderCircle className="h-5 w-5 animate-spin mb-2" />
@@ -117,7 +118,6 @@ function AddressListPage() {
             </div>
           )}
         </div>
-
 
         <div className="h-6" />
       </div>

@@ -1,4 +1,3 @@
-// app/customer/pickup/[id]/page.tsx
 "use client";
 
 import Head from "next/head";
@@ -12,22 +11,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  CalendarClock,
-  ChevronLeft,
-  Hash,
-  Navigation,
-  Phone,
-  Store,
-  Truck,
+  CalendarClock, ChevronLeft, Hash, Navigation, Phone, Store, Truck,
 } from "lucide-react";
 import useGetCustomerPickUpOrderById from "../../_hooks/useGetCustomerPickUpOrderById";
 import useCancelPickUpOrder from "../../_hooks/useCancelPickUpOrder";
 import { StatusBadge } from "../../_components/StatusBadge";
 import { formatDate } from "../../_components/FormatDate";
-
-// Sesuaikan path kedua import ini dengan letak komponenmu
-
-// Hook data + cancel (sesuaikan path-nya kalau berbeda)
 
 export default function PickupOrderDetailPage() {
   const router = useRouter();
@@ -49,7 +38,7 @@ export default function PickupOrderDetailPage() {
     <>
       <Head><title>Detail Pickup — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen bg-transparent"> 
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden
@@ -59,18 +48,22 @@ export default function PickupOrderDetailPage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
-          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
-              <div className="text-[15px] font-semibold text-foreground">Detail Pickup</div>
-            </div>
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden"> 
+          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center">
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <div className="ml-1.5 text-[15px] font-semibold text-foreground">Detail Pickup</div>
           </div>
         </div>
 
-        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3">
+        <div className="hidden md:block"> 
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <h1 className="text-xl font-semibold text-foreground">Detail Pickup</h1>
+          </div>
+        </div>
+
+        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8"> 
           {isLoading && (
             <Card className="rounded-2xl border border-border bg-card">
               <CardContent className="p-5 text-muted-foreground">Memuat detail pickup…</CardContent>
@@ -177,10 +170,7 @@ export default function PickupOrderDetailPage() {
                     {pickup.driver.phoneNumber && (
                       <div className="flex items-center gap-2 text-[13px]">
                         <Phone className="h-4 w-4 text-muted-foreground" />
-                        <Link
-                          href={`tel:${pickup.driver.phoneNumber}`}
-                          className="underline underline-offset-2 text-primary"
-                        >
+                        <Link href={`tel:${pickup.driver.phoneNumber}`} className="underline underline-offset-2 text-primary">
                           {pickup.driver.phoneNumber}
                         </Link>
                       </div>

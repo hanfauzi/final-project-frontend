@@ -28,30 +28,24 @@ export function AvatarForm() {
   return (
     <>
       <div className="grid place-items-center">
-        <div className="relative h-24 w-24 rounded-full overflow-hidden border border-border bg-card">
+        <div className="relative h-24 w-24 rounded-full overflow-hidden border border-border bg-card md:h-28 md:w-28 md:ring-1 md:ring-border/70">
           {avatarSrc ? (
-            <Image
-              src={avatarSrc}
-              alt="Foto Profil"
-              fill
-              className="object-cover"
-              sizes="96px"
-            />
+            <Image src={avatarSrc} alt="Foto Profil" fill className="object-cover" sizes="120px" />
           ) : (
-            <div className="h-full w-full grid place-items-center bg-muted text-muted-foreground text-2xl font-semibold">
+            <div className="h-full w-full grid place-items-center bg-muted text-muted-foreground text-2xl font-semibold md:text-3xl">
               {initials}
             </div>
           )}
         </div>
 
         {isEditing && (
-          <div className="mt-3 grid w-full grid-cols-2 gap-2">
+          <div className="mt-3 grid w-full grid-cols-2 gap-2 md:gap-3">
             <Button
               type="button"
               variant="secondary"
               onClick={pickFile}
               disabled={pending}
-              className="h-10 rounded-xl"
+              className="h-10 rounded-xl md:h-11"
             >
               <Camera className="h-4 w-4 mr-2" /> Ganti Foto
             </Button>
@@ -60,7 +54,7 @@ export function AvatarForm() {
               variant="secondary"
               onClick={clearPhoto}
               disabled={pending}
-              className="h-10 rounded-xl"
+              className="h-10 rounded-xl md:h-11"
             >
               <Trash2 className="h-4 w-4 mr-2" /> Hapus
             </Button>
@@ -77,20 +71,20 @@ export function AvatarForm() {
 
       {!isLoading && !isError && profile ? (
         !isEditing ? (
-          <div className="mt-4">
+          <div className="mt-4 md:mt-5">
             <Button
               type="button"
               onClick={() => {
                 formik.resetForm();
                 setIsEditing(true);
               }}
-              className="h-12 w-full rounded-xl"
+              className="h-12 w-full rounded-xl md:h-12"
             >
               <Pencil className="h-4 w-4 mr-2" /> Ubah Profil
             </Button>
           </div>
         ) : (
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2 md:gap-3">
             <Button
               type="button"
               variant="outline"
@@ -100,7 +94,7 @@ export function AvatarForm() {
                 formik.resetForm();
                 clearPhoto();
               }}
-              className="h-12 rounded-xl"
+              className="h-12 rounded-xl md:h-12"
             >
               <X className="h-4 w-4 mr-2" /> Batal
             </Button>
@@ -108,7 +102,7 @@ export function AvatarForm() {
               type="button"
               onClick={() => formik.handleSubmit()}
               disabled={pending}
-              className="h-12 rounded-xl"
+              className="h-12 rounded-xl md:h-12"
             >
               {pending ? (
                 <span className="inline-flex items-center gap-2">

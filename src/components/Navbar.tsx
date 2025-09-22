@@ -54,31 +54,75 @@ export function Navbar() {
 
   return (
     <div className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
-      <div className="mx-auto w-full max-w-sm h-12 px-4 flex items-center justify-between">
-        <span className="inline-flex w-6" />
+      <div className="mx-auto w-full max-w-sm h-12 px-4 flex items-center justify-between md:max-w-5xl md:h-14 md:px-6"> 
+        <span className="inline-flex w-6 md:hidden" /> 
         <div className="font-bold tracking-tight text-foreground select-none">
-<Link
-  href="/"
-  aria-label="Ke beranda"
-  className="inline-flex items-center px-2 py-1 -mx-2"
->
-  <div className="relative h-7 w-[112px] sm:h-8 sm:w-[128px] shrink-0">
-    <Image
-      src="/logo-text-laundr.png"
-      alt="Laundr"
-      fill
-      className="object-contain"
-      sizes="(max-width: 640px) 112px, 128px"
-      priority
-    />
-  </div>
-</Link>
+          <Link
+            href="/"
+            aria-label="Ke beranda"
+            className="inline-flex items-center px-2 py-1 -mx-2"
+          >
+            <div className="relative h-7 w-[112px] sm:h-8 sm:w-[128px] md:h-9 md:w-[150px] shrink-0"> 
+              <Image
+                src="/logo-text-laundr.png"
+                alt="Laundr"
+                fill
+                className="object-contain"
+                sizes="(max-width: 640px) 128px, 150px" 
+                priority
+              />
+            </div>
+          </Link>
+        </div>
 
+        <div className="hidden md:flex md:items-center md:gap-5"> 
+          {items.map((it) => (
+            <Link key={it.label} href={it.href} className="text-[15px] text-muted-foreground hover:text-foreground">
+              {it.label}
+            </Link>
+          ))}
+          {!loggedIn ? (
+            <div className="ml-2 flex items-center gap-2">
+              <Button asChild variant="outline" className="h-10 rounded-xl">
+                <Link href="/customer/login">Masuk</Link>
+              </Button>
+              <Button asChild className="h-10 rounded-xl">
+                <Link href="/customer/register">Daftar</Link>
+              </Button>
+            </div>
+          ) : (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button type="button" variant="destructive" className="h-10 rounded-xl">
+                  Logout
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Keluar dari akun?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Kamu akan keluar dari Laundr di perangkat ini. Pastikan perubahan sudah disimpan.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      clearAuth();
+                      router.refresh();
+                    }}
+                  >
+                    Keluar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full md:hidden"> 
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
@@ -109,7 +153,6 @@ export function Navbar() {
               ) : (
                 <>
                   <Separator className="my-2" />
-
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button

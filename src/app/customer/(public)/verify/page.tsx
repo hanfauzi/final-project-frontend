@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { validationCustomerRegisterSchema } from "@/features/customer/register/validationCustomerRegisterSchemas";
 import useResendVerifyEmail from "./_hooks/useResendVerifyEmail";
+import Image from "next/image";
 
 export default function ResendVerificationPage() {
   const { resendVerifyEmailMutation } = useResendVerifyEmail();
@@ -30,9 +31,9 @@ export default function ResendVerificationPage() {
         <title>Kirim Ulang Verifikasi • Laundr</title>
       </Head>
 
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen bg-background md:flex md:items-center md:justify-center md:p-6">
         <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
+          className="pointer-events-none absolute inset-0 -z-10 opacity-60 md:opacity-70"
           aria-hidden="true"
           style={{
             background:
@@ -40,28 +41,34 @@ export default function ResendVerificationPage() {
           }}
         />
 
-        <div className="mx-auto w-full max-w-sm px-4 py-6">
-          <div className="mb-4 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground font-bold">
-                L
-              </span>
-              <div className="text-2xl font-black tracking-tight text-foreground">Laundr</div>
+        <div className="mx-auto w-full max-w-sm px-4 py-6 md:max-w-md md:px-6 md:py-8">
+          <div className="mb-4 flex items-center justify-center md:mb-6"> 
+            <div className="inline-flex items-center gap-2"> 
+              <span className="sr-only">L</span> 
+              <div className="text-2xl font-black tracking-tight text-foreground md:text-3xl"> 
+                <Image
+                  src="/logo-text-laundr.png"
+                  alt="Laundr"
+                  width={160}
+                  height={40}
+                  priority
+                /> 
+              </div>
             </div>
           </div>
 
-          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
-            <CardHeader className="pb-2 text-center">
-              <CardTitle className="text-lg font-semibold text-foreground">
+          <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)] md:rounded-3xl md:shadow-xl">
+            <CardHeader className="pb-2 text-center md:pb-3">
+              <CardTitle className="text-lg font-semibold text-foreground md:text-xl">
                 Kirim ulang verifikasi
               </CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground md:text-[0.95rem]">
                 Masukkan email yang kamu daftarkan untuk menerima tautan baru.
               </p>
             </CardHeader>
 
-            <CardContent className="pt-2">
-              <form onSubmit={formik.handleSubmit} className="space-y-4" aria-busy={pending}>
+            <CardContent className="pt-2 md:px-6 md:pt-4">
+              <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-5" aria-busy={pending}>
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-foreground">
                     Email
@@ -100,10 +107,10 @@ export default function ResendVerificationPage() {
                 </Button>
 
                 <div className="space-y-2 pt-2">
-                  <p className="text-center text-xs text-muted-foreground">
+                  <p className="text-center text-xs text-muted-foreground md:text-sm">
                     Tidak menerima email? Cek folder <span className="font-medium">Spam</span> atau <span className="font-medium">Promotions</span>.
                   </p>
-                  <p className="text-center text-sm text-muted-foreground">
+                  <p className="text-center text-sm text-muted-foreground md:text-[0.95rem]">
                     Sudah verifikasi?{" "}
                     <Link href="/customer/login" className="font-medium text-primary underline underline-offset-2">
                       Masuk
@@ -114,7 +121,7 @@ export default function ResendVerificationPage() {
             </CardContent>
           </Card>
 
-          <div className="h-6" />
+          <div className="h-6 md:h-8" />
         </div>
       </div>
     </>
