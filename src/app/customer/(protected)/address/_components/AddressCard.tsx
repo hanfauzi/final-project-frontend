@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, MapPin, MoreHorizontal, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CustomerAddress } from "../(protected)/address/_hooks/useGetAddresses";
+import { CustomerAddress } from "../_hooks/useGetAddresses";
 
 export function AddressCard({
   data,

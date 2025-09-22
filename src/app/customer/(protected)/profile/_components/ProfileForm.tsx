@@ -88,7 +88,7 @@ export function ProfileForm() {
                   onClick={() => copy(profile.email, "email")}
                   className="h-9 rounded-lg md:h-10"
                 >
-                  {copied.email ? "Copied!" : "Copy"}
+                  {copied.email ? "Tersalin" : "Salin"}
                 </Button>
                 <Button
                   type="button"
@@ -171,7 +171,7 @@ export function ProfileForm() {
                   onClick={() => profile.phoneNumber && copy(profile.phoneNumber, "phone")}
                   className="h-9 rounded-lg disabled:opacity-50 md:h-10"
                 >
-                  {copied.phone ? "Copied!" : "Copy"}
+                  {copied.phone ? "Tersalin" : "Salin"}
                 </Button>
               </div>
             ) : (
