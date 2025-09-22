@@ -1,10 +1,12 @@
 "use client";
 
-import { Footer } from "@/components/Footer";
 import { HomeCarousel } from "@/app/(home)/_components/HomeCarousel";
+import { ServicesBand } from "@/app/(home)/_components/Services";
+import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { Services } from "@/app/(home)/_components/Services";
 import Head from "next/head";
+import AboutUs from "./_components/AboutUs";
+import Hero from "./_components/Hero";
 
 export default function Home() {
   return (
@@ -13,7 +15,7 @@ export default function Home() {
 
       <div className="relative min-h-screen bg-background md:bg-gradient-to-b md:from-background md:to-muted/30"> 
         <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60 md:opacity-80" /* [UPDATED] */
+          className="pointer-events-none absolute inset-0 -z-10 opacity-60 md:opacity-80" 
           aria-hidden="true"
           style={{
             background:
@@ -21,11 +23,13 @@ export default function Home() {
           }}
         />
 
-        <Navbar />
 
-        <main className="mx-auto w-full max-w-sm md:max-w-5xl md:px-6 md:py-6"> 
+        <main className="mx-auto w-full max-w-sm md:max-w-full "> 
+        <Navbar />
+          <Hero/>
           <HomeCarousel />
-          <Services />
+          <AboutUs/>
+          <ServicesBand />
         </main>
 
         <Footer />

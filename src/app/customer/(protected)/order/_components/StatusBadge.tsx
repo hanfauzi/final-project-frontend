@@ -8,25 +8,30 @@ export function StatusBadge({ status }: { status: string }) {
     const NEG   = "bg-destructive/10 text-destructive";
     const NEU   = "bg-muted text-foreground";
 
-    switch (status) {
+  switch (status) {
       case "WAITING_FOR_CONFIRMATION":
+      case "WAITING_FOR_DRIVER_PICKUP":
       case "WAITING_FOR_PAYMENT":
       case "READY_FOR_DELIVERY":
         return { text: mapText(status), classes: BRAND };
-      case "ACCEPTED":
-      case "COMPLETED":
+
+      case "ON_THE_WAY_TO_OUTLET":
+      case "ARRIVED_AT_OUTLET":
+      case "WASHING_IN_PROGRESS":
+      case "IRONING_IN_PROGRESS":
+      case "PACKING_IN_PROGRESS":
+      case "OUT_FOR_DELIVERY":
+        return { text: mapText(status), classes: NEU };
+
       case "DELIVERED_TO_CUSTOMER":
+      case "COMPLETED":
         return { text: mapText(status), classes: POS };
-      case "REJECTED":
+
       case "CANCELLED":
         return { text: mapText(status), classes: NEG };
-      case "PICKED_UP":
-      case "IN_PROGRESS":
-      case "READY":
-      case "DELIVERING":
-        return { text: mapText(status), classes: NEU };
+
       default:
-        return { text: status, classes: "bg-muted text-muted-foreground" };
+        return { text: String(status), classes: "bg-muted text-muted-foreground" };
     }
   }, [status]);
 
@@ -34,19 +39,20 @@ export function StatusBadge({ status }: { status: string }) {
 }
 
 function mapText(s: string) {
-  switch (s) {
-    case "WAITING_FOR_CONFIRMATION": return "Menunggu Konfirmasi";
-    case "ACCEPTED": return "Diterima";
-    case "REJECTED": return "Ditolak";
-    case "PICKED_UP": return "Sudah Dijemput";
-    case "IN_PROGRESS": return "Diproses";
-    case "READY": return "Siap Diantar";
-    case "DELIVERING": return "Diantar";
-    case "COMPLETED": return "Selesai";
-    case "CANCELLED": return "Dibatalkan";
-    case "WAITING_FOR_PAYMENT": return "Menunggu Pembayaran";
-    case "READY_FOR_DELIVERY": return "Siap Diantar";
-    case "DELIVERED_TO_CUSTOMER": return "Pesanan Telah Dikirim";
-    default: return s;
+ switch (s) {
+    case "WAITING_FOR_CONFIRMATION":  return "Menunggu Konfirmasi";
+    case "WAITING_FOR_DRIVER_PICKUP": return "Menunggu Driver Pickup";
+    case "ON_THE_WAY_TO_OUTLET":      return "Kurir Menuju Outlet";
+    case "ARRIVED_AT_OUTLET":         return "Tiba di Outlet";
+    case "WASHING_IN_PROGRESS":       return "Pencucian Berlangsung";
+    case "IRONING_IN_PROGRESS":       return "Penyetrikaan Berlangsung";
+    case "PACKING_IN_PROGRESS":       return "Pengemasan Berlangsung";
+    case "WAITING_FOR_PAYMENT":       return "Menunggu Pembayaran";
+    case "READY_FOR_DELIVERY":        return "Siap Dikirim";
+    case "OUT_FOR_DELIVERY":          return "Sedang Dikirim";
+    case "DELIVERED_TO_CUSTOMER":     return "Tiba di Tujuan";
+    case "COMPLETED":                 return "Selesai";
+    case "CANCELLED":                 return "Dibatalkan";
+    default:                          return String(s);
   }
 }

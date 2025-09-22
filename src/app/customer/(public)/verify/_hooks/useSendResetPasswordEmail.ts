@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export interface SendEmailPayload {
@@ -8,7 +9,7 @@ export interface SendEmailPayload {
 }
 
 export default function useSendResetPasswordEmail() {
-
+const router = useRouter();
 
   const sendResetPasswordEmailMutation = useMutation({
     mutationFn: async (payload: SendEmailPayload) => {
@@ -17,6 +18,7 @@ export default function useSendResetPasswordEmail() {
     },
     onSuccess: () => {
       toast.success("Email reset password berhasil dikirim. Silakan periksa email Anda!");
+      router.refresh()
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data.message ?? "Gagal mengirim email reset password.");

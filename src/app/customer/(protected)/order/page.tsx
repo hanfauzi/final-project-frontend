@@ -29,6 +29,9 @@ import { useDebounce } from "./_hooks/useDebounce";
 import useGetCustomerPickUpOrders from "./_hooks/useGetCustomerPickUpOrders";
 import useGetCustomerOrders from "./_hooks/useGetOrders";
 import { PickUpStatusBadge } from "./_components/PickUpStatusBadge";
+import useGetCustomerDeliveryOrders from "./_hooks/useGetCustomerDeliveryOrders";
+import { DeliveryStatusSheet } from "./_components/DeliveryOrderStatusSheet";
+import { DeliveryStatusBadge } from "./_components/DeliveryOrderStatusBadge";
 
 export default function CustomerOrdersPage() {
   const router = useRouter();
@@ -62,11 +65,27 @@ export default function CustomerOrdersPage() {
     dateTo: dateToP,
   });
 
+    const [pageD, setPageD] = useState(1);
+  const [statusD, setStatusD] = useState<string | undefined>();
+  const [dateFromD, setDateFromD] = useState<string | undefined>();
+  const [dateToD, setDateToD] = useState<string | undefined>();
+
+  const deliveriesQ = useGetCustomerDeliveryOrders({
+    page: pageD,
+    take: 5,
+  status: statusD,
+  dateFrom: dateFromD,
+  dateTo: dateToD,
+  });
+
   const orders = ordersQ.data?.data ?? [];
   const metaO = ordersQ.data?.meta;
 
   const pickups = pickupsQ.data?.data ?? [];
   const metaP = pickupsQ.data?.meta;
+
+  const deliveries = deliveriesQ.data?.data ?? [];
+  const metaD = deliveriesQ.data?.meta;
 
   return (
     <>
@@ -242,6 +261,130 @@ export default function CustomerOrdersPage() {
             </TabsContent>
 
             {/* ===================== DELIVERIES ===================== */}
+            <TabsContent value="deliveries" className="mt-4 space-y-3">
+              <div className="flex gap-2 md:gap-3">
+                <DeliveryStatusSheet
+                  value={statusD}
+                  onChange={(v) => {
+                    setStatusD(v);
+                    setPageD(1);
+                  }}
+                />
+
+                <DateSheet
+                  separateFields
+                  from={dateFromD}
+                  to={dateToD}
+                  onApply={(f, t) => {
+                    setDateFromD(f);
+                    setDateToD(t);
+                    setPageD(1);
+                  }}
+                  onClear={() => {
+                    setDateFromD(undefined);
+                    setDateToD(undefined);
+                    setPageD(1);
+                  }}
+                />
+              </div>
+
+              <main className="space-y-3 pb-6 md:pb-8">
+                {deliveriesQ.isLoading && (
+                  <div className="py-10 grid place-items-center text-muted-foreground">
+                    <RefreshCw className="h-5 w-5 animate-spin mb-2" />
+                    Memuat Deliveries
+                  </div>
+                )}
+
+                {deliveriesQ.isError && !deliveriesQ.isLoading && (
+                  <div className="py-10 text-center text-destructive">
+                    Gagal memuat deliveries.
+                  </div>
+                )}
+
+                {!deliveriesQ.isLoading &&
+                  !deliveriesQ.isError &&
+                  deliveries.length === 0 && (
+                    <div className="py-10 text-center text-muted-foreground">
+                      Belum ada delivery
+                    </div>
+                  )}
+
+                {deliveries.map((d) => {
+                  const href = `/customer/order/delivery/${d.id}`;
+                  return (
+                    <Link key={d.id} href={href} className="block">
+                      <Card className="rounded-xl border border-border bg-card text-card-foreground hover:bg-accent">
+                        <CardContent className="p-3.5">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+                                <Hash className="h-3.5 w-3.5" />
+                                <span className="font-medium text-foreground">
+                                  #{d.id.slice(0, 6).toUpperCase()}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-1.5">
+                                <Truck className="h-4 w-4 text-muted-foreground" />
+                                <div className="text-[13px] font-medium text-foreground">
+                                  {d.outlet.name} • {d.outlet.cityName}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-1.5">
+                                <Navigation className="h-4 w-4 text-muted-foreground" />
+                                <div className="text-[12px] text-muted-foreground">
+                                  {d.distance} km • Rp{" "}
+                                  {d.price.toLocaleString("id-ID")}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-1.5">
+                                <CalendarClock className="h-4 w-4 text-muted-foreground" />
+                                <div className="text-[12px] text-muted-foreground">
+                                  {formatDate(d.createdAt)}
+                                </div>
+                              </div>
+
+                              <DeliveryStatusBadge status={d.status} />
+                            </div>
+
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+                {metaD && metaD.totalPages > 1 && (
+                  <div className="flex justify-between items-center pt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full"
+                      disabled={pageD <= 1}
+                      onClick={() => setPageD((d) => Math.max(1, d - 1))}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" /> Prev
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                      {metaD.page} / {metaD.totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full"
+                      disabled={pageD >= metaD.totalPages}
+                      onClick={() =>
+                        setPageD((d) => Math.min(metaD.totalPages, d + 1))
+                      }
+                    >
+                      Next <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                )}
+              </main>
+            </TabsContent>
 
             <TabsContent value="orders" className="mt-4 space-y-3">
               <div className="space-y-2">

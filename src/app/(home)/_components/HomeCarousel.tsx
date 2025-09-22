@@ -1,94 +1,82 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Card, CardContent } from "../../../components/ui/card";
-import Image from "next/image"; 
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function HomeCarousel() {
   const slides = [
-    { id: 1, src: "/images/hero-1.jpg", alt: "Promo 1" },
-    { id: 2, src: "/images/hero-2.jpg", alt: "Promo 2" },
-    { id: 3, src: "/images/hero-3.jpg", alt: "Promo 3" },
+    { id: 1, src: "/lipetan.jpg", alt: "Lipetan rapi" },
+    { id: 2, src: "/mesin-cuci.jpg", alt: "Mesin cuci" },
+    { id: 3, src: "/gantungan.jpg", alt: "Pakaian di gantungan" },
   ];
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const [index, setIndex] = useState(0);
-  const [pause, setPause] = useState(false); 
+  const [pause, setPause] = useState(false);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    if (pause) return; 
-
-    const timer = setInterval(() => {
-      setIndex((prev) => {
-        const next = (prev + 1) % slides.length;
-        const child = el.children[next] as HTMLElement | undefined;
-        child?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-        return next;
-      });
+    if (pause) return;
+    const t = setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length);
     }, 3500);
+    return () => clearInterval(t);
+  }, [pause, slides.length]);
 
-    return () => clearInterval(timer);
-  }, [slides.length, pause]); 
+  const prev = () => setIndex((i) => (i - 1 + slides.length) % slides.length);
+  const next = () => setIndex((i) => (i + 1) % slides.length);
 
   return (
-    <section className="mt-3 md:mt-6"> 
-      <div
-        ref={containerRef}
-        className="w-full overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar"
-        onMouseEnter={() => setPause(true)} onMouseLeave={() => setPause(false)} 
-      >
-        <div className="flex w-full">
-          {slides.map((s) => (
-            <div key={s.id} className="min-w-full snap-start px-4 md:px-0"> 
-              <Card className="rounded-2xl overflow-hidden border border-border shadow-[0_8px_30px_rgba(0,0,0,.06)] md:rounded-3xl md:shadow-xl"> 
-                <CardContent className="p-0">
-                  <div className="relative w-full aspect-[16/9] md:aspect-[21/8] bg-muted"> 
-                    <Image
-                      src={s.src}
-                      alt={s.alt}
-                      fill
-                      priority
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 1024px" 
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" /> 
-                    <div className="absolute bottom-3 left-4 right-4 md:bottom-5 md:left-6 md:right-auto md:max-w-md"> 
-                      <div className="inline-flex items-center rounded-full bg-primary/90 px-3 py-1 text-[11px] font-medium text-primary-foreground md:text-xs"> 
-                        Promo Spesial
-                      </div>
-                      <h3 className="mt-2 text-white text-lg font-semibold drop-shadow md:text-2xl"> 
-                        {s.alt}
-                      </h3>
-                      <p className="text-white/90 text-xs md:text-sm">
-                        Cuci, setrika, lipat — cepat & hemat di Laundr.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-3 flex items-center justify-center gap-2 md:mt-4"> 
+    <section
+      className="mt-3 px-5 md:px-10 md:mt-6"
+      onMouseEnter={() => setPause(true)}
+      onMouseLeave={() => setPause(false)}
+      aria-roledescription="carousel"
+      aria-label="Promo Laundr"
+    >
+      <div className="relative w-full  aspect-[16/9] md:aspect-[21/8] overflow-hidden bg-black">
         {slides.map((s, i) => (
-          <button
+          <div
             key={s.id}
-            aria-label={`Slide ${i + 1}`}
-            onClick={() => {
-              setIndex(i);
-              const el = containerRef.current;
-              const child = el?.children[i] as HTMLElement | undefined;
-              child?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-            }} 
-            className={`h-1.5 rounded-full transition-all ${
-              i === index ? "w-6 bg-primary" : "w-1.5 bg-muted"
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              i === index ? "opacity-100" : "opacity-0"
             }`}
-          />
+            aria-hidden={i !== index}
+          >
+            <Image
+              src={s.src}
+              alt={s.alt}
+              fill
+              priority={i === 0}
+              className="object-cover"
+              sizes="100vw"
+            />
+             <div className="pointer-events-none absolute inset-0 bg-black/20" /> 
+          </div>
         ))}
+
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-2 md:px-4">
+          <Button
+            type="button"
+            size="icon"
+            variant="secondary"
+            onClick={prev}
+            className="pointer-events-auto h-9 w-9 rounded-full/none bg-background/70 backdrop-blur hover:bg-background/90"
+            aria-label="Sebelumnya"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <Button
+            type="button"
+            size="icon"
+            variant="secondary"
+            onClick={next}
+            className="pointer-events-auto h-9 w-9 rounded-full/none bg-background/70 backdrop-blur hover:bg-background/90"
+            aria-label="Berikutnya"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
     </section>
   );
