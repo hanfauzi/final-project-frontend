@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -10,7 +12,7 @@ export default function Hero() {
     >
       <div className="relative h-[58vh] min-h-[420px] md:h-[72vh]">
         <Image
-          src="/hero.jpg" 
+          src="/hero.jpg"
           alt=""
           fill
           priority
@@ -22,17 +24,25 @@ export default function Hero() {
 
       <div className="absolute inset-0">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="pt-16 md:pt-24 lg:pt-28 w-full max-w-3xl">
+          <div className="pt-16 md:pt-22 lg:pt-22 w-full max-w-3xl">
             <h1 className="text-white font-bold leading-tight tracking-[-0.02em] text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
               <span className="block">Waktu Luangmu, Bukan untuk Laundry.</span>
               <span className="block">Jemput Sekarang, Bersih Hari Ini.</span>
             </h1>
 
             <p className="mt-4 text-white/90 text-sm sm:text-base md:text-lg max-w-2xl">
-              Serahkan ke Laundr—jemput, cuci, setrika, antar. Tracking real-time,
-              pembayaran aman, kualitas outlet tepercaya.
+              Serahkan ke Laundr—jemput, cuci, setrika, antar. Tracking
+              real-time, pembayaran aman, kualitas outlet tepercaya.
             </p>
 
+            <div className="mt-6 flex gap-3">
+              <Button>
+                <Link href="#services">Layanan</Link>
+              </Button>
+              <Button variant="outline">
+                <Link href="#about">Tentang Kami</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

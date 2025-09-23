@@ -28,7 +28,7 @@ export function HomeCarousel() {
 
   return (
     <section
-      className="mt-3 px-5 md:px-10 md:mt-6"
+      className="mt-3 px-5 md:px-10 md:mt-20"
       onMouseEnter={() => setPause(true)}
       onMouseLeave={() => setPause(false)}
       aria-roledescription="carousel"

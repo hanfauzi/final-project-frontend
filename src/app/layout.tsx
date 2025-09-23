@@ -4,15 +4,14 @@ import ReactQueryProvider from "@/providers/ReactQueryProviders";
 import { Toaster } from "sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import ClientProviders from "@/providers/ClientProviders";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], 
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-sans",              
+  variable: "--font-sans",
 });
-
-
 
 export const metadata: Metadata = {
   title: "Laundr",
@@ -30,12 +29,11 @@ export default function RootLayout({
         <GoogleOAuthProvider
           clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
         >
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ClientProviders>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </ClientProviders>
         </GoogleOAuthProvider>
         <Toaster richColors position="top-center" />
-
-       
-        
       </body>
     </html>
   );
