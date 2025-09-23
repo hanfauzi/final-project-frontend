@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 import useGetCustomerPickUpOrderById from "../../_hooks/useGetCustomerPickUpOrderById";
 import useCancelPickUpOrder from "../../_hooks/useCancelPickUpOrder";
-import { StatusBadge } from "../../_components/StatusBadge";
 import { formatDate } from "../../_components/FormatDate";
+import { PickUpStatusBadge } from "../../_components/PickUpStatusBadge";
 
 export default function PickupOrderDetailPage() {
   const router = useRouter();
@@ -96,7 +96,7 @@ export default function PickupOrderDetailPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="text-[12px] text-muted-foreground">Status</div>
-                    <StatusBadge status={pickup.status} />
+                    <PickUpStatusBadge status={pickup.status} />
                   </div>
 
                   <div className="flex items-start gap-2">
