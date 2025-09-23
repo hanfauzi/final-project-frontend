@@ -11,7 +11,7 @@ export default function PickupOrdersList() {
   if (isError) return <p>Terjadi error</p>;
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 p-6">
         <h1 className="text-xl font-bold mb-4">Pick Up Orders</h1>
       {data?.map((pickup: any) => (
         <Link
