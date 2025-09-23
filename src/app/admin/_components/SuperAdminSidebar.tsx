@@ -3,7 +3,7 @@ import SidebarItem from "./SidebarItem";
 import { Separator } from "@/components/ui/separator";
 import { Users, Home, Box, ClipboardList, CalendarArrowUp } from "lucide-react";
 
-const Sidebar: FC = () => {
+const SuperAdminSidebar: FC = () => {
   return (
     <div className="w-64 h-screen p-4 border-r border-gray-200 dark:border-gray-700 flex flex-col">
       {/* Section Manage */}
@@ -26,4 +26,4 @@ const Sidebar: FC = () => {
   );
 };
 
-export default Sidebar;
+export default SuperAdminSidebar;

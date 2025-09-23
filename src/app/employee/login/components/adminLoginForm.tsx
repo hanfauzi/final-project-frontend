@@ -5,21 +5,21 @@ import * as Yup from "yup";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSuperAdminLogin } from "../hooks/useAuthAdmin";
 import Loading from "@/components/Loading";
+import useEmployeeLogin from "../hooks/useAuthEmployee";
 
 const SuperAdminLoginSchema = Yup.object().shape({
-  email: Yup.string().email("Email tidak valid").required("Email wajib diisi"),
-  password: Yup.string().min(8, "Minimal 8 karakter").required("Password wajib diisi"),
+  email: Yup.string().email("Invalid email format!").required("Email is required"),
+  password: Yup.string().min(8, "Minimum 8 characters").required("Password is required"),
 });
 
 export default function SuperAdminLoginForm() {
-  const login = useSuperAdminLogin();
+  const login = useEmployeeLogin();
 
   return (
     <Card className="w-full max-w-md mx-auto mt-10 shadow-lg">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Super Admin Login</CardTitle>
+        <CardTitle className="text-xl font-semibold">Employee Login</CardTitle>
       </CardHeader>
       <CardContent>
         <Formik

@@ -12,6 +12,7 @@ import {
 
 interface Order {
   id: string;
+    invoiceNo: string;
   customers?: { name?: string };
   outlets?: { name?: string };
   createdAt: string;
@@ -32,7 +33,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Order ID</TableHead>
+            <TableHead>Invoice</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Outlet</TableHead>
             <TableHead>Created At</TableHead>
@@ -41,7 +42,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
         <TableBody>
           {data?.map((order) => (
             <TableRow key={order.id}>
-              <TableCell>{order.id}</TableCell>
+              <TableCell>{order.invoiceNo}</TableCell>
               <TableCell>{order.customers?.name ?? "-"}</TableCell>
               <TableCell>{order.outlets?.name ?? "-"}</TableCell>
               <TableCell>
