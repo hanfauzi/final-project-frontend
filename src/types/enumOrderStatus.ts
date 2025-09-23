@@ -1,0 +1,15 @@
+export enum OrderStatus {
+  WAITING_FOR_CONFIRMATION = "waiting_for_confirmation",
+  WAITING_FOR_DRIVER_PICKUP = "waiting_for_driver_pickup",
+  ON_THE_WAY_TO_OUTLET = "on_the_way_to_outlet",
+  ARRIVED_AT_OUTLET = "arrived_at_outlet",
+  WASHING_IN_PROGRESS = "washing_in_progress",
+  IRONING_IN_PROGRESS = "ironing_in_progress",
+  PACKING_IN_PROGRESS = "packing_in_progress",
+  WAITING_FOR_PAYMENT = "waiting_for_payment",
+  READY_FOR_DELIVERY = "ready_for_delivery",
+  OUT_FOR_DELIVERY = "out_for_delivery",
+  DELIVERED_TO_CUSTOMER = "delivered_to_customer",
+  CANCELLED = "cancelled",
+  COMPLETED = "completed",
+}

@@ -6,6 +6,7 @@ export interface Order {
   id: string;
   outletId: string;
   createdAt: string;
+  invoiceNo: string;
   customers?: {
     id: string;
     name: string;
