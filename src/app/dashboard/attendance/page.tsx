@@ -61,7 +61,7 @@ const AttendancePage = () => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-xl px-4 py-2 bg-white shadow-sm">
+          <div className="rounded-xl px-4 py-2 bg-white shadow-md border-2 border-primary/50">
             <div className="flex flex-col gap-2 justify-between h-full">
               <div className="flex justify-between">
                 <div className="font-bold">My schedule</div>
@@ -99,7 +99,7 @@ const AttendancePage = () => {
               </div>
             </div>
           </div>
-          <a href="/dashboard/attendance/history" className="rounded-xl px-4 py-2 bg-white shadow-sm">
+          <a href="/dashboard/attendance/history" className="rounded-xl px-4 py-2 bg-white shadow-md border-2 border-primary/50">
             <div className="flex flex-col gap-2 justify-between h-full">
               <div className="flex justify-between">
                 <div className="font-bold">Attendance history</div>
