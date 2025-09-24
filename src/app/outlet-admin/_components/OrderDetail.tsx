@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOrderDetail } from "../_hooks/useOrdersOutletAdmin";
 import { OrderItemType } from "@/types/orderItem";
-import Countdown from "./CountDown";
+import Countdown from "./Countdown";
 
 interface OrderDetailProps {
   orderId: string;
@@ -32,7 +32,7 @@ const OrderInfo: FC<{ order: any }> = ({ order }) => (
         <p>{new Date(order.createdAt).toLocaleString()}</p>
         <p>
           {order.estHours ? (
-            <Countdown estimatedDoneAt={new Date(new Date(order.createdAt).getTime() + order.estHours * 60 * 60 * 1000)} />
+            <Badge><Countdown estimatedDoneAt={new Date(new Date(order.createdAt).getTime() + order.estHours * 60 * 60 * 1000)} /></Badge>
           ) : (
             <Badge>{order.estHours} JAM</Badge>
           )}

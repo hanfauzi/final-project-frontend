@@ -17,7 +17,7 @@ const OutletAdminSidebar: FC = () => {
 
       {/* Section Info / Lainnya */}
       <div className="flex flex-col gap-1">
-        <SidebarItem title="Reports" href="/admin/reports" icon={<ClipboardList size={18} />} />
+        <SidebarItem title="Sales Reports" href="/outlet-admin/sales" icon={<ClipboardList size={18} />} />
       </div>
     </div>
   );

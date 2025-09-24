@@ -65,13 +65,7 @@ const OrdersFilter: FC<OrdersFilterProps> = ({
         </SelectContent>
       </Select>
 
-      <Button
-        variant="secondary"
-        onClick={onApply}
-        disabled={isApplying}
-      >
-        Apply Filter
-      </Button>
+     
     </div>
   );
 };
