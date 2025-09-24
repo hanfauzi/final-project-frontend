@@ -40,7 +40,7 @@ const ClockOutButton = () => {
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="w-full" variant={"outline"} disabled={isPending || isSuccess}>
+          <Button className="w-full font-bold" disabled={isPending || isSuccess}>
             {isPending ? "Clocking out..." : isSuccess ? "Clocked Out ✅" : "Clock Out"}
           </Button>
         </AlertDialogTrigger>

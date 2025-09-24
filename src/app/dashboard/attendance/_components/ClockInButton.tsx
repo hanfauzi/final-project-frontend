@@ -40,7 +40,7 @@ const ClockInButton = () => {
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="w-full" variant={"outline"} disabled={isPending || isSuccess}>
+          <Button className="w-full font-bold" disabled={isPending || isSuccess}>
             {isPending ? "Clocking in..." : isSuccess ? "Clocked In ✅" : "Clock In"}
           </Button>
         </AlertDialogTrigger>

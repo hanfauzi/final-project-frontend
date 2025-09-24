@@ -1,6 +1,6 @@
 export default function AttendanceLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="max-w-sm mx-auto">
+    <main className="mx-auto max-w-sm md:max-w-[800px]">
       {children}
     </main>
   )
