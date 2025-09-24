@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
+import Loading from "@/components/Loading";
 
 export default function PickupOrdersList() {
   const { data, isLoading, isError } = usePickupOrders();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (isError) return <p>Terjadi error</p>;
 
   return (

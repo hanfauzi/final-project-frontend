@@ -9,6 +9,7 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card";
+import Loading from "@/components/Loading";
 
 export default function PickupOrderDetailPage() {
   const params = useParams<{ pickupOrderId: string }>();
@@ -16,7 +17,7 @@ export default function PickupOrderDetailPage() {
 
   const { data, isLoading, error } = usePickupOrderDetail(pickupOrderId);
 
-  if (isLoading) return <p>Loading pickup order...</p>;
+  if (isLoading) return <Loading />;
   if (error) return <p className="text-red-500">Failed to load pickup order</p>;
   if (!data) return <p>Pickup order not found</p>;
 

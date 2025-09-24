@@ -23,6 +23,7 @@ export interface Order {
 interface GetAllOrdersResponse {
   data: Order[];
   meta: {
+    totalPages: number;
     total: number;
     page: number;
     limit: number;

@@ -4,6 +4,10 @@ export const CreateOutletSchema = Yup.object().shape({
   name: Yup.string()
     .max(60, "Name must not be longer than 60 characters")
     .required("Name is required"),
+    code: Yup.string()
+    .min(3, "Code must be 3 characters")
+    .max(3, "Code must be 3 characters")
+    .required("Code is required"),
   address: Yup.string()
     .max(200, "Address must not be longer than 200 characters")
     .required("Address is required"),
@@ -17,6 +21,6 @@ export const CreateOutletSchema = Yup.object().shape({
   longitude: Yup.number().required("Longitude is required. ex: 106.12345"),
   coverageArea: Yup.number()
     .min(1, "Coverage area must be at least 1 km")
-    .max(3, "Coverage area must not be more than 3 km")
+    .max(5, "Coverage area must not be more than 5 km")
     .required("Coverage area is required"),
 });

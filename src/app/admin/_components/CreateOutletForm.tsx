@@ -26,6 +26,7 @@ const CreateOutletForm: FC = () => {
       <Formik
         initialValues={{
           name: "",
+          code: "",
           address: "",
           phoneNumber: "",
           cityId: "",
@@ -54,6 +55,14 @@ const CreateOutletForm: FC = () => {
               <Field as={Input} name="name" placeholder="Outlet Name" />
               <ErrorMessage
                 name="name"
+                component="div"
+                className="text-red-500 text-sm"
+              />
+            </div>
+            <div>
+              <Field as={Input} name="code" placeholder="Outlet Code. ex: SBY or JKT" />
+              <ErrorMessage
+                name="code"
                 component="div"
                 className="text-red-500 text-sm"
               />
