@@ -23,11 +23,14 @@ export default function OrderDetailPage() {
 
   const canPay = !!order && order.status === "WAITING_FOR_PAYMENT";
 
+  const fmtID = (n: number) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
+  const grandTotal  = order?.amount ?? 0;
+
   return (
     <>
       <Head><title>Detail Order — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-transparent"> 
+      <div className="relative min-h-screen bg-transparent">
         <div
           className="pointer-events-none absolute inset-0 -z-10 opacity-60"
           aria-hidden="true"
@@ -37,7 +40,7 @@ export default function OrderDetailPage() {
           }}
         />
 
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden"> 
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center">
             <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
@@ -46,13 +49,13 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="hidden md:block"> 
+        <div className="hidden md:block">
           <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
             <h1 className="text-xl font-semibold text-foreground">Detail Order</h1>
           </div>
         </div>
 
-        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8"> 
+        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8">
           {isLoading && (
             <Card className="rounded-2xl border border-border bg-card">
               <CardContent className="p-5 text-muted-foreground">
@@ -130,6 +133,17 @@ export default function OrderDetailPage() {
                 </CardContent>
               </Card>
 
+              <Card className="rounded-2xl border border-border bg-card text-card-foreground">
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[13px] textforeground font-medium ">Total Harga</span>
+                    <span className="text-[15px] font-semibold text-foreground">
+                      {fmtID(grandTotal)}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+
               {canPay && (
                 <Card className="rounded-2xl border border-border bg-card">
                   <CardContent className="p-4 space-y-3">
@@ -137,6 +151,14 @@ export default function OrderDetailPage() {
                       <CreditCard className="h-4 w-4 text-muted-foreground" />
                       <div className="text-[13px] font-medium text-foreground">Pembayaran</div>
                     </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-[12px] text-muted-foreground">Total tagihan</span>
+                      <span className="text-[14px] font-semibold text-foreground">
+                        {fmtID(grandTotal)}
+                      </span>
+                    </div>
+
                     <p className="text-[12px] text-muted-foreground">
                       Silakan lanjutkan pembayaran untuk memproses pengantaran.
                     </p>
@@ -152,8 +174,6 @@ export default function OrderDetailPage() {
                   </CardContent>
                 </Card>
               )}
-
-
             </>
           )}
         </main>

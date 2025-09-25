@@ -7,6 +7,7 @@ export type SuggestOutletResponse = {
     outletId: string;
     outletName: string;
     distanceOutletKm: number;
+    estimatedPickupPrice: number;
   };
 };
 

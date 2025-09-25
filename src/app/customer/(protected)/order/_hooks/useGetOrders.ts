@@ -14,12 +14,18 @@ type OrderListItem = {
   id: string;
   invoiceNo: string | null;
   status: string;
-  notes: string | null;
   createdAt: string;
   estHours: number | null;
-  outlets: { id: string; name: string };                 
-  deliveryOrder?: { id: string; status: string } | null; 
+  outlets: { id: string; name: string };
+  deliveryOrder?: { id: string; status: string; price?: number } | null;
+  serviceNames: string[];           
   serviceLabel: string;
+  amount: number;                   
+  breakdown: {                      
+    itemsTotal: number;
+    pickupFeeApplied: number;
+    deliveryFee: number;
+  };
 };
 
 type ApiListResponse<T> = {

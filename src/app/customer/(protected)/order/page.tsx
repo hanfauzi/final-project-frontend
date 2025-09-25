@@ -8,6 +8,7 @@ import {
   CalendarClock,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
   Hash,
   Navigation,
   Package,
@@ -385,7 +386,7 @@ export default function CustomerOrdersPage() {
               </main>
             </TabsContent>
 
-            <TabsContent value="orders" className="mt-4 space-y-3">
+ <TabsContent value="orders" className="mt-4 space-y-3">
               <div className="space-y-2">
                 <div className="relative">
                   <Input
@@ -427,7 +428,7 @@ export default function CustomerOrdersPage() {
                   />
 
                   <DateSheet
-                  separateFields
+                    separateFields
                     from={dateFromO}
                     to={dateToO}
                     onApply={(f, t) => {
@@ -458,47 +459,51 @@ export default function CustomerOrdersPage() {
                   </div>
                 )}
 
-                {!ordersQ.isLoading &&
-                  !ordersQ.isError &&
-                  orders.length === 0 && (
-                    <div className="py-10 text-center text-muted-foreground">
-                      Belum ada order.
-                    </div>
-                  )}
+                {!ordersQ.isLoading && !ordersQ.isError && orders.length === 0 && (
+                  <div className="py-10 text-center text-muted-foreground">
+                    Belum ada order.
+                  </div>
+                )}
 
                 {orders.map((o) => {
-                  const inv =
-                    o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
+                  const inv = o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
+                  const amount = Number(o.amount || 0);
                   return (
-                    <Link
-                      key={o.id}
-                      href={`/customer/order/${o.id}`}
-                      className="block"
-                    >
+                    <Link key={o.id} href={`/customer/order/${o.id}`} className="block">
                       <Card className="rounded-xl border border-border bg-card text-card-foreground hover:bg-accent">
                         <CardContent className="p-3.5">
                           <div className="flex items-start justify-between gap-3">
+                            {/* Kiri: informasi berbaris */}
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
                                 <Hash className="h-3.5 w-3.5" />
-                                <span className="font-medium text-foreground">
-                                  {inv}
-                                </span>
+                                <span className="font-medium text-foreground">{inv}</span>
                               </div>
+
                               <div className="flex items-center gap-1.5">
                                 <Package className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {o.serviceLabel }
+                                  {o.serviceLabel}
                                 </div>
                               </div>
+
                               <div className="flex items-center gap-1.5">
                                 <CalendarClock className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[12px] text-muted-foreground">
                                   {formatDate(o.createdAt)}
                                 </div>
                               </div>
+
+                              <div className="flex items-center gap-1.5">
+                                <CreditCard className="h-4 w-4 text-muted-foreground" />
+                                <div className="text-[13px] font-semibold text-foreground">
+                                   {"Rp "}{amount.toLocaleString("id-ID")}
+                                </div>
+                              </div>
+
                               <StatusBadge status={o.status} />
                             </div>
+
                             <ChevronRight className="h-5 w-5 text-muted-foreground mt-1" />
                           </div>
                         </CardContent>
@@ -526,9 +531,7 @@ export default function CustomerOrdersPage() {
                       size="sm"
                       className="rounded-full"
                       disabled={pageO >= metaO.totalPages}
-                      onClick={() =>
-                        setPageO((p) => Math.min(metaO.totalPages, p + 1))
-                      }
+                      onClick={() => setPageO((p) => Math.min(metaO.totalPages, p + 1))}
                     >
                       Next <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
