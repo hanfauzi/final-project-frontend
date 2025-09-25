@@ -12,7 +12,6 @@ export interface EditProfilePayload {
 export default function useEditProfile() {
   const queryClient = useQueryClient();
 
-
   const editProfileMutation = useMutation({
     mutationFn: async (payload: EditProfilePayload) => {
       const formData = new FormData();
@@ -28,8 +27,8 @@ export default function useEditProfile() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("Profil berhasil diperbarui!");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data.message ?? "Gagal memperbarui profil.");
