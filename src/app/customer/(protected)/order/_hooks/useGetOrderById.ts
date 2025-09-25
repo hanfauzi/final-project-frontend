@@ -11,8 +11,15 @@ export type CustomerOrder = {
   updatedAt: string;
   invoiceNo: string | null;
   outlets?: { name: string } | null;
-  deliveryOrder?: { id: string; status: string } | null;
+  deliveryOrder?: { id: string; status: string; price?: number } | null; 
+  serviceNames: string[];         
   serviceLabel: string;
+  amount: number;                
+  breakdown: {                    
+    itemsTotal: number;
+    pickupFeeApplied: number;
+    deliveryFee: number;
+  };
   items: Array<{
     id: string;
     qty: number;
@@ -27,9 +34,7 @@ const useGetCustomerOrderById = (id: string | undefined) => {
     queryKey: ["order", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await axiosInstance.get<CustomerOrder>(
-        `/api/order/${id}`
-      );
+      const { data } = await axiosInstance.get<CustomerOrder>(`/api/order/${id}`);
       return data;
     },
   });

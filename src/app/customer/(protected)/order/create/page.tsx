@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Check, ChevronDown, ChevronLeft, MapPin, Package, Store } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, MapPin, Package, Store, Truck } from "lucide-react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -194,14 +194,32 @@ const selectedNames = useMemo(
                 </Label>
                 <div className="h-11 rounded-xl border border-border bg-card px-3 grid items-center text-[13px] text-foreground">
                   {!addressId
-                    ? "Pilih alamat dulu untuk menghitung outlet"
+                    ? "Pilih alamat dulu untuk mencari outlet"
                     : suggestLoading
-                    ? "Menghitung outlet…"
+                    ? "Mencari outlet terdekat"
                     : suggestError
-                    ? "Gagal menghitung outlet"
+                    ? "Gagal menemukan outlet"
                     : suggest?.data
-                    ? `${suggest.data.outletName} (± ${suggest.data.distanceOutletKm} km)`
+                    ? `${suggest.data.outletName} (± ${suggest.data.distanceOutletKm} km) `
                     : "Tidak ada outlet yang mencakup alamat ini"}
+                </div>
+
+              </div>
+                            <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Truck className="h-4 w-4 text-muted-foreground" />
+                  Estimasi Harga Penjemputan
+                </Label>
+                <div className="h-11 rounded-xl border border-border bg-card px-3 grid items-center text-[13px] text-foreground">
+                  {!addressId
+                    ? "Pilih alamat dulu untuk mendapatkan estimasi harga"
+                    : suggestLoading
+                    ? "Menghitung estimasi harga"
+                    : suggestError
+                    ? "Gagal menghitung estimasi harga"
+                    : suggest?.data
+                    ? `Rp ${suggest.data.estimatedPickupPrice.toLocaleString("id-ID")}`
+                    : "Harga tidak tersedia"}
                 </div>
               </div>
 
