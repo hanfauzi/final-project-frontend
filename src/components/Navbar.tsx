@@ -92,8 +92,11 @@ export function Navbar() {
               </Link>
             ))}
 
+             <div className="mx-1 h-6 w-px bg-border" aria-hidden />
+
             {loggedIn && <BellNotifications loggedIn={loggedIn} />}
 
+            <div className="mx-1 h-6 w-px bg-border" aria-hidden />
             {!loggedIn ? (
               <div className="ml-2 flex items-center gap-2">
                 <Button asChild variant="outline" className="h-10 rounded-xl">

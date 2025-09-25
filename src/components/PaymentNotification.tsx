@@ -114,7 +114,7 @@ export function BellNotifications({ loggedIn }: { loggedIn: boolean }) {
 
         return (
           <li key={n.id} className="border-b last:border-b-0">
-            <DropdownMenuItem asChild className="px-3 py-2.5">
+            <DropdownMenuItem asChild className="px-3 py-2.5 cursor-pointer">
               <Link href={`/customer/order/${n.id}`} className="flex w-full flex-col items-start text-left">
                 <span className="text-[13px] font-semibold text-foreground">
                   {inv}

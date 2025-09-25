@@ -7,9 +7,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function HomeCarousel() {
   const slides = [
-    { id: 1, src: "/lipetan.jpg", alt: "Lipetan rapi" },
-    { id: 2, src: "/mesin-cuci.jpg", alt: "Mesin cuci" },
-    { id: 3, src: "/gantungan.jpg", alt: "Pakaian di gantungan" },
+    { id: 1, src: "/laundr_slide_1.jpg", alt: "Lipetan rapi" },
+    { id: 2, src: "/laundr_slide_2.jpg", alt: "Mesin cuci" },
+    { id: 3, src: "/laundr_slide_3.jpg", alt: "Pakaian di gantungan" },
   ];
 
   const [index, setIndex] = useState(0);
