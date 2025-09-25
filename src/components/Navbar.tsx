@@ -45,6 +45,7 @@ export function Navbar() {
       { label: "Profil", href: "/customer/profile" },
       { label: "Alamat", href: "/customer/address" },
       { label: "Transaksi", href: "/customer/order" },
+      {label: "Buat Pesanan", href: "/customer/order/create" },
     ] as const;
   }, [loggedIn]);
 
