@@ -197,7 +197,7 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <Truck className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {p.outlet.name} • {p.outlet.cityName}
+                                  {p.outlet.name} 
                                 </div>
                               </div>
 
@@ -260,7 +260,6 @@ export default function CustomerOrdersPage() {
               </main>
             </TabsContent>
 
-            {/* ===================== DELIVERIES ===================== */}
             <TabsContent value="deliveries" className="mt-4 space-y-3">
               <div className="flex gap-2 md:gap-3">
                 <DeliveryStatusSheet
@@ -428,6 +427,7 @@ export default function CustomerOrdersPage() {
                   />
 
                   <DateSheet
+                  separateFields
                     from={dateFromO}
                     to={dateToO}
                     onApply={(f, t) => {
