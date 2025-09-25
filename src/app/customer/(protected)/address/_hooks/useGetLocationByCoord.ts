@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { axiosInstance } from '@/lib/axios';
 
-export type ReverseGeoOut = { formatted: string; city: string };
+export type ReverseGeoOut = { formatted: string; city: string, postcode?: string;};
 
 export default function useGetLocationByCoord() {
   const [data, setData] = useState<ReverseGeoOut | null>(null);

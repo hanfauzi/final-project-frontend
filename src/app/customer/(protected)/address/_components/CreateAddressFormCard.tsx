@@ -63,7 +63,7 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
         <div className="space-y-2">
           <UILabel className="text-foreground">Alamat Lengkap</UILabel>
           <Textarea
-            placeholder="Nama jalan, nomor rumah, RT/RW, dsb"
+            placeholder="Tulis alamat lengkap anda di sini"
             value={formik.values.address}
             onChange={(e) => formik.setFieldValue("address", e.target.value)}
             className="min-h-24 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
@@ -123,13 +123,22 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
             lng: formik.values.longitude,
             addressLine: formik.values.pinpoint,
             city: formik.values.city,
+            postalCode: formik.values.postalCode,
           }}
           onLocationSelect={(loc) => {
             formik.setFieldValue("latitude", loc.latitude);
             formik.setFieldValue("longitude", loc.longitude);
             formik.setFieldValue("pinpoint", loc.addressLine ?? "");
-            formik.setFieldValue("city", loc.city ?? "");
-            formik.setFieldValue("address", loc.addressLine ?? "");
+             if (!formik.values.postalCode?.trim()) {
+    formik.setFieldValue("postalCode", loc.postalCode ?? "");
+  }
+            if (!formik.values.city?.trim()) {
+    formik.setFieldValue("city", loc.city ?? "");
+  }
+
+  if (!formik.values.address?.trim()) {
+    formik.setFieldValue("address", loc.addressLine ?? "");
+  }
           }}
         />
 
