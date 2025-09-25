@@ -1,14 +1,14 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import GetAllOutlets from "../_components/GetAllOutlets";
 import Image from "next/image";
+import OutletAdminPerformanceDashboard from "../_components/PerformanceDashboardOutletAdmin";
 
-export default function OutletsPage() {
+const PerformancePage = () => {
   return (
-    <div className="p-4">
+    <div className="p-6">
       <PageHeader
-        title="OUTLETS"
+        title="PERFORMANCE REPORTS"
         rightElement={
           <Image
             src={"/logo-text-laundr.png"}
@@ -19,7 +19,9 @@ export default function OutletsPage() {
           />
         }
       />
-      <GetAllOutlets />
+      <OutletAdminPerformanceDashboard />
     </div>
   );
-}
+};
+
+export default PerformancePage;

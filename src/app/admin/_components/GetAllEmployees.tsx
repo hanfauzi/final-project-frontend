@@ -4,12 +4,13 @@ import { useEmployees } from "@/app/admin/_hooks/useEmployees";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
@@ -20,7 +21,7 @@ const GetAllEmployees: FC = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [limit] = useState(8);
+  const [limit] = useState(12);
   const [page, setPage] = useState(() => Number(searchParams.get("page") || 1));
   const [searchInput, setSearchInput] = useState(
     () => searchParams.get("search") || ""
@@ -55,7 +56,8 @@ const GetAllEmployees: FC = () => {
   const totalPages = data?.meta?.totalPages ?? 1;
 
   return (
-    <div className="flex flex-col min-h-screen gap-4">
+    <div className="flex flex-col min-h-screen gap-4 ">
+      {/* Header Section */}
       <div className="flex justify-between items-center">
         <SearchBar
           value={searchInput}
@@ -64,32 +66,48 @@ const GetAllEmployees: FC = () => {
         />
 
         <Link href="/admin/employees/create">
-          <Button className="cursor-pointer">
-            Create New Employee
-          </Button>
+          <Button className="cursor-pointer">Create New Employee</Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {employees.map((emp) => (
-          <Link
-            key={emp.id}
-            href={`/admin/employees/${emp.id}`}
-            className="group"
-          >
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle>{emp.name}</CardTitle>
-                <CardDescription>{emp.role}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex justify-between items-center">
-                <span>{emp.email}</span>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      {/* Employees Table */}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="font-bold px-7">Name</TableHead>
+              <TableHead className="font-bold px-7">Role</TableHead>
+              <TableHead className="font-bold px-7">Email</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {employees.length > 0 ? (
+              employees.map((emp) => (
+                <TableRow
+                  key={emp.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => router.push(`/admin/employees/${emp.id}`)}
+                >
+                  <TableCell className="font-medium py-4 px-6">{emp.name}</TableCell>
+                  <TableCell className="py-5 px-7">{emp.role}</TableCell>
+                  <TableCell className="py-5 px-7">{emp.email}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={3}
+                  className="text-center text-gray-500 font-medium"
+                >
+                  NO EMPLOYEES FOUND
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
+      {/* Pagination Section */}
       <div className="flex justify-center items-center gap-2 mt-4">
         <Button
           variant="outline"

@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SalesReportsChartSuperAdmin } from "../_components/SalesReportsChartSuperAdmin";
 import { useSuperAdminSalesReport } from "../_hooks/useSalesReports";
+import PageHeader from "@/components/PageHeader";
+import Image from "next/image";
 
 export default function SalesReportPage() {
   const searchParams = useSearchParams();
@@ -24,7 +26,19 @@ export default function SalesReportPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="P-6">
+        <PageHeader
+        title="SALES REPORT"
+        rightElement={
+          <Image
+            src={"/logo-text-laundr.png"}
+            alt="laundr image"
+            width={100}
+            height={50}
+            className="rounded-full"
+          />
+        }
+      />
       {isLoading && <Skeleton className="h-[400px] w-full" />}
       {isError && <p className="text-red-500">Failed to load report</p>}
       {data && <SalesReportsChartSuperAdmin data={data} />}

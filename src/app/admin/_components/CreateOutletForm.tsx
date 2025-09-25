@@ -14,6 +14,7 @@ import { FC } from "react";
 import { useCities } from "../_hooks/useCities";
 import { useCreateOutlet } from "../_hooks/useOutlets";
 import { CreateOutletSchema } from "../schema/create-outlet.schema";
+import { MapSelector } from "./MapPicker";
 
 const CreateOutletForm: FC = () => {
   const { data: cities = [], isLoading: isCitiesLoading } = useCities();
@@ -60,7 +61,11 @@ const CreateOutletForm: FC = () => {
               />
             </div>
             <div>
-              <Field as={Input} name="code" placeholder="Outlet Code. ex: SBY or JKT" />
+              <Field
+                as={Input}
+                name="code"
+                placeholder="Outlet Code. ex: SBY or JKT"
+              />
               <ErrorMessage
                 name="code"
                 component="div"
@@ -103,7 +108,7 @@ const CreateOutletForm: FC = () => {
                   {" "}
                   <SelectValue placeholder="Select City" />{" "}
                 </SelectTrigger>{" "}
-                <SelectContent>
+                <SelectContent className="z-[9999]">
                   {" "}
                   {isCitiesLoading ? (
                     <SelectItem value="loading">Loading...</SelectItem>
@@ -134,6 +139,23 @@ const CreateOutletForm: FC = () => {
                 component="div"
                 className="text-red-500 text-sm"
               />
+            </div>
+            {/* Map Picker */}
+            <div>
+              <p className="mb-2 text-sm text-gray-600">
+                Click map to set coordinates
+              </p>
+              <MapSelector
+                onPick={({ lat, lng }) => {
+                  setFieldValue("latitude", lat);
+                  setFieldValue("longitude", lng);
+                }}
+              />
+              {values.latitude && values.longitude && (
+                <p className="mt-2 text-sm">
+                  Lat: {values.latitude}, Lng: {values.longitude}
+                </p>
+              )}
             </div>
 
             {/* Latitude */}
@@ -180,6 +202,7 @@ const CreateOutletForm: FC = () => {
                 className="text-red-500 text-sm"
               />
             </div>
+            
 
             {/* Submit */}
             <Button type="submit" className="w-full" disabled={isPending}>
