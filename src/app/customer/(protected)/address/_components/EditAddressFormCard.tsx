@@ -41,8 +41,6 @@ export default function EditAddressFormCard({
 }: Props) {
   return (
     <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
-
-
       <CardContent className="space-y-4">
         {isLoading && (
           <div className="text-sm text-muted-foreground inline-flex items-center gap-2">
@@ -50,10 +48,10 @@ export default function EditAddressFormCard({
           </div>
         )}
         {isError && (
-          <div className="text-sm text-destructive">Gagal mengambil alamat.</div>
+          <div className="text-sm text-destructive">
+            Gagal mengambil alamat.
+          </div>
         )}
-
-
 
         <div className="flex items-center gap-2 text-xs">
           <span
@@ -144,7 +142,9 @@ export default function EditAddressFormCard({
           <UILabel className="text-foreground">Nomor HP</UILabel>
           <Input
             value={formik.values.phoneNumber}
-            onChange={(e) => formik.setFieldValue("phoneNumber", e.target.value)}
+            onChange={(e) =>
+              formik.setFieldValue("phoneNumber", e.target.value)
+            }
             className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
         </div>
@@ -155,20 +155,24 @@ export default function EditAddressFormCard({
             lng: formik.values.longitude,
             addressLine: formik.values.pinpoint,
             city: formik.values.city,
+            postalCode: formik.values.postalCode,
           }}
           onLocationSelect={(loc) => {
             formik.setFieldValue("latitude", loc.latitude);
             formik.setFieldValue("longitude", loc.longitude);
             formik.setFieldValue("pinpoint", loc.addressLine ?? "");
-            formik.setFieldValue("city", loc.city ?? "");
+            if (!formik.values.postalCode?.trim()) {
+              formik.setFieldValue("postalCode", loc.postalCode ?? "");
+            }
 
-            const shouldFillAddress =
-              (!formik.touched.address && !formik.values.address) ||
-              formik.values.address.trim().length === 0;
+            if (!formik.touched.city && !formik.values.city?.trim()) {
+              formik.setFieldValue("city", loc.city ?? "");
+            }
 
-            if (shouldFillAddress) {
+            if (!formik.touched.address && !formik.values.address?.trim()) {
               formik.setFieldValue("address", loc.addressLine ?? "");
             }
+
           }}
         />
 

@@ -1,17 +1,16 @@
 "use client";
 
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
-import { useFormik } from "formik";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, LoaderCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { validationSetPasswordSchema } from "@/features/customer/verify/schema/validationSetPasswordSchema";
+import { useFormik } from "formik";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
+import Head from "next/head";
+import Image from "next/image";
+import { useState } from "react";
 import useSetPassword from "../../_hooks/useSetPassword";
-import Image from "next/image"; 
 
 export default function SetPasswordPage() {
   const { setPasswordMutation } = useSetPassword();
@@ -177,17 +176,6 @@ export default function SetPasswordPage() {
                   )}
                 </Button>
 
-                <div className="space-y-2 pt-2">
-                  <p className="text-center text-sm text-muted-foreground md:text-[0.95rem]"> 
-                    Sudah ingat password?{" "}
-                    <Link
-                      href="/customer/login"
-                      className="font-medium text-primary underline underline-offset-2"
-                    >
-                      Kembali masuk
-                    </Link>
-                  </p>
-                </div>
               </form>
             </CardContent>
           </Card>

@@ -37,6 +37,7 @@ export type LocationPick = {
   latitude: number;
   longitude: number;
   isPrimary?: boolean;
+  postalCode?: string;
 };
 
 export type InitialLocation = {
@@ -44,6 +45,7 @@ export type InitialLocation = {
   lng: number;
   addressLine?: string;
   city?: string;
+  postalCode?: string;
 };
 
 interface CardMapProps {
@@ -51,7 +53,18 @@ interface CardMapProps {
   initial: InitialLocation;
 }
 
-const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
+const CardMap: FC<CardMapProps> = ({ onLocationSelect, initial }) => {
+  useEffect(() => {
+  if (initial?.lat && initial?.lng) {
+    const next: [number, number] = [initial.lat, initial.lng];
+    setCurrentPosition(next);
+
+    // kalau belum ada addressLine/city/postalCode dari initial, lakukan reverse geocode
+    if (!initial.addressLine || !initial.city || !initial.postalCode) {
+      void getLocationRef.current(next[0], next[1]);
+    }
+  }
+}, [initial]);
   const { getLocation, data, isLoading } = useGetLocationByCoord();
   const [currentPosition, setCurrentPosition] = useState<
     [number, number] | null
@@ -104,6 +117,10 @@ const CardMap: FC<CardMapProps> = ({ onLocationSelect }) => {
     onSelectRef.current({
       addressLine: data?.formatted ?? "",
       city: data?.city ?? "",
+      postalCode:  data?.postcode ||
+    (typeof data?.formatted === "string"
+      ? (data.formatted.match(/\b\d{5}\b/)?.[0] ?? "")
+      : ""),
       latitude: currentPosition[0],
       longitude: currentPosition[1],
     });
