@@ -20,7 +20,7 @@ const GetAllOrders: FC = () => {
 
   const { data, isLoading, isError, refetch } = useOrders({
     page: currentPage,
-    limit: 10,
+    limit: 12,
     outletId,
     sortBy: "createdAt",
     sortOrder: "desc",
@@ -54,10 +54,10 @@ const GetAllOrders: FC = () => {
   if (isError) return <p className="text-red-500">Failed to load orders</p>;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="px-2 space-y-6">
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle className="text-xl">Orders</CardTitle>
+          <CardTitle className="text-xl"></CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <OrdersFilter

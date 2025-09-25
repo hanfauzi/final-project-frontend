@@ -16,7 +16,7 @@ const OrderInfo: FC<{ order: any }> = ({ order }) => (
   <Card>
     <CardContent className="flex items-start gap-x-2">
       {/* Kiri: Judul */}
-       <div className="flex flex-col space-y-2 font-semibold">
+      <div className="flex flex-col space-y-2 font-semibold">
         <h3 className="font-semibold text-lg">Invoice:</h3>
         <h3 className="font-semibold text-lg">Status:</h3>
         <h3 className="font-semibold text-lg">Tanggal dibuat:</h3>
@@ -32,7 +32,16 @@ const OrderInfo: FC<{ order: any }> = ({ order }) => (
         <p>{new Date(order.createdAt).toLocaleString()}</p>
         <p>
           {order.estHours ? (
-            <Badge><Countdown estimatedDoneAt={new Date(new Date(order.createdAt).getTime() + order.estHours * 60 * 60 * 1000)} /></Badge>
+            <Badge>
+              <Countdown
+                estimatedDoneAt={
+                  new Date(
+                    new Date(order.createdAt).getTime() +
+                      order.estHours * 60 * 60 * 1000
+                  )
+                }
+              />
+            </Badge>
           ) : (
             <Badge>{order.estHours} JAM</Badge>
           )}
@@ -42,21 +51,20 @@ const OrderInfo: FC<{ order: any }> = ({ order }) => (
   </Card>
 );
 
-
 const CustomerInfo: FC<{ customer: any }> = ({ customer }) => (
   <Card>
     <CardHeader>
       <CardTitle>Customer</CardTitle>
     </CardHeader>
     <CardContent className="flex space-y-1 gap-x-2">
-        <div className="flex flex-col space-y-3">
-            <p>Nama:</p>
-            <p>Telepon:</p>
-        </div>
-        <div className="flex flex-col space-y-3">
-            <p>{customer?.name || "-"}</p>
-            <p>{customer?.phoneNumber || "-"}</p>
-        </div>
+      <div className="flex flex-col space-y-3">
+        <p>Nama:</p>
+        <p>Telepon:</p>
+      </div>
+      <div className="flex flex-col space-y-3">
+        <p>{customer?.name || "-"}</p>
+        <p>{customer?.phoneNumber || "-"}</p>
+      </div>
     </CardContent>
   </Card>
 );
@@ -67,16 +75,16 @@ const OutletInfo: FC<{ outlet: any }> = ({ outlet }) => (
       <CardTitle>Outlet</CardTitle>
     </CardHeader>
     <CardContent className="flex gap-x-2 space-y-1">
-        <div className="flex flex-col space-y-3">
-            <p>Nama:</p>
-            <p>Alamat:</p>
-            <p>Telepon:</p>
-        </div>
-        <div className="flex flex-col space-y-3">
-            <p>{outlet?.name || "-"}</p>
-            <p>{outlet?.address || "-"}</p>
-            <p>{outlet?.phoneNumber || "-"}</p>
-        </div>
+      <div className="flex flex-col space-y-3">
+        <p>Nama:</p>
+        <p>Alamat:</p>
+        <p>Telepon:</p>
+      </div>
+      <div className="flex flex-col space-y-3">
+        <p>{outlet?.name || "-"}</p>
+        <p>{outlet?.address || "-"}</p>
+        <p>{outlet?.phoneNumber || "-"}</p>
+      </div>
     </CardContent>
   </Card>
 );
@@ -86,26 +94,33 @@ const WorkerTasks: FC<{ tasks: any[] }> = ({ tasks }) => (
     <CardHeader>
       <CardTitle>Karyawan yang mengerjakan</CardTitle>
     </CardHeader>
-    <CardContent className="space-y-2">
+    <CardContent>
       {tasks?.length ? (
-        tasks.map((task) => (
-          <div key={task.id} className="border-b border-gray-200 py-2">
-            <p>Nama: {task.employee?.name || "-"}</p>
-            <p>Workstation: {task.workStation?.name || "-"}</p>
-            <p>
-              Tanggal proses: {new Date(task.startTime).toLocaleString()} -{" "}
-              {task.endTime
-                ? new Date(task.endTime).toLocaleString()
-                : "Belum selesai"}
-            </p>
-          </div>
-        ))
+        <div className="space-y-10">
+          {tasks.map((task) => (
+            <div
+              key={task.id}
+              className="border-b border-gray-200 pb-3 space-y-1"
+            >
+              <div className="flex">
+                <p className="font-medium w-20">Nama:</p>
+                <p>{task.employee?.name || "-"}</p>
+              </div>
+              <div className="flex">
+                <p className="font-medium w-20">Station:</p>
+                <p>{task?.workStation?.station || "-"}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>-</p>
       )}
     </CardContent>
   </Card>
 );
+
+
 
 const LaundryItemsTable: FC<{ orderItems: OrderItemType[] }> = ({
   orderItems,

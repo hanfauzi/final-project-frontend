@@ -42,10 +42,10 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
         <TableBody>
           {data?.map((order) => (
             <TableRow key={order.id}>
-              <TableCell>{order.invoiceNo}</TableCell>
-              <TableCell>{order.customers?.name ?? "-"}</TableCell>
-              <TableCell>{order.outlets?.name ?? "-"}</TableCell>
-              <TableCell>
+              <TableCell className="py-4">{order.invoiceNo}</TableCell>
+              <TableCell className="py-4">{order.customers?.name ?? "-"}</TableCell>
+              <TableCell className="py-4">{order.outlets?.name ?? "-"}</TableCell>
+              <TableCell className="py-4">
                 {new Date(order.createdAt).toLocaleString()}
               </TableCell>
             </TableRow>

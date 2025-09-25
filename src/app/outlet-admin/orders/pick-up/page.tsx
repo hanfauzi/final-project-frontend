@@ -1,44 +1,82 @@
 "use client";
 
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
 import Loading from "@/components/Loading";
+import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 export default function PickupOrdersList() {
   const { data, isLoading, isError } = usePickupOrders();
+  const router = useRouter();
 
   if (isLoading) return <Loading />;
-  if (isError) return <p>Terjadi error</p>;
+  if (isError) return <p className="text-red-500">Terjadi error</p>;
 
   return (
-    <div className="grid gap-4 p-6">
-        <h1 className="text-xl font-bold mb-4">Pick Up Orders</h1>
-      {data?.map((pickup: any) => (
-        <Link
-          key={pickup.id}
-          href={`/outlet-admin/orders/pick-up/${pickup.id}`}
-          className="block"
-        >
-          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle>{pickup.customer.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex space-y-1 gap-x-2">
-                <div className="flex flex-col space-y-3">
-            <p>Status:</p>
-            <p>Outlet:</p>
-            <p>Total Invoice:</p>
-        </div>
-        <div className="flex flex-col space-y-3">
-            <p>{pickup.status}</p>
-            <p>{pickup.outlet.name}</p>
-            <p>{pickup.orderHeaders.length}</p>
-        </div>
-            </CardContent>
-          </Card>
-        </Link>
-      ))}
+    <div className="p-6 space-y-6">
+      <h1 className="text-xl font-bold">Pick Up Orders</h1>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Customer</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Outlet</TableHead>
+              <TableHead>Total Invoice</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data && data.length > 0 ? (
+              data.map((pickup: any) => (
+                <TableRow
+                  key={pickup.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() =>
+                    router.push(`/outlet-admin/orders/pick-up/${pickup.id}`)
+                  }
+                >
+                  <TableCell className="font-medium">
+                    {pickup.customer.name}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        pickup.status === "completed"
+                          ? "secondary"
+                          : pickup.status === "cancelled"
+                          ? "destructive"
+                          : "outline"
+                      }
+                    >
+                      {pickup.status.toUpperCase()}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{pickup.outlet.name}</TableCell>
+                  <TableCell>{pickup.orderHeaders.length}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="text-center text-gray-500 font-medium"
+                >
+                  NO PICKUP ORDERS FOUND
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

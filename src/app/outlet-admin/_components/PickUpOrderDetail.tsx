@@ -10,6 +10,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import Loading from "@/components/Loading";
+import { PickUpStatusBadge } from "@/app/customer/(protected)/order/_components/PickUpStatusBadge";
 
 export default function PickupOrderDetailPage() {
   const params = useParams<{ pickupOrderId: string }>();
@@ -44,6 +45,7 @@ export default function PickupOrderDetailPage() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Status</p>
               <p className="font-semibold">{data.status}</p>
+              
             </div>
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">Notes</p>

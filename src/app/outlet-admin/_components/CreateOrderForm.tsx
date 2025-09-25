@@ -16,6 +16,7 @@ import { createOrderSchema } from "@/features/outlet-admin/order/schema/createOr
 import { useCreateOrderFromPickup } from "../_hooks/useOrdersOutletAdmin";
 import { useLaundryItems } from "@/app/admin/_hooks/useLaundryItems";
 import { useLaundryServices } from "@/app/admin/_hooks/useLaundryService";
+import { Trash } from "lucide-react";
 
 interface Props {
   pickupOrderId: string;
@@ -226,11 +227,11 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
                                   <Button
                                     className="cursor-pointer"
                                     type="button"
-                                    variant="destructive"
+                                    variant="outline"
                                     size="sm"
                                     onClick={() => removeLaundry(liIndex)}
                                   >
-                                    - Cancel
+                                    <Trash />
                                   </Button>
                                 </div>
                               </div>
