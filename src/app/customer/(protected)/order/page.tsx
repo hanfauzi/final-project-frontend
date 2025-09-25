@@ -15,6 +15,7 @@ import {
   Plus,
   RefreshCw,
   Truck,
+  User,
   X,
 } from "lucide-react";
 import Head from "next/head";
@@ -131,7 +132,7 @@ export default function CustomerOrdersPage() {
               <TabsTrigger value="orders">Orders</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="pickups" className="mt-4 space-y-3">
+   <TabsContent value="pickups" className="mt-4 space-y-3">
               <div className="flex gap-2 md:gap-3">
                 <PickUpStatusSheet
                   value={statusP}
@@ -172,13 +173,11 @@ export default function CustomerOrdersPage() {
                   </div>
                 )}
 
-                {!pickupsQ.isLoading &&
-                  !pickupsQ.isError &&
-                  pickups.length === 0 && (
-                    <div className="py-10 text-center text-muted-foreground">
-                      Belum ada pickup order.
-                    </div>
-                  )}
+                {!pickupsQ.isLoading && !pickupsQ.isError && pickups.length === 0 && (
+                  <div className="py-10 text-center text-muted-foreground">
+                    Belum ada pickup order.
+                  </div>
+                )}
 
                 {pickups.map((p) => {
                   const href = `/customer/order/pickup/${p.id}`;
@@ -198,15 +197,23 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <Truck className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {p.outlet.name} 
+                                  {p.outlet.name}
+                                </div>
+                              </div>
+
+                              {/* PENERIMA — NEW */}
+                              <div className="flex items-center gap-1.5">
+                                <User className="h-4 w-4 text-muted-foreground" />
+                                <div className="text-[12px] text-muted-foreground">
+                                  {p.receiverName}
+                                  {p.receiverPhone ? ` | ${p.receiverPhone}` : ""}
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-1.5">
                                 <Navigation className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[12px] text-muted-foreground">
-                                  {p.distance} km • Rp{" "}
-                                  {p.price.toLocaleString("id-ID")}
+                                  {p.distance} km | Rp {p.price.toLocaleString("id-ID")}
                                 </div>
                               </div>
 
@@ -231,6 +238,7 @@ export default function CustomerOrdersPage() {
                     </Link>
                   );
                 })}
+
                 {metaP && metaP.totalPages > 1 && (
                   <div className="flex justify-between items-center pt-2">
                     <Button
@@ -250,9 +258,7 @@ export default function CustomerOrdersPage() {
                       size="sm"
                       className="rounded-full"
                       disabled={pageP >= metaP.totalPages}
-                      onClick={() =>
-                        setPageP((p) => Math.min(metaP.totalPages, p + 1))
-                      }
+                      onClick={() => setPageP((p) => Math.min(metaP.totalPages, p + 1))}
                     >
                       Next <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>

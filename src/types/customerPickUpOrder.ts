@@ -1,4 +1,4 @@
-import type { PickUpOrderStatus } from "@/types/orderPickUpStatus"; // pakai enum yg sudah kamu punya
+import type { PickUpOrderStatus } from "@/types/orderPickUpStatus"; 
 
 export type OutletInfo = {
   id: string;
@@ -19,11 +19,13 @@ export type CustomerPickUpOrderDetail = {
   notes: string | null;
   distance: number;
   price: number;
-  scheduledAt: string | null;     
-  pickedUpAt: string | null;      
-  arrivedAtOutlet: string | null; 
-  createdAt: string;              
-  updatedAt: string;              
+  scheduledAt: string | null;
+  pickedUpAt: string | null;
+  arrivedAtOutlet: string | null;
+  createdAt: string;
+  updatedAt: string;
   outlet: OutletInfo;
   driver: DriverInfo;
+  receiverName: string;
+  receiverPhone: string;
 };

@@ -7,6 +7,8 @@ import { toast } from "sonner";
 export type CreatePickupOrderPayload = {
   customerAddressId: string;
   services: string[] 
+  receiverName: string
+  receiverPhone: string
 };
 
 export type PickupOrderResponse = {

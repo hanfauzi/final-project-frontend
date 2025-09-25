@@ -22,7 +22,14 @@ export type PickupOrderItem = {
   status: string;
   createdAt: string;
   updatedAt: string;
-  orderHeaders: Array<{ id: string; invoiceNo: string | null; status: string; createdAt: string }>;
+  receiverName: string;
+  receiverPhone: string;
+  orderHeaders: Array<{
+    id: string;
+    invoiceNo: string | null;
+    status: string;
+    createdAt: string;
+  }>;
   _count: { orderHeaders: number };
 };
 
@@ -31,7 +38,9 @@ type ApiListResponse<T> = {
   meta: { page: number; take: number; total: number; totalPages: number };
 };
 
-export default function useGetCustomerPickUpOrders(params: CustomerPickupQuery) {
+export default function useGetCustomerPickUpOrders(
+  params: CustomerPickupQuery
+) {
   return useQuery({
     queryKey: ["pickup-orders", params],
     queryFn: async () => {
@@ -42,10 +51,10 @@ export default function useGetCustomerPickUpOrders(params: CustomerPickupQuery) 
       if (params.dateFrom) qs.set("dateFrom", params.dateFrom);
       if (params.dateTo) qs.set("dateTo", params.dateTo);
 
-      const { data } = await axiosInstance.get<ApiListResponse<PickupOrderItem>>(
-        `/api/order/pickups?${qs.toString()}`
-      );
-      return data; 
+      const { data } = await axiosInstance.get<
+        ApiListResponse<PickupOrderItem>
+      >(`/api/order/pickups?${qs.toString()}`);
+      return data;
     },
   });
 }
