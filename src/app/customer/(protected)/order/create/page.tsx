@@ -2,27 +2,42 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Check, ChevronDown, ChevronLeft, MapPin, Package, Store } from "lucide-react";
 import Head from "next/head";
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import useGetCustomerAddressById from "../../address/_hooks/useGetAddressById";
 import useGetCustomerAddresses, { CustomerAddress } from "../../address/_hooks/useGetAddresses";
 import useCreatePickupOrder from "../_hooks/useCreatePickUpOrder";
+import { useLaundryServices } from "../_hooks/useGetServices";
 import useSuggestOutlet from "../_hooks/useSuggestOutlet";
 
-const services = [
-  { id: "express-wash", name: "Cuci Kiloan Express", desc: "Selesai 1×24 jam" },
-  { id: "reguler-wash", name: "Cuci Kiloan Reguler", desc: "Selesai 2–3 hari" },
-  { id: "express-dry", name: "Cuci Kering Express", desc: "Selesai dalam 6 jam" },
-];
 
 export default function CreateOrderPage() {
   const router = useRouter();
+  const { data: svcResp, isLoading: svcLoading } = useLaundryServices();
+const svcList: Array<{ id: string; name: string; desc?: string }> = useMemo(
+  () => (svcResp?.data ?? []), 
+  [svcResp]
+);
+
+const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+
+const toggleService = (id: string, checked: boolean | string) => {
+  const isOn = checked === true || checked === "true";
+  setSelectedServiceIds((curr) =>
+    isOn ? Array.from(new Set([...curr, id])) : curr.filter((x) => x !== id)
+  );
+};
+
+const svcMap = useMemo(() => new Map(svcList.map(s => [s.id, s])), [svcList]);
+const selectedNames = useMemo(
+  () => selectedServiceIds.map(id => svcMap.get(id)?.name).filter(Boolean) as string[],
+  [selectedServiceIds, svcMap]
+);
 
   const { data: addresses = [], isLoading: addrListLoading } = useGetCustomerAddresses();
   const [addressId, setAddressId] = useState<string | undefined>(undefined);
@@ -38,14 +53,9 @@ export default function CreateOrderPage() {
   const { data: addressDetail, isLoading: addrLoading } = useGetCustomerAddressById(addressId);
   const { data: suggest, isFetching: suggestLoading, isError: suggestError } = useSuggestOutlet(addressId);
 
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const toggleService = (name: string, checked: boolean | string) => {
-    const isOn = checked === true || checked === "true";
-    setSelectedServices((curr) => (isOn ? Array.from(new Set([...curr, name])) : curr.filter((s) => s !== name)));
-  };
 
-  const [useSatuan, setUseSatuan] = useState(false);
-  const [satuanName, setSatuanName] = useState("");
+
+
 
   const { createPickUpOrderMutation } = useCreatePickupOrder();
   const outletNameAfterCreate = useMemo(
@@ -61,19 +71,17 @@ export default function CreateOrderPage() {
   function handleSubmit() {
     if (!addressId) return;
 
-    const parts: string[] = [];
-    if (selectedServices.length) parts.push(selectedServices.join(", "));
-    if (useSatuan && satuanName.trim()) parts.push(`Satuan: ${satuanName.trim()}`);
 
-    const notes = parts.join(" | ");
-    if (!notes) return;
-
-    createPickUpOrderMutation.mutate({ customerAddressId: addressId, notes });
+     createPickUpOrderMutation.mutate({
+    customerAddressId: addressId,
+    services: selectedServiceIds, 
+  });
   }
 
-  const submitDisabled =
-    (!selectedServices.length && !(useSatuan && satuanName.trim())) ||
-    !addressId || createPickUpOrderMutation.isPending;
+ const submitDisabled =
+  (!selectedServiceIds.length) ||
+  !addressId ||
+  createPickUpOrderMutation.isPending;
 
   return (
     <>
@@ -215,62 +223,35 @@ export default function CreateOrderPage() {
                   Pilih Layanan
                 </Label>
 
-                <div className="grid gap-3">
-                  {services.map((s) => {
-                    const checked = selectedServices.includes(s.name);
-                    return (
-                      <div
-                        key={s.id}
-                        className={`rounded-xl border p-3 transition ${
-                          checked ? "border-ring bg-ring/5" : "border-border hover:bg-accent"
-                        }`}
-                      >
-                        <label htmlFor={s.id} className="flex items-start gap-3 cursor-pointer">
-                          <Checkbox
-                            id={s.id}
-                            checked={checked}
-                            onCheckedChange={(v) => toggleService(s.name, v)}
-                            className="mt-0.5"
-                          />
-                          <div>
-                            <p className="text-sm font-medium text-foreground">{s.name}</p>
-                            <p className="text-xs text-muted-foreground">{s.desc}</p>
-                          </div>
-                        </label>
-                      </div>
-                    );
-                  })}
-                </div>
+ <div className="grid gap-3">
+  {svcLoading && <div className="text-sm text-muted-foreground">Memuat layanan…</div>}
+  {!svcLoading && svcList.map((s) => {
+    const checked = selectedServiceIds.includes(s.id);
+    return (
+      <div
+        key={s.id}
+        className={`rounded-xl border p-3 transition ${checked ? "border-ring bg-ring/5" : "border-border hover:bg-accent"}`}
+      >
+        <label htmlFor={s.id} className="flex items-start gap-3 cursor-pointer">
+          <Checkbox
+            id={s.id}
+            checked={checked}
+            onCheckedChange={(v) => toggleService(s.id, v)} 
+            className="mt-0.5"
+          />
+          <div>
+            <p className="text-sm font-medium text-foreground">{s.name}</p>
+            {!!s.desc && <p className="text-xs text-muted-foreground">{s.desc}</p>}
+          </div>
+        </label>
+      </div>
+    );
+  })}
+</div>
 
-                {selectedServices.length > 0 && (
-                  <p className="text-xs text-primary">
-                    Dipilih: {selectedServices.join(", ")}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-foreground">Layanan Satuan (opsional)</Label>
-                <div className={`rounded-2xl border p-3 ${useSatuan ? "border-ring bg-ring/5" : "border-border"}`}>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox checked={useSatuan} onCheckedChange={(v) => setUseSatuan(v === true)} />
-                    <span className="text-[13px] text-foreground font-medium">Tambahkan item satuan</span>
-                  </label>
-
-                  {useSatuan && (
-                    <div className="mt-3 grid gap-2">
-                      <Input
-                        value={satuanName}
-                        onChange={(e) => setSatuanName(e.target.value)}
-                        placeholder="Contoh: Kemeja, Jas, Selimut"
-                        className="h-11 rounded-xl focus-visible:ring-ring"
-                      />
-                      <p className="text-[11px] text-muted-foreground">
-                        Tulis satu item (bebas). Jika lebih dari satu jenis, pisahkan dengan koma.
-                      </p>
-                    </div>
-                  )}
-                </div>
+{selectedNames.length > 0 && (
+  <p className="text-xs text-primary">Dipilih: {selectedNames.join(", ")}</p>
+)}
               </div>
 
               <Button
@@ -279,7 +260,7 @@ export default function CreateOrderPage() {
                 disabled={submitDisabled}
                 className="w-full h-12 rounded-xl disabled:opacity-50"
               >
-                {createPickUpOrderMutation.isPending ? "Membuat..." : "Buat Order"}
+                {createPickUpOrderMutation.isPending ? "Membuat" : "Buat Order"}
               </Button>
             </CardContent>
           </Card>

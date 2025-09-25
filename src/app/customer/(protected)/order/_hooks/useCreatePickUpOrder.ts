@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export type CreatePickupOrderPayload = {
   customerAddressId: string;
-  notes?: string | null; 
+  services: string[] 
 };
 
 export type PickupOrderResponse = {
@@ -19,6 +19,7 @@ export type PickupOrderResponse = {
     estHours: number | null;
     distanceOutletKm: number;
     outlets: { name: string };
+     services: string[]
   };
 };
 
@@ -28,16 +29,16 @@ const router = useRouter();
 
   const createPickUpOrderMutation = useMutation({
     mutationFn: async (payload: CreatePickupOrderPayload) => {
+      const services = Array.from(new Set((payload.services ?? []).filter(Boolean)));
       const { data } = await axiosInstance.post<PickupOrderResponse>(
         "/api/order/create",
-        payload,
+        {...payload,services}
 
       );
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-
+      queryClient.invalidateQueries({ queryKey: ["pickup-orders"] });
       toast.success("Pickup order berhasil dibuat");
       router.replace("/customer/order");
     },
