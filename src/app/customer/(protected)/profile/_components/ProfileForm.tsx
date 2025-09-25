@@ -7,6 +7,17 @@ import { useState } from "react";
 import { useClipboardMap } from "../_hooks/ui/useClipboardMap";
 import { useProfileForms } from "../_hooks/ui/useProfileForms";
 import useGetCustomerProfile from "../_hooks/useGetProfile";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export function ProfileForm() {
   const { data, isLoading, isError, error } = useGetCustomerProfile();
@@ -47,12 +58,19 @@ export function ProfileForm() {
           aria-busy={pending}
         >
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-foreground flex items-center gap-2 md:text-[15px]">
+            <Label
+              htmlFor="name"
+              className="text-foreground flex items-center gap-2 md:text-[15px]"
+            >
               <User className="h-4 w-4 text-muted-foreground" />
               Nama
             </Label>
             {!isEditing ? (
-              <Input disabled value={profile.name ?? ""} className="h-11 md:h-12" />
+              <Input
+                disabled
+                value={profile.name ?? ""}
+                className="h-11 md:h-12"
+              />
             ) : (
               <>
                 <Input
@@ -61,7 +79,9 @@ export function ProfileForm() {
                   disabled={pending}
                   {...formik.getFieldProps("name")}
                   placeholder="Nama kamu"
-                  className={`h-11 rounded-xl md:h-12 ${hasErr("name") ? "border-destructive" : ""}`}
+                  className={`h-11 rounded-xl md:h-12 ${
+                    hasErr("name") ? "border-destructive" : ""
+                  }`}
                 />
                 {hasErr("name") && (
                   <p className="text-xs text-destructive" role="alert">
@@ -80,7 +100,11 @@ export function ProfileForm() {
 
             {!isEditingEmail ? (
               <div className="flex items-center gap-2">
-                <Input disabled value={profile.email ?? ""} className="h-11 md:h-12 flex-1 min-w-0" />
+                <Input
+                  disabled
+                  value={profile.email ?? ""}
+                  className="h-11 md:h-12 flex-1 min-w-0"
+                />
                 <Button
                   type="button"
                   variant="secondary"
@@ -114,7 +138,9 @@ export function ProfileForm() {
                     disabled={pendingEmail}
                     {...emailFormik.getFieldProps("email")}
                     placeholder="you@example.com"
-                    className={`h-11 rounded-xl md:h-12 flex-1 min-w-0 ${hasErrEmail ? "border-destructive" : ""}`}
+                    className={`h-11 rounded-xl md:h-12 flex-1 min-w-0 ${
+                      hasErrEmail ? "border-destructive" : ""
+                    }`}
                   />
                   <Button
                     type="button"
@@ -129,22 +155,45 @@ export function ProfileForm() {
                   >
                     Batal
                   </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={pendingEmail}
-                    onClick={() => emailFormik.handleSubmit()}
-                    className="h-9 rounded-lg md:h-10"
-                  >
-                    {pendingEmail ? (
-                      <span className="inline-flex items-center gap-2">
-                        <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
-                        Save
-                      </span>
-                    ) : (
-                      "Save"
-                    )}
-                  </Button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        type="button"
+                        size="sm"
+                        disabled={pendingEmail}
+                        className="h-9 rounded-lg md:h-10"
+                      >
+                        {pendingEmail ? (
+                          <span className="inline-flex items-center gap-2">
+                            <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                            Save
+                          </span>
+                        ) : (
+                          "Save"
+                        )}
+                      </Button>
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Ubah alamat email?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Kami akan menyimpan email baru ini. Anda harus
+                          memverifikasi email baru anda setelah merubahnya.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => emailFormik.handleSubmit()}
+                          disabled={pendingEmail}
+                        >
+                          Simpan
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
                 {hasErrEmail && (
                   <p className="text-xs text-destructive" role="alert">
@@ -156,19 +205,28 @@ export function ProfileForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phoneNumber" className="text-foreground flex items-center gap-2 md:text-[15px]">
+            <Label
+              htmlFor="phoneNumber"
+              className="text-foreground flex items-center gap-2 md:text-[15px]"
+            >
               <Phone className="h-4 w-4 text-muted-foreground" />
               No. Telepon
             </Label>
             {!isEditing ? (
               <div className="flex items-center gap-2">
-                <Input disabled value={profile.phoneNumber ?? ""} className="h-11 md:h-12 flex-1 min-w-0" />
+                <Input
+                  disabled
+                  value={profile.phoneNumber ?? ""}
+                  className="h-11 md:h-12 flex-1 min-w-0"
+                />
                 <Button
                   type="button"
                   variant="secondary"
                   size="sm"
                   disabled={!profile.phoneNumber}
-                  onClick={() => profile.phoneNumber && copy(profile.phoneNumber, "phone")}
+                  onClick={() =>
+                    profile.phoneNumber && copy(profile.phoneNumber, "phone")
+                  }
                   className="h-9 rounded-lg disabled:opacity-50 md:h-10"
                 >
                   {copied.phone ? "Tersalin" : "Salin"}
@@ -182,7 +240,9 @@ export function ProfileForm() {
                   disabled={pending}
                   {...formik.getFieldProps("phoneNumber")}
                   placeholder="08xxxxxxxxxx"
-                  className={`h-11 rounded-xl md:h-12 ${hasErr("phoneNumber") ? "border-destructive" : ""}`}
+                  className={`h-11 rounded-xl md:h-12 ${
+                    hasErr("phoneNumber") ? "border-destructive" : ""
+                  }`}
                 />
                 {hasErr("phoneNumber") && (
                   <p className="text-xs text-destructive" role="alert">
