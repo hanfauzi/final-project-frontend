@@ -114,7 +114,7 @@ export function Navbar() {
                     variant="destructive"
                     className="h-10 rounded-xl"
                   >
-                    Logout
+                    Keluar
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -196,7 +196,7 @@ export function Navbar() {
                             variant="destructive"
                             className="mx-3 mb-3 inline-flex items-center justify-center h-11 w-[calc(100%-1.5rem)] rounded-xl"
                           >
-                            Logout
+                            Keluar
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
