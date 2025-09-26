@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Separator } from "@/components/ui/separator";
-import { Users, Home, Box, ClipboardList, CalendarArrowUp, Bike, ChartPie } from "lucide-react";
+import { Users, Home, Box, ClipboardList, CalendarArrowUp, Bike, ChartPie, TicketCheck } from "lucide-react";
 import SidebarItem from "@/app/admin/_components/SidebarItem";
 import EmployeeProfile from "@/components/EmployeeProfile";
 
@@ -13,6 +13,7 @@ const OutletAdminSidebar: FC = () => {
         <SidebarItem title="Dashboard" href="/outlet-admin" icon={<Home size={18} />} />
         <SidebarItem title="Manage Orders" href="/outlet-admin/orders" icon={<CalendarArrowUp size={18} />} />
         <SidebarItem title="Pickup Orders" href="/outlet-admin/orders/pick-up" icon={<Bike size={18} />} />
+        <SidebarItem title="Bypass Request" href="/outlet-admin/bypass" icon={<TicketCheck size={18} />} />
       </div>
 
       <Separator className="my-4" />

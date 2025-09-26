@@ -42,6 +42,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
         <TableBody>
           {data?.map((order) => (
             <TableRow key={order.id}>
+              
               <TableCell className="py-4">{order.invoiceNo}</TableCell>
               <TableCell className="py-4">{order.customers?.name ?? "-"}</TableCell>
               <TableCell className="py-4">{order.outlets?.name ?? "-"}</TableCell>

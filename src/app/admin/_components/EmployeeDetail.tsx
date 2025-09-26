@@ -19,16 +19,32 @@ import { FC, useState } from "react";
 import { useShifts } from "../_hooks/useShifts";
 import { UpdateEmployeeFormValues } from "../schema/update-employee.schema";
 import { UpdateEmployeeForm } from "./UpdateEmployeeForm";
+import Image from "next/image";
 
 interface EmployeeDetailProps {
   id: string;
+}
+
+export const EmployeeRoles = ["SUPER_ADMIN", "OUTLET_ADMIN", "DRIVER", "WORKER"] as const;
+export type EmployeeRole = typeof EmployeeRoles[number];
+
+interface UpdateEmployeePayload {
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  address?: string;
+  role?: EmployeeRole;
+  shiftId?: string;
+  password?: string;
+  isActive?: boolean;
+  photoUrl?: File;
 }
 
 const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
   const { data: employee, isLoading, error } = useEmployee(id);
   const [isEditing, setIsEditing] = useState(false);
   const updateMutation = useUpdateEmployee();
-  const { data: shifts, isLoading: shiftIsLoading } = useShifts();
+  const { data: shifts } = useShifts();
   const deleteMutation = useDeleteEmployee();
 
   if (isLoading) return <Loading />;
@@ -39,47 +55,37 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
     email: employee.email,
     phoneNumber: employee.phoneNumber,
     address: employee.address,
-    role: employee.role,
+    role: employee.role as EmployeeRole,
     shiftId: employee.shiftId,
-    photoUrl: employee.photoUrl,
+    photoUrl: "",
     password: "",
   };
 
   const preparePayload = (
     values: UpdateEmployeeFormValues
-  ): FormData | Record<string, any> => {
-    const hasFile = values.photoUrl instanceof File;
-
-    if (hasFile) {
+  ): FormData | UpdateEmployeePayload => {
+    if (values.photoUrl instanceof File) {
       const formData = new FormData();
-      if (values.photoUrl instanceof File)
-        formData.append("photo", values.photoUrl);
+      formData.append("photo", values.photoUrl);
       if (values.name) formData.append("name", values.name);
       if (values.email) formData.append("email", values.email);
-      if (values.phoneNumber)
-        formData.append("phoneNumber", values.phoneNumber);
+      if (values.phoneNumber) formData.append("phoneNumber", values.phoneNumber);
       if (values.address) formData.append("address", values.address);
-      if (values.role) formData.append("role", values.role);
+      if (values.role && EmployeeRoles.includes(values.role as EmployeeRole))
+        formData.append("role", values.role);
       if (values.shiftId) formData.append("shiftId", values.shiftId);
       if (values.password) formData.append("password", values.password);
-      if (typeof (values as any).isActive !== "undefined")
-        formData.append("isActive", String((values as any).isActive));
-
       return formData;
     } else {
-      const payload: Record<string, any> = {};
+      const payload: UpdateEmployeePayload = {};
       if (values.name) payload.name = values.name;
       if (values.email) payload.email = values.email;
       if (values.phoneNumber) payload.phoneNumber = values.phoneNumber;
       if (values.address) payload.address = values.address;
-      if (values.role) payload.role = values.role;
+      if (values.role && EmployeeRoles.includes(values.role as EmployeeRole))
+        payload.role = values.role as EmployeeRole;
       if (values.shiftId) payload.shiftId = values.shiftId;
       if (values.password) payload.password = values.password;
-      if (typeof (values as any).isActive !== "undefined")
-        payload.isActive = (values as any).isActive;
-      if (typeof values.photoUrl === "string" && values.photoUrl)
-        payload.photoUrl = values.photoUrl;
-
       return payload;
     }
   };
@@ -90,20 +96,21 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
     updateMutation.mutate(
       { id: employee.id, data },
       {
-        onSuccess: () => {
-          setIsEditing(false);
-        },
+        onSuccess: () => setIsEditing(false),
       }
     );
   };
 
+  const avatarSrc = employee.photoUrl || "/profile-default.jpg"; 
+
   return (
-    <Card className="max-w-md mx-auto mt-6">
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">{employee.name}</CardTitle>
-        <CardDescription>{employee.role}</CardDescription>
+    <Card className="w-full p-6 shadow-md">
+      <CardHeader>
+        <CardTitle className="sr-only">{employee.name}</CardTitle>
+        <CardDescription className="sr-only items-center">{employee.role}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col items-center gap-2">
+
+      <CardContent>
         {isEditing ? (
           <UpdateEmployeeForm
             initialValues={initialValues}
@@ -113,41 +120,56 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
             isPending={updateMutation.isPending}
           />
         ) : (
-          <>
-            {employee.photoUrl && (
-              <div className="flex justify-center mb-4">
-                <img
-                  src={employee.photoUrl}
-                  alt={employee.name}
-                  className="w-32 h-32 rounded-full object-cover"
-                />
-              </div>
-            )}
-
-            <div className="grid grid-cols-3 gap-2 text-sm">
-              <span className="font-semibold">Email:</span>
-              <span className="col-span-2">{employee.email}</span>
-
-              <span className="font-semibold">Phone:</span>
-              <span className="col-span-2">{employee.phoneNumber}</span>
-
-              <span className="font-semibold">Address:</span>
-              <span className="col-span-2">{employee.address}</span>
-
-              <span className="font-semibold">Outlet:</span>
-              <span className="col-span-2">{employee.outlet?.name || "-"}</span>
-            </div>
-
-            <div className="flex justify-between gap-2 mt-4">
-              
-              <ConfirmDeleteDialog
-                itemName="Employee"
-                onConfirm={() => deleteMutation.mutate(employee.id)}
-                isPending={deleteMutation.isPending}
+          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+            {/* Kiri: Foto + Nama */}
+            <div className="flex flex-col items-center">
+              <Image
+                src={avatarSrc}
+                alt={employee.name}
+                width={160}
+                height={160}
+                className="rounded-full object-cover mb-4 shadow"
               />
-              <Button className="cursor-pointer" onClick={() => setIsEditing(true)}>Edit</Button>
+              <h2 className="text-xl md:text-2xl font-bold text-center">{employee.name}</h2>
             </div>
-          </>
+
+            {/* Kanan: Informasi detail */}
+            <div className="flex-1 grid grid-cols-1 gap-4 text-base">
+              <div>
+                <p className="font-semibold text-gray-600 text-sm uppercase">Role</p>
+                <p className="mt-1">{employee.role}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-600 text-sm uppercase">Email</p>
+                <p className="mt-1">{employee.email}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-600 text-sm uppercase">Phone</p>
+                <p className="mt-1">{employee.phoneNumber}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-600 text-sm uppercase">Address</p>
+                <p className="mt-1">{employee.address}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-600 text-sm uppercase">Outlet</p>
+                <p className="mt-1">{employee.outlet?.name || "-"}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!isEditing && (
+          <div className="flex justify-end gap-3 mt-6">
+            <ConfirmDeleteDialog
+              itemName="Employee"
+              onConfirm={() => deleteMutation.mutate(employee.id)}
+              isPending={deleteMutation.isPending}
+            />
+            <Button size="default" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>

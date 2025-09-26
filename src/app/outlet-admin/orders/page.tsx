@@ -131,7 +131,7 @@ export default function OutletOrdersPage() {
                   <TableCell>
                     <Badge
                       variant={
-                        order.status === "completed"
+                        order.status === "COMPLETED"
                           ? "secondary"
                           : order.status === "cancelled"
                           ? "destructive"
