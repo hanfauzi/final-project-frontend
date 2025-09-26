@@ -13,12 +13,12 @@ import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 import useLoginHook from "./_hooks/useLogin";
 import { validationCustomerLoginSchema } from "@/features/customer/login/schema/validationCustomerLoginSchema";
-import { useGoogleAuth } from "../register/_hooks/useGoogleAuth";
 import Image from "next/image"; 
+import { useGoogleLogin } from "../register/_hooks/useGoogleLogin";
 
 export default function LoginPage() {
   const { loginCustomerMutation } = useLoginHook();
-  const googleAuth = useGoogleAuth();
+  const googleLogin = useGoogleLogin();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -181,13 +181,13 @@ export default function LoginPage() {
                       const idToken = cred.credential;
                       if (!idToken)
                         return toast.error("Google tidak mengirim token.");
-                      googleAuth.mutate(idToken);
+                      googleLogin.mutate(idToken);
                     }}
                     onError={() => toast.error("Gagal login dengan Google.")}
                     useOneTap={false}
                     theme="outline"
                     size="large"
-                    text="continue_with"
+                    text="signin_with"
                     shape="pill"
                     width="320"
                     locale="id"

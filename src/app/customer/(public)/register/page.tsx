@@ -10,14 +10,15 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { validationCustomerRegisterSchema } from "@/features/customer/register/validationCustomerRegisterSchemas";
 import useRegisterHook from "./_hooks/useRegister";
-import { useGoogleAuth } from "./_hooks/useGoogleAuth";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
 import Image from "next/image"; 
+import { useGoogleLogin } from "./_hooks/useGoogleLogin";
 
 function RegisterPage() {
   const { registerCustomerMutation } = useRegisterHook();
-  const googleAuth = useGoogleAuth();
+  const googleLogin = useGoogleLogin();
+
   const formik = useFormik({
     initialValues: { email: "" },
     validationSchema: validationCustomerRegisterSchema,
@@ -118,13 +119,13 @@ function RegisterPage() {
                     onSuccess={(cred) => {
                       const idToken = cred.credential;
                       if (!idToken) return toast.error("Google tidak mengirim token.");
-                      googleAuth.mutate(idToken);
+                      googleLogin.mutate(idToken);
                     }}
                     onError={() => toast.error("Gagal login dengan Google.")}
                     useOneTap={false}
                     theme="outline"
                     size="large"
-                    text="signup_with"
+                    text="signin_with"
                     shape="pill"
                     width="320"
                     locale="id"

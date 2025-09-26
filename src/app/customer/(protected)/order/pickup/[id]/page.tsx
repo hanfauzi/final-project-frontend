@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  CalendarClock, ChevronLeft, Hash, Navigation, Phone, Store, Truck,
+  CalendarClock, ChevronLeft, Hash, Navigation, Phone, Store, Truck, User, 
 } from "lucide-react";
 import useGetCustomerPickUpOrderById from "../../_hooks/useGetCustomerPickUpOrderById";
 import useCancelPickUpOrder from "../../_hooks/useCancelPickUpOrder";
@@ -38,17 +38,13 @@ export default function PickupOrderDetailPage() {
     <>
       <Head><title>Detail Pickup — Laundr</title></Head>
 
-      <div className="relative min-h-screen bg-transparent"> 
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-          aria-hidden
-          style={{
-            background:
-              "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
-          }}
-        />
+      <div className="relative min-h-screen bg-transparent">
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden style={{
+          background:
+            "radial-gradient(1200px 420px at 50% -50%, rgba(0,0,0,0.08), transparent 60%), radial-gradient(600px 260px at 100% 10%, rgba(0,0,0,0.04), transparent 70%)",
+        }} />
 
-        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden"> 
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
           <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center">
             <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
               <ChevronLeft className="h-5 w-5" />
@@ -57,13 +53,13 @@ export default function PickupOrderDetailPage() {
           </div>
         </div>
 
-        <div className="hidden md:block"> 
+        <div className="hidden md:block">
           <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
             <h1 className="text-xl font-semibold text-foreground">Detail Pickup</h1>
           </div>
         </div>
 
-        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8"> 
+        <main className="mx-auto w-full max-w-sm px-4 py-4 space-y-3 md:max-w-5xl md:px-6 md:py-8">
           {isLoading && (
             <Card className="rounded-2xl border border-border bg-card">
               <CardContent className="p-5 text-muted-foreground">Memuat detail pickup…</CardContent>
@@ -108,6 +104,20 @@ export default function PickupOrderDetailPage() {
                       </div>
                       {outletAddr && (
                         <div className="text-[12px] text-muted-foreground mt-0.5">{outletAddr}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <User className="h-4 w-4 text-muted-foreground mt-0.5" />
+                    <div>
+                      <div className="text-[12px] text-muted-foreground">Penerima</div>
+                      <div className="text-[13px] font-medium text-foreground">{pickup.receiverName}</div>
+                      {!!pickup.receiverPhone && (
+                        <div className="flex items-center gap-2 text-[13px]">
+                          <Phone className="h-4 w-4 text-muted-foreground" />
+                            {pickup.receiverPhone}
+                        </div>
                       )}
                     </div>
                   </div>
