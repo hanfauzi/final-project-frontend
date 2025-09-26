@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
+import PageHeader from "@/components/PageHeader";
+import Image from "next/image";
 
 export default function PickupOrdersList() {
   const { data, isLoading, isError } = usePickupOrders();
@@ -22,7 +24,18 @@ export default function PickupOrdersList() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-xl font-bold">Pick Up Orders</h1>
+      <PageHeader
+        title="PICKUP ORDER REQUESTS"
+        rightElement={
+          <Image
+            src={"/logo-text-laundr.png"}
+            alt="laundr image"
+            width={100}
+            height={50}
+            className="rounded-full"
+          />
+        }
+      />
 
       <div className="rounded-md border">
         <Table>

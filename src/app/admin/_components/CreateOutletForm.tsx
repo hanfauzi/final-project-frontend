@@ -46,7 +46,9 @@ const CreateOutletForm: FC = () => {
               coverageArea: Number(values.coverageArea),
             });
             resetForm();
-          } catch (error: any) {}
+          } catch (error) {
+            console.error(error);
+          }
         }}
       >
         {({ setFieldValue, values }) => (
@@ -202,7 +204,6 @@ const CreateOutletForm: FC = () => {
                 className="text-red-500 text-sm"
               />
             </div>
-            
 
             {/* Submit */}
             <Button type="submit" className="w-full" disabled={isPending}>

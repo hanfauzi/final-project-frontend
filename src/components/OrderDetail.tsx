@@ -4,9 +4,9 @@ import { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOrderDetail } from "../_hooks/useOrdersOutletAdmin";
+import { useOrderDetail } from "../app/outlet-admin/_hooks/useOrdersOutletAdmin";
 import { OrderItemType } from "@/types/orderItem";
-import Countdown from "./Countdown";
+import Countdown from "../app/outlet-admin/_components/Countdown";
 
 interface OrderDetailProps {
   orderId: string;

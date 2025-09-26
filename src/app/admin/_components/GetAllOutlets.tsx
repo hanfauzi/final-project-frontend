@@ -85,7 +85,7 @@ const GetAllOutlets: FC = () => {
                 <CardTitle>{outlet.name}</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-1 text-sm">
-                <span>{outlet.address}</span>
+                {/* <span>{outlet.address}</span> */}
                 <span>{outlet.cityName}</span>
                 <span>{outlet.phoneNumber}</span>
                 <span

@@ -22,6 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// shadcn card
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 const PerformanceDashboard: FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -53,8 +56,9 @@ const PerformanceDashboard: FC = () => {
     router.replace(`/admin/performances?${params.toString()}`);
   }, [startDate, endDate, selectedOutletId, router]);
 
-  const outletParam = selectedOutletId && selectedOutletId !== "all" ? selectedOutletId : undefined;
-  const { data, isLoading, error } = usePerformance(
+  const outletParam =
+    selectedOutletId && selectedOutletId !== "all" ? selectedOutletId : undefined;
+  const { data, isLoading } = usePerformance(
     startDate.toISOString().slice(0, 10),
     endDate.toISOString().slice(0, 10),
     outletParam
@@ -74,93 +78,106 @@ const PerformanceDashboard: FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Filter */}
-      <div className="flex items-center gap-4 mb-6">
-        {/* Start Date */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Start Date</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline">
-                {format(startDate, "yyyy-MM-dd")}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={startDate}
-                onSelect={(date) => date && setStartDate(date)}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+      {/* Filter Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Filters</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap items-center gap-6">
+            {/* Start Date */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Start Date</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline">{format(startDate, "yyyy-MM-dd")}</Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    onSelect={(date) => date && setStartDate(date)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
 
-        {/* End Date */}
-        <div>
-          <label className="block text-sm font-medium mb-1">End Date</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline">{format(endDate, "yyyy-MM-dd")}</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={endDate}
-                onSelect={(date) => date && setEndDate(date)}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+            {/* End Date */}
+            <div>
+              <label className="block text-sm font-medium mb-1">End Date</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline">{format(endDate, "yyyy-MM-dd")}</Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    onSelect={(date) => date && setEndDate(date)}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
 
-        {/* Outlet */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Outlet</label>
-          <Select
-            value={selectedOutletId}
-            onValueChange={(val) => setSelectedOutletId(val)}
-          >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="All Outlets" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Outlets</SelectItem>
-              {outlets.map((outlet) => (
-                <SelectItem key={outlet.id} value={outlet.id}>
-                  {outlet.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Workers */}
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Worker Performance</h2>
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : workerChartData.length > 0 ? (
-          <div className="w-full h-[350px]">
-            <DonutChart data={workerChartData} title="Workers" />
+            {/* Outlet */}
+            <div>
+              <label className="block text-sm font-medium mb-1">Outlet</label>
+              <Select
+                value={selectedOutletId}
+                onValueChange={(val) => setSelectedOutletId(val)}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="All Outlets" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Outlets</SelectItem>
+                  {outlets.map((outlet) => (
+                    <SelectItem key={outlet.id} value={outlet.id}>
+                      {outlet.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        ) : (
-          <p>No worker data available.</p>
-        )}
-      </div>
+        </CardContent>
+      </Card>
 
-      {/* Drivers */}
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Driver Performance</h2>
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : driverChartData.length > 0 ? (
-          <div className="w-full h-[350px]">
-            <DonutChart data={driverChartData} title="Drivers" />
-          </div>
-        ) : (
-          <p>No driver data available.</p>
-        )}
-      </div>
+      {/* Worker Performance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Worker Performance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : workerChartData.length > 0 ? (
+            <div className="w-full h-[350px]">
+              <DonutChart data={workerChartData} title="Workers" />
+            </div>
+          ) : (
+            <p>No worker data available.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Driver Performance */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Driver Performance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : driverChartData.length > 0 ? (
+            <div className="w-full h-[350px]">
+              <DonutChart data={driverChartData} title="Drivers" />
+            </div>
+          ) : (
+            <p>No driver data available.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
