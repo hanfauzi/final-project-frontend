@@ -21,6 +21,8 @@ interface EmployeesParams {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   search?: string;
+  role?: string;
+  outletId?: string;
 }
 interface EmployeeResponse {
   data: Employee[];

@@ -28,8 +28,6 @@ export default function GetAllLaundryItems() {
   const updateMutation = useUpdateLaundryItem();
   const deleteMutation = useDeleteLaundryItem();
 
-  console.log("Laundry Items:>>>>>>", data);
-
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -52,10 +50,10 @@ export default function GetAllLaundryItems() {
     <Card className="p-6">
       <CardContent className="flex flex-col gap-4">
         {/* Header (Add new item) */}
-        <div className="flex justify-end">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           {!showForm ? (
             <Button
-              className="cursor-pointer"
+              className="cursor-pointer w-full sm:w-auto"
               onClick={() => setShowForm(true)}
             >
               <Plus className="mr-2 h-4 w-4" />
@@ -70,82 +68,84 @@ export default function GetAllLaundryItems() {
 
         {/* List Items */}
         <TooltipProvider>
-          {data?.map((item: ILaundryItem) => (
-            <div
-              key={item.id}
-              className="flex justify-between items-center border p-2 rounded"
-            >
-              {editingId === item.id ? (
-                <Input
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  className="flex-1 mr-2"
-                />
-              ) : (
-                <span>{item.name}</span>
-              )}
-
-              <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
+            {data?.map((item: ILaundryItem) => (
+              <div
+                key={item.id}
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center border p-2 rounded gap-2"
+              >
                 {editingId === item.id ? (
-                  <>
-                    <Button
-                      className="cursor-pointer"
-                      size="icon"
-                      variant="outline"
-                      onClick={() => handleSave(item.id)}
-                    >
-                      <Check />
-                    </Button>
-                    <Button
-                      className="cursor-pointer"
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => setEditingId(null)}
-                    >
-                      <X />
-                    </Button>
-                  </>
+                  <Input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    className="flex-1"
+                  />
                 ) : (
-                  <>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className="cursor-pointer"
-                          size="icon"
-                          variant="outline"
-                          onClick={() => {
-                            setEditingId(item.id);
-                            setEditValue(item.name);
-                          }}
-                        >
-                          <SquarePen />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Edit</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className="cursor-pointer"
-                          size="icon"
-                          variant="destructive"
-                          onClick={() => deleteMutation.mutate(item.id)}
-                        >
-                          <Trash />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </>
+                  <span className="break-words">{item.name}</span>
                 )}
+
+                <div className="flex gap-2 justify-end">
+                  {editingId === item.id ? (
+                    <>
+                      <Button
+                        className="cursor-pointer"
+                        size="icon"
+                        variant="outline"
+                        onClick={() => handleSave(item.id)}
+                      >
+                        <Check />
+                      </Button>
+                      <Button
+                        className="cursor-pointer"
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => setEditingId(null)}
+                      >
+                        <X />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            className="cursor-pointer"
+                            size="icon"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingId(item.id);
+                              setEditValue(item.name);
+                            }}
+                          >
+                            <SquarePen />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Edit</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            className="cursor-pointer"
+                            size="icon"
+                            variant="destructive"
+                            onClick={() => deleteMutation.mutate(item.id)}
+                          >
+                            <Trash />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Delete</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </TooltipProvider>
       </CardContent>
     </Card>
