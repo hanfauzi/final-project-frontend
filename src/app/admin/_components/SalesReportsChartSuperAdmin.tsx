@@ -1,30 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
-import {
-  format,
-  addDays,
-  addMonths,
-  addYears,
-  startOfMonth,
-  endOfMonth,
-  startOfYear,
-  endOfYear,
-  isAfter,
-  isBefore,
-} from "date-fns";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useOutlets } from "../_hooks/useOutlets";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -32,14 +15,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+  addDays,
+  addMonths,
+  addYears,
+  endOfMonth,
+  endOfYear,
+  format,
+  isAfter,
+  isBefore,
+  startOfMonth,
+  startOfYear,
+} from "date-fns";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { useOutlets } from "../_hooks/useOutlets";
+import { Outlet } from "@/types/outlet";
 
 interface ReportChartProps {
   data: { period: string; total: number }[];
@@ -163,7 +163,7 @@ export function SalesReportsChartSuperAdmin({ data }: ReportChartProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Outlets</SelectItem>
-              {outlets?.map((outlet: any) => (
+              {outlets?.map((outlet) => (
                 <SelectItem key={outlet.id} value={outlet.id}>
                   {outlet.name}
                 </SelectItem>

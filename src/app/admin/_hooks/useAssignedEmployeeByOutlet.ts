@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 export interface Employee {
@@ -56,7 +57,7 @@ export function useAssignEmployeeToOutlet() {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
       toast.success(res.message || "Employee assigned to outlet successfully!");
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       const message =
         error.response?.data?.message || "Failed to assign employee to outlet";
       toast.error(message);

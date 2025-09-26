@@ -2,11 +2,10 @@
 
 import { useEmployeeProfile } from "@/hooks/useEmployeeProfile";
 import { Skeleton } from "./ui/skeleton";
+import Image from "next/image";
 
 const EmployeeProfile = () => {
   const { data: employee, isLoading } = useEmployeeProfile();
-
-  console.log("employee profile >>>>", employee);
 
   if (isLoading) {
     return (
@@ -23,14 +22,21 @@ const EmployeeProfile = () => {
 
   return (
     <div className="flex flex-col items-center gap-2 p-5 text-center">
-      <img
-        src={employee.photoUrl ?? "/default-avatar.png"}
-        alt={employee.email}
-        className="w-16 h-16 rounded-full object-cover"
-      />
+      <div className="relative w-22 h-22">
+        <Image
+          src={employee.photoUrl ?? "/profile-default.jpg"}
+          alt={employee.email}
+          fill
+          className="rounded-full object-cover border border-gray-200 shadow-sm"
+        />
+      </div>
       <div>
         <h2 className="text-base font-semibold">{employee.name}</h2>
-        <p className="text-sm text-gray-500">{employee.role === "SUPER_ADMIN" ? employee.role : employee.outlet?.name}</p>
+        <p className="text-sm text-gray-500">
+          {employee.role === "SUPER_ADMIN"
+            ? employee.role
+            : employee.outlet?.name}
+        </p>
       </div>
     </div>
   );

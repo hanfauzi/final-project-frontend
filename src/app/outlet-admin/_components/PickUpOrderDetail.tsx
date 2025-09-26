@@ -1,16 +1,10 @@
 "use client";
 
+import Loading from "@/components/Loading";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useParams } from "next/navigation";
 import { usePickupOrderDetail } from "../_hooks/usePickupOrders";
 import CreateOrderForm from "./CreateOrderForm";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
-import Loading from "@/components/Loading";
-import { PickUpStatusBadge } from "@/app/customer/(protected)/order/_components/PickUpStatusBadge";
 
 export default function PickupOrderDetailPage() {
   const params = useParams<{ pickupOrderId: string }>();
@@ -26,12 +20,16 @@ export default function PickupOrderDetailPage() {
     <div className="p-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-bold">Pickup Order Detail</CardTitle>
+          <CardTitle className="text-lg font-bold">
+            Pickup Order Detail
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Customer</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Customer
+              </p>
               <p className="font-semibold">{data.customer.name}</p>
             </div>
             <div>
@@ -39,13 +37,16 @@ export default function PickupOrderDetailPage() {
               <p className="font-semibold">{data.customer.phoneNumber}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Outlet</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Outlet
+              </p>
               <p className="font-semibold">{data.outlet.name}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Status</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Status
+              </p>
               <p className="font-semibold">{data.status}</p>
-              
             </div>
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">Notes</p>

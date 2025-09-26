@@ -1,12 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-interface LaundryService {
-  id: string;
-  name: string;
-  basePrice: number;
-  unit: string;
-}
 
 export const useLaundryServices = () =>
   useQuery({

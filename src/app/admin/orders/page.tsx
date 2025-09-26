@@ -1,9 +1,8 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import GetAllEmployees from "../_components/GetAllEmployees";
-import GetAllOrders from "../_components/GetAllOrders";
 import Image from "next/image";
+import GetAllOrders from "../_components/GetAllOrders";
 
 export default function EmployeesPage() {
   return (

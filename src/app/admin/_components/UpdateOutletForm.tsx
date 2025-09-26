@@ -30,6 +30,10 @@ interface UpdateOutletFormProps {
   onCancel: () => void;
   isPending?: boolean;
 }
+interface City {
+  cityId: string;
+  cityName: string;
+}
 
 export const UpdateOutletForm: FC<UpdateOutletFormProps> = ({
   initialValues,
@@ -91,7 +95,7 @@ const { data: cities = [], isLoading: isCitiesLoading } = useCities();
                 {isCitiesLoading ? (
                   <SelectItem value="loading">Loading...</SelectItem>
                 ) : (
-                  cities.map((city: any) => (
+                  cities.map((city: City) => (
                     <SelectItem key={city.cityId} value={city.cityId}>
                       {city.cityName}
                     </SelectItem>

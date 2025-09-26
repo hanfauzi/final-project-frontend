@@ -6,6 +6,7 @@ import { EmployeeFormValues } from "../schema/create-employee.schema";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 // key buat cache query
 const EMPLOYEES_KEY = ["employees"];
@@ -89,7 +90,7 @@ export function useCreateEmployee() {
       toast.success(`Employee created sucessfully`);
       router.replace(`/admin/employees`);
     },
-    onError: async (error: any) => {
+    onError: async (error: AxiosError<{ message: string }>) => {
       if (error.response) {
         toast.error(
           error.response.data?.message ?? "Failed to create employee"
@@ -125,7 +126,7 @@ export function useUpdateEmployee() {
       queryClient.invalidateQueries({ queryKey: ["employees", variables.id] });
       toast.success("Employee updated successfully!");
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(
         error?.response?.data?.message ??
           error.message ??

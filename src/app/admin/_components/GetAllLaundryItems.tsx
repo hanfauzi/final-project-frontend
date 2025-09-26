@@ -16,14 +16,19 @@ import {
 } from "../_hooks/useLaundryItems";
 import CreateLaundryItemForm from "./CreateLaundryItem";
 import Loading from "@/components/Loading";
-
-// import shadcn card
 import { Card, CardContent } from "@/components/ui/card";
+
+interface ILaundryItem {
+  id: string;
+  name: string;
+}
 
 export default function GetAllLaundryItems() {
   const { data, isLoading } = useLaundryItems();
   const updateMutation = useUpdateLaundryItem();
   const deleteMutation = useDeleteLaundryItem();
+
+  console.log("Laundry Items:>>>>>>", data);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -65,7 +70,7 @@ export default function GetAllLaundryItems() {
 
         {/* List Items */}
         <TooltipProvider>
-          {data?.map((item: any) => (
+          {data?.map((item: ILaundryItem) => (
             <div
               key={item.id}
               className="flex justify-between items-center border p-2 rounded"

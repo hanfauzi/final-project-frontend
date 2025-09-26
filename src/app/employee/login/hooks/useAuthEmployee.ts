@@ -46,7 +46,6 @@ export default function useEmployeeLogin() {
         }
       );
 
-      console.log("DATA >>>>>", data.data);
       const { token, payload: user } = data.data;
 
       return {
@@ -61,7 +60,9 @@ export default function useEmployeeLogin() {
         router.replace("/admin");
       } else if (employee.role === "OUTLET_ADMIN") {
         router.replace("/outlet-admin");
-      } else { router.replace("/dashboard"); }
+      } else {
+        router.replace("/dashboard");
+      }
     },
     onError: (err) => {
       toast.error(err.response?.data.message ?? "Login gagal");

@@ -31,8 +31,6 @@ const OrdersFilter: FC<OrdersFilterProps> = ({
   isOutletsError,
   outletId,
   onOutletChange,
-  onApply,
-  isApplying,
 }) => {
   return (
     <div className="flex items-center gap-4">
@@ -64,8 +62,6 @@ const OrdersFilter: FC<OrdersFilterProps> = ({
           )}
         </SelectContent>
       </Select>
-
-     
     </div>
   );
 };

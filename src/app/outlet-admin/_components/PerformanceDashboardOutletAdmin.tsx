@@ -37,7 +37,7 @@ const OutletAdminPerformanceDashboard: FC = () => {
     router.replace(`/outlet-admin/performances?${params.toString()}`);
   }, [startDate, endDate, router]);
 
-  const { data, isLoading, error } = useOutletAdminPerformance(
+  const { data, isLoading } = useOutletAdminPerformance(
     startDate.toISOString().slice(0, 10),
     endDate.toISOString().slice(0, 10)
   );

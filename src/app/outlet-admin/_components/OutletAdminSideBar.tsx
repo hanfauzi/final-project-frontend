@@ -1,8 +1,8 @@
-import { FC } from "react";
-import { Separator } from "@/components/ui/separator";
-import { Users, Home, Box, ClipboardList, CalendarArrowUp, Bike, ChartPie, TicketCheck } from "lucide-react";
 import SidebarItem from "@/app/admin/_components/SidebarItem";
 import EmployeeProfile from "@/components/EmployeeProfile";
+import { Separator } from "@/components/ui/separator";
+import { Bike, CalendarArrowUp, ChartPie, ClipboardList, Home, TicketCheck } from "lucide-react";
+import { FC } from "react";
 
 const OutletAdminSidebar: FC = () => {
   return (
