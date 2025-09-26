@@ -10,6 +10,7 @@ export interface PickUpOrder {
   price: number;
   pickedUpAt: string | null;
   arrivedAtOutlet: string | null;
+  services: string[]; 
 
   createdAt: string;
 

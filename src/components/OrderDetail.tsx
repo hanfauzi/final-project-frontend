@@ -7,12 +7,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useOrderDetail } from "../app/outlet-admin/_hooks/useOrdersOutletAdmin";
 import { OrderItemType } from "@/types/orderItem";
 import Countdown from "../app/outlet-admin/_components/Countdown";
+import { OrderHeader } from "@/types/orderHeader";
+import { Customer } from "@/types/customer";
+import { Outlet } from "@/types/outlet";
+import { WorkerTask } from "@/types/workerTasks";
 
 interface OrderDetailProps {
   orderId: string;
 }
 
-const OrderInfo: FC<{ order: any }> = ({ order }) => (
+const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
   <Card>
     <CardContent className="flex items-start gap-x-2">
       {/* Kiri: Judul */}
@@ -51,7 +55,7 @@ const OrderInfo: FC<{ order: any }> = ({ order }) => (
   </Card>
 );
 
-const CustomerInfo: FC<{ customer: any }> = ({ customer }) => (
+const CustomerInfo: FC<{ customer: Customer }> = ({ customer }) => (
   <Card>
     <CardHeader>
       <CardTitle>Customer</CardTitle>
@@ -69,7 +73,7 @@ const CustomerInfo: FC<{ customer: any }> = ({ customer }) => (
   </Card>
 );
 
-const OutletInfo: FC<{ outlet: any }> = ({ outlet }) => (
+const OutletInfo: FC<{ outlet: Outlet }> = ({ outlet }) => (
   <Card>
     <CardHeader>
       <CardTitle>Outlet</CardTitle>
@@ -89,7 +93,7 @@ const OutletInfo: FC<{ outlet: any }> = ({ outlet }) => (
   </Card>
 );
 
-const WorkerTasks: FC<{ tasks: any[] }> = ({ tasks }) => (
+const WorkerTasks: FC<{ tasks: WorkerTask[] }> = ({ tasks }) => (
   <Card>
     <CardHeader>
       <CardTitle>Karyawan yang mengerjakan</CardTitle>
@@ -108,7 +112,7 @@ const WorkerTasks: FC<{ tasks: any[] }> = ({ tasks }) => (
               </div>
               <div className="flex">
                 <p className="font-medium w-20">Station:</p>
-                <p>{task?.workStation?.station || "-"}</p>
+                <p>{task?.station || "-"}</p>
               </div>
             </div>
           ))}

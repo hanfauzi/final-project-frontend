@@ -3,23 +3,26 @@
 import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-
 export interface PickupOrders {
+  id: string;
+  customerId: string;
+  driverId: string;
+  outletId: string;
+  status: string;
+  customerAddressId: string;
+  notes: string;
+  price: number;
+  services: {
     id: string;
-    customerId: string;
-    driverId: string;
-    outletId: string;
-    status: string;
-    customerAddressId: string;
-    notes: string;
-    price: number;
- 
-
+    name: string;
+    basePrice: number;
+    estHours?: number;
+  }[];
 }
 
 export interface GetPickupOrdersResponse {
-    data: PickupOrders[];
-    message: string;
+  data: PickupOrders[];
+  message: string;
 }
 export interface PickupOrderDetail {
   id: string;
@@ -42,7 +45,6 @@ interface GetPickupOrderDetailResponse {
   message: string;
 }
 
-
 export const usePickupOrders = () => {
   return useQuery({
     queryKey: ["pickupOrders"],
@@ -50,7 +52,7 @@ export const usePickupOrders = () => {
       const res = await axiosInstance.get<GetPickupOrdersResponse>(
         "/api/admin/orders/pickup-orders"
       );
-      return res.data.data; 
+      return res.data.data;
     },
   });
 };

@@ -8,7 +8,8 @@ export interface OrderHeader {
   customerId: string;
   status: OrderStatus;
   notes: string;
-  estHour: number;
+  estHours: number;
+  invoiceNo: string;
 
   createdAt: string;
   
