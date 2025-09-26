@@ -1,7 +1,6 @@
 import { Customer } from "./customer";
 import { CustomerAddress } from "./customerAddress";
 import { Employee } from "./employee";
-import { OrderHeader } from "./orderHeader";
 import { Outlet } from "./outlet";
 
 export interface PickUpOrder {
