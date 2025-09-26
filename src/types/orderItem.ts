@@ -1,4 +1,4 @@
-interface LaundryItemType {
+export interface LaundryItemType {
   id: string;
   qty: number;
   laundryItem: {
