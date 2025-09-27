@@ -25,8 +25,13 @@ interface EmployeeDetailProps {
   id: string;
 }
 
-export const EmployeeRoles = ["SUPER_ADMIN", "OUTLET_ADMIN", "DRIVER", "WORKER"] as const;
-export type EmployeeRole = typeof EmployeeRoles[number];
+export const EmployeeRoles = [
+  "SUPER_ADMIN",
+  "OUTLET_ADMIN",
+  "DRIVER",
+  "WORKER",
+] as const;
+export type EmployeeRole = (typeof EmployeeRoles)[number];
 
 interface UpdateEmployeePayload {
   name?: string;
@@ -69,7 +74,8 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
       formData.append("photo", values.photoUrl);
       if (values.name) formData.append("name", values.name);
       if (values.email) formData.append("email", values.email);
-      if (values.phoneNumber) formData.append("phoneNumber", values.phoneNumber);
+      if (values.phoneNumber)
+        formData.append("phoneNumber", values.phoneNumber);
       if (values.address) formData.append("address", values.address);
       if (values.role && EmployeeRoles.includes(values.role as EmployeeRole))
         formData.append("role", values.role);
@@ -101,13 +107,15 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
     );
   };
 
-  const avatarSrc = employee.photoUrl || "/profile-default.jpg"; 
+  const avatarSrc = employee.photoUrl || "/profile-default.jpg";
 
   return (
     <Card className="w-full p-6 shadow-md">
       <CardHeader>
         <CardTitle className="sr-only">{employee.name}</CardTitle>
-        <CardDescription className="sr-only items-center">{employee.role}</CardDescription>
+        <CardDescription className="sr-only items-center">
+          {employee.role}
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -122,37 +130,51 @@ const EmployeeDetail: FC<EmployeeDetailProps> = ({ id }) => {
         ) : (
           <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
             {/* Kiri: Foto + Nama */}
-            <div className="flex flex-col items-center">
-              <Image
-                src={avatarSrc}
-                alt={employee.name}
-                width={160}
-                height={160}
-                className="rounded-full object-cover mb-4 shadow"
-              />
-              <h2 className="text-xl md:text-2xl font-bold text-center">{employee.name}</h2>
-            </div>
+           <div className="flex flex-col items-center">
+  <div className="relative w-40 h-40 mb-4 rounded-full overflow-hidden shadow">
+    <Image
+      src={avatarSrc}
+      alt={employee.name}
+      fill
+      className="object-cover"
+    />
+  </div>
+  <h2 className="text-xl md:text-2xl font-bold text-center">
+    {employee.name}
+  </h2>
+</div>
+
 
             {/* Kanan: Informasi detail */}
             <div className="flex-1 grid grid-cols-1 gap-4 text-base">
               <div>
-                <p className="font-semibold text-gray-600 text-sm uppercase">Role</p>
+                <p className="font-semibold text-gray-600 text-sm uppercase">
+                  Role
+                </p>
                 <p className="mt-1">{employee.role}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-600 text-sm uppercase">Email</p>
+                <p className="font-semibold text-gray-600 text-sm uppercase">
+                  Email
+                </p>
                 <p className="mt-1">{employee.email}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-600 text-sm uppercase">Phone</p>
+                <p className="font-semibold text-gray-600 text-sm uppercase">
+                  Phone
+                </p>
                 <p className="mt-1">{employee.phoneNumber}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-600 text-sm uppercase">Address</p>
+                <p className="font-semibold text-gray-600 text-sm uppercase">
+                  Address
+                </p>
                 <p className="mt-1">{employee.address}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-600 text-sm uppercase">Outlet</p>
+                <p className="font-semibold text-gray-600 text-sm uppercase">
+                  Outlet
+                </p>
                 <p className="mt-1">{employee.outlet?.name || "-"}</p>
               </div>
             </div>

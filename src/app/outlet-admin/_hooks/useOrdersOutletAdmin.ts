@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export interface Order {
   id: string;
@@ -119,7 +120,7 @@ export function useCreateOrderFromPickup() {
       toast.success("Order created successfully!");
       router.replace("/outlet-admin/orders");
     },
-    onError: (err: any) => {
+    onError: (err: AxiosError<{ message: string }>) => {
       toast.error(err.response?.data?.message || "Failed to create order");
     },
   });

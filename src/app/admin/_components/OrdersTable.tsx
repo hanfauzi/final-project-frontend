@@ -1,6 +1,5 @@
 "use client";
 
-import { FC } from "react";
 import {
   Table,
   TableBody,
@@ -9,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
 
 interface Order {
   id: string;
-    invoiceNo: string;
+  invoiceNo: string;
   customers?: { name?: string };
   outlets?: { name?: string };
   createdAt: string;
@@ -28,6 +29,7 @@ interface OrdersTableProps {
 }
 
 const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
+  const router = useRouter();
   return (
     <>
       <Table>
@@ -41,11 +43,18 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
         </TableHeader>
         <TableBody>
           {data?.map((order) => (
-            <TableRow key={order.id}>
-              
+            <TableRow
+              key={order.id}
+              className="cursor-pointer hover:bg-gray-100"
+              onClick={() => router.push(`/admin/orders/${order.id}`)}
+            >
               <TableCell className="py-4">{order.invoiceNo}</TableCell>
-              <TableCell className="py-4">{order.customers?.name ?? "-"}</TableCell>
-              <TableCell className="py-4">{order.outlets?.name ?? "-"}</TableCell>
+              <TableCell className="py-4">
+                {order.customers?.name ?? "-"}
+              </TableCell>
+              <TableCell className="py-4">
+                {order.outlets?.name ?? "-"}
+              </TableCell>
               <TableCell className="py-4">
                 {new Date(order.createdAt).toLocaleString()}
               </TableCell>

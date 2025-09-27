@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -89,7 +90,7 @@ export const useCreateOutlet = () => {
       toast.success("Outlet created successfully!");
       router.replace("/admin/outlets");
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error?.response?.data?.message || "Failed to create outlet");
     },
   });
@@ -97,7 +98,6 @@ export const useCreateOutlet = () => {
 
 export const useUpdateOutlet = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<Outlet> }) => {
@@ -109,7 +109,7 @@ export const useUpdateOutlet = () => {
       queryClient.invalidateQueries({ queryKey: ["outlet", id] });
       toast.success(`Outlet updated sucessfully!`);
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error?.response?.data?.message || "Update outlet failed");
     },
   });
@@ -128,7 +128,7 @@ export const useDeleteOutlet = () => {
       toast.success("Outlet deleted successfully!");
       router.replace("/admin/outlets");
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error?.response?.data?.message || "Delete outlet failed");
     },
   });

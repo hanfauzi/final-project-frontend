@@ -17,6 +17,10 @@ import { useCreateOrderFromPickup } from "../_hooks/useOrdersOutletAdmin";
 import { useLaundryItems } from "@/app/admin/_hooks/useLaundryItems";
 import { usePickupOrders } from "../_hooks/usePickupOrders";
 
+interface LaundryItem {
+  id: string;
+  name: string;
+}
 interface LaundryItemForm {
   laundryItemId: string;
   qty: number;
@@ -58,16 +62,14 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
     if (!pickup) return;
 
     // populate items dari pickup.services
-    const itemsFromPickup: OrderItemForm[] = pickup.services.map(
-      (service) => ({
-        serviceId: service.id,
-        service: service,
-        qty: 1,
-        unitPrice: service.basePrice ,
-        note: "",
-        laundryItems: [{ laundryItemId: "", qty: 1 }],
-      })
-    );
+    const itemsFromPickup: OrderItemForm[] = pickup.services.map((service) => ({
+      serviceId: service.id,
+      service: service,
+      qty: 1,
+      unitPrice: service.basePrice,
+      note: "",
+      laundryItems: [{ laundryItemId: "", qty: 1 }],
+    }));
     setInitialItems(itemsFromPickup);
   }, [pickupOrderId, pickupOrders]);
 
@@ -91,7 +93,7 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
         <FormikProvider value={formik}>
           <form onSubmit={formik.handleSubmit} className="space-y-8">
             <FieldArray name="items">
-              {({ remove, push }) => (
+              {({ remove }) => (
                 <div className="space-y-8">
                   {formik.values.items.map((item, itemIndex) => (
                     <div
@@ -191,14 +193,16 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
                                       <SelectValue placeholder="Select Item" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      {laundryItems.map((laundry: any) => (
-                                        <SelectItem
-                                          key={laundry.id}
-                                          value={laundry.id}
-                                        >
-                                          {laundry.name}
-                                        </SelectItem>
-                                      ))}
+                                      {laundryItems.map(
+                                        (laundry: LaundryItem) => (
+                                          <SelectItem
+                                            key={laundry.id}
+                                            value={laundry.id}
+                                          >
+                                            {laundry.name}
+                                          </SelectItem>
+                                        )
+                                      )}
                                     </SelectContent>
                                   </Select>
                                 </div>
