@@ -21,7 +21,7 @@ const CreateOutletForm: FC = () => {
   const { mutateAsync: createOutlet, isPending } = useCreateOutlet();
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow">
+    <div className="w-full max-w-lg md:max-w-5xl mx-auto p-6 bg-white rounded-2xl shadow">
       <h2 className="text-xl font-semibold mb-4">Create Outlet</h2>
 
       <Formik
@@ -167,6 +167,7 @@ const CreateOutletForm: FC = () => {
                 name="latitude"
                 placeholder="Latitude. ex: -6.12345"
                 type="number"
+                disabled
               />
               <ErrorMessage
                 name="latitude"
@@ -182,6 +183,7 @@ const CreateOutletForm: FC = () => {
                 name="longitude"
                 placeholder="Longitude. ex: 106.12345"
                 type="number"
+                disabled
               />
               <ErrorMessage
                 name="longitude"

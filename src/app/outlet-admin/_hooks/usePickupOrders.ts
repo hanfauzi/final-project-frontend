@@ -1,6 +1,7 @@
 "use client";
 
 import { axiosInstance } from "@/lib/axios";
+import { Outlet } from "@/types/outlet";
 import { useQuery } from "@tanstack/react-query";
 
 export interface PickupOrders {
@@ -12,6 +13,9 @@ export interface PickupOrders {
   customerAddressId: string;
   notes: string;
   price: number;
+  outlet: {
+    name: string;
+  }[];
   services: {
     id: string;
     name: string;

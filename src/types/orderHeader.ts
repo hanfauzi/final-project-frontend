@@ -10,6 +10,9 @@ export interface OrderHeader {
   notes: string;
   estHours: number;
   invoiceNo: string;
+  itemsTotal?: number;
+  pickupPrice?: number;
+  total?: number;
 
   createdAt: string;
   

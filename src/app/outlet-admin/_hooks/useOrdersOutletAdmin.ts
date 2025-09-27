@@ -5,6 +5,11 @@ import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
+import { OrderHeader } from "@/types/orderHeader";
+import { OrderItem, WorkerTask } from "@/types/workerTasks";
+import { Customer } from "@/types/customer";
+import { Outlet } from "@/types/outlet";
+import { OrderItemType } from "@/types/orderItem";
 
 export interface Order {
   id: string;
@@ -62,6 +67,17 @@ export interface GetPickupOrdersResponse {
   data: PickupOrders[];
   message: string;
 }
+export interface OrderDetail extends OrderHeader {
+  OrderItem: OrderItemType[]
+  workerTasks: WorkerTask[];
+  customers: Customer;
+  outlets: Outlet;
+
+  itemsTotal: number;
+  pickupPrice: number;
+  total: number;
+  message?: string;
+}
 
 export function useOutletOrders(
   params?: Record<string, any>,
@@ -81,11 +97,10 @@ export function useOutletOrders(
 }
 
 export const useOrderDetail = (orderId: string) => {
-  return useQuery({
+  return useQuery<OrderDetail>({
     queryKey: ["orderDetail", orderId],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/api/admin/orders/${orderId}`);
-      console.log("Response data:", data);
       return data;
     },
     enabled: !!orderId,

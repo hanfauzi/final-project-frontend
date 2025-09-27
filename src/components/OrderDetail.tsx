@@ -1,16 +1,16 @@
 "use client";
 
-import { FC } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOrderDetail } from "../app/outlet-admin/_hooks/useOrdersOutletAdmin";
-import { OrderItemType } from "@/types/orderItem";
-import Countdown from "../app/outlet-admin/_components/Countdown";
-import { OrderHeader } from "@/types/orderHeader";
 import { Customer } from "@/types/customer";
+import { OrderHeader } from "@/types/orderHeader";
+import { OrderItemType } from "@/types/orderItem";
 import { Outlet } from "@/types/outlet";
 import { WorkerTask } from "@/types/workerTasks";
+import { FC } from "react";
+import Countdown from "../app/outlet-admin/_components/Countdown";
+import { useOrderDetail } from "../app/outlet-admin/_hooks/useOrdersOutletAdmin";
 
 interface OrderDetailProps {
   orderId: string;
@@ -18,23 +18,26 @@ interface OrderDetailProps {
 
 const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
   <Card>
-    <CardContent className="flex items-start gap-x-2">
-      {/* Kiri: Judul */}
-      <div className="flex flex-col space-y-2 font-semibold">
-        <h3 className="font-semibold text-lg">Invoice:</h3>
-        <h3 className="font-semibold text-lg">Status:</h3>
-        <h3 className="font-semibold text-lg">Tanggal dibuat:</h3>
-        <h3 className="font-semibold text-lg">Estimasi:</h3>
-      </div>
-
-      {/* Kanan: Informasi */}
+    <CardHeader>
+      <CardTitle>Order Info</CardTitle>
+    </CardHeader>
+    <CardContent className="grid grid-cols-2 gap-6">
+      {/* Kiri: Info Umum */}
       <div className="flex flex-col space-y-3">
-        <p>{order.invoiceNo}</p>
-        <p>
+        <div className="flex">
+          <p className="font-medium w-40">Invoice:</p>
+          <p>{order.invoiceNo}</p>
+        </div>
+        <div className="flex">
+          <p className="font-medium w-40">Status:</p>
           <Badge>{order.status}</Badge>
-        </p>
-        <p>{new Date(order.createdAt).toLocaleString()}</p>
-        <p>
+        </div>
+        <div className="flex">
+          <p className="font-medium w-40">Tanggal dibuat:</p>
+          <p>{new Date(order.createdAt).toLocaleString()}</p>
+        </div>
+        <div className="flex">
+          <p className="font-medium w-40">Estimasi:</p>
           {order.estHours ? (
             <Badge>
               <Countdown
@@ -49,7 +52,23 @@ const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
           ) : (
             <Badge>{order.estHours} JAM</Badge>
           )}
-        </p>
+        </div>
+      </div>
+
+      {/* Kanan: Total2 */}
+      <div className="flex flex-col space-y-3">
+        <div className="flex ">
+          <p className="font-medium w-40">Items Total:</p>
+          <p >Rp {order.itemsTotal?.toLocaleString() ?? 0}</p>
+        </div>
+        <div className="flex">
+          <p className="font-medium w-40">Pickup Price:</p>
+          <p>Rp {order.pickupPrice?.toLocaleString() ?? 0}</p>
+        </div>
+        <div className="flex">
+          <p className="font-medium w-40">Total:</p>
+          <b>Rp {order.total?.toLocaleString() ?? 0}</b>
+        </div>
       </div>
     </CardContent>
   </Card>
@@ -123,8 +142,6 @@ const WorkerTasks: FC<{ tasks: WorkerTask[] }> = ({ tasks }) => (
     </CardContent>
   </Card>
 );
-
-
 
 const LaundryItemsTable: FC<{ orderItems: OrderItemType[] }> = ({
   orderItems,

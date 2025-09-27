@@ -44,7 +44,7 @@ export default function OutletOrdersPage() {
   const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
   const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
   const [page, setPage] = useState(initialPage);
-  const limit = 10; // sinkron dengan backend default
+  const limit = 10; 
 
   useEffect(() => {
     const params = new URLSearchParams();
