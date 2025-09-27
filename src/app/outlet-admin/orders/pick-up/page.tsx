@@ -1,7 +1,8 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
+import PageHeader from "@/components/PageHeader";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -10,10 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
-import PageHeader from "@/components/PageHeader";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
+
 
 export default function PickupOrdersList() {
   const { data, isLoading, isError } = usePickupOrders();

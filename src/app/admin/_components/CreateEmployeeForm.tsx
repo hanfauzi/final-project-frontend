@@ -44,16 +44,18 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
     if (loadingOutlets) return <Loading />
 
   return (
+    <div className="max-w-lg sm:max-w-xl md:max-w-4xl mx-auto p-4 sm:p-6">
     <Formik
       initialValues={initialValues}
       validationSchema={employeeSchema}
       onSubmit={onSubmit}
     >
       {({ values, handleChange, setFieldValue }) => (
-        <Form className="flex flex-col gap-4">
+        <Form className="flex flex-col gap-4 w-full">
           <div>
             <Input
               name="name"
+              className="w-full"
               placeholder="Full Name"
               value={values.name}
               onChange={handleChange}
@@ -68,6 +70,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
           <div>
             <Input
               name="email"
+              className="w-full"
               placeholder="Email"
               type="email"
               value={values.email}
@@ -83,6 +86,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
           <div>
             <Input
               name="password"
+              className="w-full"
               placeholder="Password"
               type="password"
               value={values.password}
@@ -98,6 +102,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
           <div>
             <Input
               name="phoneNumber"
+              className="w-full"
               placeholder="Phone Number"
               value={values.phoneNumber}
               onChange={handleChange}
@@ -112,6 +117,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
           <div>
             <Textarea
               name="address"
+              className="w-full"
               placeholder="Address"
               value={values.address}
               onChange={handleChange}
@@ -130,7 +136,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
                 setFieldValue("role", val as EmployeeRole)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Role" />
               </SelectTrigger>
               <SelectContent>
@@ -229,6 +235,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
         </Form>
       )}
     </Formik>
+    </div>
   );
 };
 

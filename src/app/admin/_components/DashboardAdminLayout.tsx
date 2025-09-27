@@ -26,7 +26,7 @@ const DashboardAdminLayout: FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {renderSidebar()}
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10">{children}</main>
     </div>
   );
 };

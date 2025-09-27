@@ -14,6 +14,8 @@ import { FC } from "react";
 interface Order {
   id: string;
   invoiceNo: string;
+  status: string;
+  totalPrice: number;
   customers?: { name?: string };
   outlets?: { name?: string };
   createdAt: string;
@@ -38,7 +40,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
             <TableHead>Invoice</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Outlet</TableHead>
-            <TableHead>Created At</TableHead>
+            <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -56,7 +58,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
                 {order.outlets?.name ?? "-"}
               </TableCell>
               <TableCell className="py-4">
-                {new Date(order.createdAt).toLocaleString()}
+                {order.status}
               </TableCell>
             </TableRow>
           ))}
