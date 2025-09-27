@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,33 +15,33 @@ import { WorkerTask } from "@/types/workerTasks";
 import { Check, X } from "lucide-react";
 import { useState } from "react";
 import {
-    useAcceptBypassRequest,
-    useBypassRequest,
-    useRejectBypassRequest,
+  useAcceptBypassRequest,
+  useBypassRequest,
+  useRejectBypassRequest,
 } from "../_hooks/useBypassRequest";
 
 export default function BypassRequestsPage() {
   const { data: tasks = [], isLoading, isError } = useBypassRequest();
   const acceptMutation = useAcceptBypassRequest();
   const rejectMutation = useRejectBypassRequest();
-  
-  const [query] = useState("");
 
-  // modal states
-  const [selectedTask, setSelectedTask] = useState<WorkerTask | null>(null);
+  const [selectedTaskDetail, setSelectedTaskDetail] = useState<WorkerTask | null>(null);
   const [showDetail, setShowDetail] = useState(false);
+
+  const [selectedTaskReject, setSelectedTaskReject] = useState<WorkerTask | null>(null);
   const [showReject, setShowReject] = useState(false);
   const [rejectNote, setRejectNote] = useState("");
 
-  
+  const [selectedTaskAccept, setSelectedTaskAccept] = useState<WorkerTask | null>(null);
+  const [showAccept, setShowAccept] = useState(false);
 
-  function handleAccept(taskId: string) {
-    acceptMutation.mutate({ taskId, adminId: "ADMIN_ID" });
-    setShowDetail(false);
+  function openDetail(task: WorkerTask) {
+    setSelectedTaskDetail(task);
+    setShowDetail(true);
   }
 
-  function openReject(t: WorkerTask) {
-    setSelectedTask(t);
+  function openReject(task: WorkerTask) {
+    setSelectedTaskReject(task);
     setRejectNote("");
     setShowReject(true);
   }
@@ -52,19 +52,28 @@ export default function BypassRequestsPage() {
     setShowDetail(false);
   }
 
+  function openAcceptModal(task: WorkerTask) {
+    setSelectedTaskAccept(task);
+    setShowAccept(true);
+  }
+
+  function confirmAccept() {
+    if (!selectedTaskAccept) return;
+    acceptMutation.mutate({ taskId: selectedTaskAccept.id, adminId: "ADMIN_ID" });
+    setShowAccept(false);
+    setShowDetail(false);
+  }
+
   if (isLoading) return <p className="p-6">Loading bypass requests...</p>;
-  if (isError)
-    return <p className="p-6 text-red-500">Error loading bypass requests</p>;
+  if (isError) return <p className="p-6 text-red-500">Error loading bypass requests</p>;
 
   return (
-    <div className="p- space-y-6">
+    <div className="p-6 space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Requests</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-
-          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
@@ -82,19 +91,14 @@ export default function BypassRequestsPage() {
               <tbody>
                 {tasks.length === 0 && (
                   <tr>
-                    <td
-                      colSpan={8}
-                      className="p-6 text-center text-sm text-muted-foreground"
-                    >
+                    <td colSpan={8} className="p-6 text-center text-sm text-muted-foreground">
                       No bypass requests match the filters.
                     </td>
                   </tr>
                 )}
                 {tasks.map((t) => (
                   <tr key={t.id} className="border-t hover:bg-muted/50">
-                    <td className="p-3 align-top">
-                      <div className="font-medium">{t.station}</div>
-                    </td>
+                    <td className="p-3 align-top">{t.station}</td>
                     <td className="p-3 align-top">
                       <div className="font-semibold">{t.orderHeader?.invoiceNo}</div>
                       <div className="text-sm">{t.orderItem?.name}</div>
@@ -116,7 +120,7 @@ export default function BypassRequestsPage() {
                     </td>
                     <td className="p-3 align-top">
                       <div className="flex gap-2">
-                        <Button size="sm" onClick={() => handleAccept(t.id)}>
+                        <Button size="sm" onClick={() => openAcceptModal(t)}>
                           <Check size={14} />
                         </Button>
                         <Button size="sm" variant="destructive" onClick={() => openReject(t)}>
@@ -132,57 +136,17 @@ export default function BypassRequestsPage() {
         </CardContent>
       </Card>
 
-      {/* Detail Modal */}
-      <Dialog open={showDetail} onOpenChange={setShowDetail}>
-        <DialogContent className="w-[700px]">
+      {/* Accept Modal */}
+      <Dialog open={showAccept} onOpenChange={setShowAccept}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>Bypass Detail</DialogTitle>
+            <DialogTitle>Confirm Accept</DialogTitle>
           </DialogHeader>
-          {selectedTask ? (
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground">Worker</p>
-                  <p className="font-medium">
-                    {selectedTask.employee?.name} — {selectedTask.workStation?.name}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Requested</p>
-                  <p className="font-medium">
-                    {new Date(selectedTask.updatedAt).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <Separator />
-              <div>
-                <p className="text-xs text-muted-foreground">Order</p>
-                <p className="font-medium">{selectedTask.orderHeader?.invoiceNo}</p>
-                <p className="font-medium">{selectedTask.orderItem?.name}</p>
-                <p className="font-medium">
-                  {selectedTask.itemQty} {selectedTask.itemUnit}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Bypass note</p>
-                <p className="mt-1">{selectedTask.bypassReqNote}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button onClick={() => handleAccept(selectedTask.id)}>Accept</Button>
-                <Button variant="destructive" onClick={() => openReject(selectedTask)}>
-                  Reject
-                </Button>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Admin note / history</p>
-                <div className="mt-2 bg-slate-50 p-3 rounded text-sm text-muted-foreground">
-                  {selectedTask.itemPassedNote ?? "—"}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div>Loading...</div>
-          )}
+          <p>Are you sure you want to accept this bypass request?</p>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="ghost" onClick={() => setShowAccept(false)}>Cancel</Button>
+            <Button onClick={confirmAccept}>Accept</Button>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -205,7 +169,7 @@ export default function BypassRequestsPage() {
               <Button
                 variant="destructive"
                 onClick={() =>
-                  selectedTask && handleReject(selectedTask.id, rejectNote)
+                  selectedTaskReject && handleReject(selectedTaskReject.id, rejectNote)
                 }
               >
                 Reject

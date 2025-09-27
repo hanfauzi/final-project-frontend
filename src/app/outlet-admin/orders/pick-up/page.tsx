@@ -15,7 +15,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
 
-
 export default function PickupOrdersList() {
   const { data, isLoading, isError } = usePickupOrders();
   const router = useRouter();
@@ -46,6 +45,7 @@ export default function PickupOrdersList() {
               <TableHead>Status</TableHead>
               <TableHead>Outlet</TableHead>
               <TableHead>Total Invoice</TableHead>
+              <TableHead>Waktu</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,6 +76,9 @@ export default function PickupOrdersList() {
                   </TableCell>
                   <TableCell>{pickup.outlet.name}</TableCell>
                   <TableCell>{pickup.orderHeaders.length}</TableCell>
+                  <TableCell>
+                    {new Date(pickup.createdAt).toLocaleString()}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
