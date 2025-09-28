@@ -20,7 +20,7 @@ export default function DashboardLogoutButton() {
 
   const handleLogout = () => {
     clearAuth();
-    router.push("/dashboard/login");
+    router.push("/employee/login");
     router.refresh();
   };
 

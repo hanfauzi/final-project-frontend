@@ -61,7 +61,7 @@ export default function OrdersList({
             </small>
             <small>
               {order.createdAt
-                ? format(new Date(order.createdAt), "hh:mm")
+                ? format(new Date(order.createdAt), "HH:mm")
                 : "N/A"}
             </small>
           </div>
