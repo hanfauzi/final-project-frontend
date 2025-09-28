@@ -70,6 +70,7 @@ export function useRejectBypassRequest() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bypass-request"] });
+      toast.success("Bypass request rejection has been sent!")
     },
     onError: () => {
         toast.error("Failed to reject bypass request");
