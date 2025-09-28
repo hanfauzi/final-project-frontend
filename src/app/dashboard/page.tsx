@@ -8,10 +8,6 @@ import DashboardLogoutButton from './_components/DashboardLogoutButton';
 const DashboardPage = () => {
   const { data: employee, isLoading: employeeLoading, isError: employeeError } = useGetEmployee();
 
-  if(employee) {
-    console.log(employee);
-  }
-
   return (
     <div className='mx-auto max-w-sm md:max-w-[800px]'>
       <div className="flex flex-col gap-4 px-2 pt-4 pb-20 min-h-[calc(100vh-48px)] bg-neutral-50">
