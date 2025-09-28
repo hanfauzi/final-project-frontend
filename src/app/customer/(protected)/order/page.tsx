@@ -334,14 +334,14 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <Truck className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {d.outlet.name} • {d.outlet.cityName}
+                                  {d.outlet.name} 
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-1.5">
                                 <Navigation className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[12px] text-muted-foreground">
-                                  {d.distance} km • Rp{" "}
+                                  {d.distance} km | Rp{" "}
                                   {d.price.toLocaleString("id-ID")}
                                 </div>
                               </div>
@@ -479,7 +479,6 @@ export default function CustomerOrdersPage() {
                       <Card className="rounded-xl border border-border bg-card text-card-foreground hover:bg-accent">
                         <CardContent className="p-3.5">
                           <div className="flex items-start justify-between gap-3">
-                            {/* Kiri: informasi berbaris */}
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
                                 <Hash className="h-3.5 w-3.5" />

@@ -8,8 +8,8 @@ import { toast } from "sonner";
 
 type ConfirmArgs = {
   orderHeaderId: string;
-  deliveryId?: string;     // untuk invalidasi detail delivery (opsional)
-  redirectTo?: string;     // kalau mau redirect setelah sukses (opsional)
+  deliveryId?: string;    
+  redirectTo?: string;     
 };
 
 export default function useConfirmationOrder() {
