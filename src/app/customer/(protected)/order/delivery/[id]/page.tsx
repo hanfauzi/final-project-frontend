@@ -29,7 +29,6 @@ const { confirmationOrderMutation } = useConfirmationOrder();
   const { data: delivery, isLoading, isError } = useGetCustomerDeliveryOrderById(id);
 
   const outletDisplay = delivery?.outlet?.name ?? "-";
-  const outletCity = delivery?.outlet?.cityName ? ` • ${delivery.outlet.cityName}` : "";
   const outletAddr = delivery?.outlet?.address ?? "";
   const shortId = delivery?.id ? `#${delivery.id.slice(0, 6).toUpperCase()}` : "-";
   const rupiah = (n: number) => `Rp ${n.toLocaleString("id-ID")}`;
@@ -98,7 +97,7 @@ const { confirmationOrderMutation } = useConfirmationOrder();
                     <div>
                       <div className="text-[12px] text-muted-foreground">Outlet</div>
                       <div className="text-[13px] font-medium text-foreground">
-                        {outletDisplay}{outletCity}
+                        {outletDisplay}
                       </div>
                       {outletAddr && (
                         <div className="text-[12px] text-muted-foreground mt-0.5">{outletAddr}</div>
@@ -112,7 +111,6 @@ const { confirmationOrderMutation } = useConfirmationOrder();
                       <div className="text-[12px] text-muted-foreground">Alamat Tujuan</div>
                       <div className="text-[13px] text-foreground">
                         {delivery.customerAddress?.address || "-"}
-                        {delivery.customerAddress?.city ? ` • ${delivery.customerAddress.city}` : ""}
                       </div>
                     </div>
                   </div>
@@ -122,7 +120,7 @@ const { confirmationOrderMutation } = useConfirmationOrder();
                     <div>
                       <div className="text-[12px] text-muted-foreground">Jarak & Biaya Delivery</div>
                       <div className="text-[13px] text-foreground">
-                        {delivery.distance} km • {rupiah(delivery.price)}
+                        {delivery.distance} km | {rupiah(delivery.price)}
                       </div>
                     </div>
                   </div>
