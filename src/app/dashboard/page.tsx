@@ -8,9 +8,6 @@ import useGetEmployee from "./_hooks/useGetEmployee";
 const DashboardPage = () => {
   const { data: employee, isLoading: employeeLoading } = useGetEmployee();
 
-  if (employee) {
-    console.log(employee);
-  }
 
   return (
     <div className="mx-auto max-w-sm md:max-w-[800px]">
