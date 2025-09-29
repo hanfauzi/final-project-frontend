@@ -67,7 +67,7 @@ export default function CustomerOrdersPage() {
     dateTo: dateToP,
   });
 
-    const [pageD, setPageD] = useState(1);
+  const [pageD, setPageD] = useState(1);
   const [statusD, setStatusD] = useState<string | undefined>();
   const [dateFromD, setDateFromD] = useState<string | undefined>();
   const [dateToD, setDateToD] = useState<string | undefined>();
@@ -75,9 +75,9 @@ export default function CustomerOrdersPage() {
   const deliveriesQ = useGetCustomerDeliveryOrders({
     page: pageD,
     take: 5,
-  status: statusD,
-  dateFrom: dateFromD,
-  dateTo: dateToD,
+    status: statusD,
+    dateFrom: dateFromD,
+    dateTo: dateToD,
   });
 
   const orders = ordersQ.data?.data ?? [];
@@ -95,34 +95,46 @@ export default function CustomerOrdersPage() {
         <title>Transaksi Saya — Laundr</title>
       </Head>
 
-  <div className="relative min-h-screen bg-transparent">
-  <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
-    <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
-      <div className="flex items-center gap-1.5">
-        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => router.back()}>
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
-        <div className="text-[15px] font-semibold text-foreground">Transaksi Saya</div>
-      </div>
-      <Link href="/customer/order/create" className="inline-flex items-center gap-1.5 text-primary">
-        <Plus className="h-4 w-4" />
-        <span className="text-sm font-medium">Buat Order</span>
-      </Link>
-    </div>
-  </div>
+      <div className="relative min-h-screen bg-transparent">
+        <div className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur md:hidden">
+          <div className="mx-auto w-full max-w-sm px-4 h-12 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onClick={() => router.back()}
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+              <div className="text-[15px] font-semibold text-foreground">
+                Transaksi Saya
+              </div>
+            </div>
+            <Link
+              href="/customer/order/create"
+              className="inline-flex items-center gap-1.5 text-primary"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="text-sm font-medium">Buat Order</span>
+            </Link>
+          </div>
+        </div>
 
-  <div className="hidden md:block">
-    <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Transaksi Saya</h1>
-        <Button asChild className="h-10 rounded-xl">
-          <Link href="/customer/order/create">
-            <Plus className="h-4 w-4 mr-2" /> Buat Order
-          </Link>
-        </Button>
-      </div>
-    </div>
-  </div>
+        <div className="hidden md:block">
+          <div className="mx-auto w-full md:max-w-5xl md:px-6 md:pt-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-semibold text-foreground">
+                Transaksi Saya
+              </h1>
+              <Button asChild className="h-10 rounded-xl">
+                <Link href="/customer/order/create">
+                  <Plus className="h-4 w-4 mr-2" /> Buat Order
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
 
         <div className="mx-auto w-full max-w-sm px-4 py-3 md:max-w-6xl md:px-6 md:py-6">
           <Tabs defaultValue="orders" className="w-full">
@@ -132,7 +144,7 @@ export default function CustomerOrdersPage() {
               <TabsTrigger value="orders">Orders</TabsTrigger>
             </TabsList>
 
-   <TabsContent value="pickups" className="mt-4 space-y-3">
+            <TabsContent value="pickups" className="mt-4 space-y-3">
               <div className="flex gap-2 md:gap-3">
                 <PickUpStatusSheet
                   value={statusP}
@@ -173,11 +185,13 @@ export default function CustomerOrdersPage() {
                   </div>
                 )}
 
-                {!pickupsQ.isLoading && !pickupsQ.isError && pickups.length === 0 && (
-                  <div className="py-10 text-center text-muted-foreground">
-                    Belum ada pickup order.
-                  </div>
-                )}
+                {!pickupsQ.isLoading &&
+                  !pickupsQ.isError &&
+                  pickups.length === 0 && (
+                    <div className="py-10 text-center text-muted-foreground">
+                      Belum ada pickup order.
+                    </div>
+                  )}
 
                 {pickups.map((p) => {
                   const href = `/customer/order/pickup/${p.id}`;
@@ -206,14 +220,17 @@ export default function CustomerOrdersPage() {
                                 <User className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[12px] text-muted-foreground">
                                   {p.receiverName}
-                                  {p.receiverPhone ? ` | ${p.receiverPhone}` : ""}
+                                  {p.receiverPhone
+                                    ? ` | ${p.receiverPhone}`
+                                    : ""}
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-1.5">
                                 <Navigation className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[12px] text-muted-foreground">
-                                  {p.distance} km | Rp {p.price.toLocaleString("id-ID")}
+                                  {p.distance} km | Rp{" "}
+                                  {p.price.toLocaleString("id-ID")}
                                 </div>
                               </div>
 
@@ -258,7 +275,9 @@ export default function CustomerOrdersPage() {
                       size="sm"
                       className="rounded-full"
                       disabled={pageP >= metaP.totalPages}
-                      onClick={() => setPageP((p) => Math.min(metaP.totalPages, p + 1))}
+                      onClick={() =>
+                        setPageP((p) => Math.min(metaP.totalPages, p + 1))
+                      }
                     >
                       Next <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
@@ -334,7 +353,7 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <Truck className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-medium text-foreground">
-                                  {d.outlet.name} 
+                                  {d.outlet.name}
                                 </div>
                               </div>
 
@@ -355,7 +374,6 @@ export default function CustomerOrdersPage() {
 
                               <DeliveryStatusBadge status={d.status} />
                             </div>
-
                           </div>
                         </CardContent>
                       </Card>
@@ -392,7 +410,7 @@ export default function CustomerOrdersPage() {
               </main>
             </TabsContent>
 
- <TabsContent value="orders" className="mt-4 space-y-3">
+            <TabsContent value="orders" className="mt-4 space-y-3">
               <div className="space-y-2">
                 <div className="relative">
                   <Input
@@ -465,24 +483,33 @@ export default function CustomerOrdersPage() {
                   </div>
                 )}
 
-                {!ordersQ.isLoading && !ordersQ.isError && orders.length === 0 && (
-                  <div className="py-10 text-center text-muted-foreground">
-                    Belum ada order.
-                  </div>
-                )}
+                {!ordersQ.isLoading &&
+                  !ordersQ.isError &&
+                  orders.length === 0 && (
+                    <div className="py-10 text-center text-muted-foreground">
+                      Belum ada order.
+                    </div>
+                  )}
 
                 {orders.map((o) => {
-                  const inv = o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
+                  const inv =
+                    o.invoiceNo ?? `#${o.id.slice(0, 6).toUpperCase()}`;
                   const amount = Number(o.amount || 0);
                   return (
-                    <Link key={o.id} href={`/customer/order/${o.id}`} className="block">
+                    <Link
+                      key={o.id}
+                      href={`/customer/order/${o.id}`}
+                      className="block"
+                    >
                       <Card className="rounded-xl border border-border bg-card text-card-foreground hover:bg-accent">
                         <CardContent className="p-3.5">
                           <div className="flex items-start justify-between gap-3">
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
                                 <Hash className="h-3.5 w-3.5" />
-                                <span className="font-medium text-foreground">{inv}</span>
+                                <span className="font-medium text-foreground">
+                                  {inv}
+                                </span>
                               </div>
 
                               <div className="flex items-center gap-1.5">
@@ -502,11 +529,19 @@ export default function CustomerOrdersPage() {
                               <div className="flex items-center gap-1.5">
                                 <CreditCard className="h-4 w-4 text-muted-foreground" />
                                 <div className="text-[13px] font-semibold text-foreground">
-                                   {"Rp "}{amount.toLocaleString("id-ID")}
+                                  {"Rp "}
+                                  {amount.toLocaleString("id-ID")}
                                 </div>
                               </div>
 
-                              <StatusBadge status={o.status} />
+                              <div className="flex items-center gap-2">
+                                {o.isPaid && (
+                                  <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[11px] font-medium">
+                                    Lunas
+                                  </span>
+                                )}
+                                <StatusBadge status={o.status} />
+                              </div>
                             </div>
 
                             <ChevronRight className="h-5 w-5 text-muted-foreground mt-1" />
@@ -536,7 +571,9 @@ export default function CustomerOrdersPage() {
                       size="sm"
                       className="rounded-full"
                       disabled={pageO >= metaO.totalPages}
-                      onClick={() => setPageO((p) => Math.min(metaO.totalPages, p + 1))}
+                      onClick={() =>
+                        setPageO((p) => Math.min(metaO.totalPages, p + 1))
+                      }
                     >
                       Next <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>

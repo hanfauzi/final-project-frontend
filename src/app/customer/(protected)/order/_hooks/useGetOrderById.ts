@@ -11,11 +11,11 @@ export type CustomerOrder = {
   updatedAt: string;
   invoiceNo: string | null;
   outlets?: { name: string } | null;
-  deliveryOrder?: { id: string; status: string; price?: number } | null; 
-  serviceNames: string[];         
+  deliveryOrder?: { id: string; status: string; price?: number } | null;
+  serviceNames: string[];
   serviceLabel: string;
-  amount: number;                
-  breakdown: {                    
+  amount: number;
+  breakdown: {
     itemsTotal: number;
     pickupFeeApplied: number;
     deliveryFee: number;
@@ -27,6 +27,8 @@ export type CustomerOrder = {
     subTotal: number;
     service: { id: string; name: string; unit: string };
   }>;
+  isPaid?: boolean;
+  paidAt?: string | null;
 };
 
 const useGetCustomerOrderById = (id: string | undefined) => {
@@ -34,7 +36,9 @@ const useGetCustomerOrderById = (id: string | undefined) => {
     queryKey: ["order", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data } = await axiosInstance.get<CustomerOrder>(`/api/order/${id}`);
+      const { data } = await axiosInstance.get<CustomerOrder>(
+        `/api/order/${id}`
+      );
       return data;
     },
   });
