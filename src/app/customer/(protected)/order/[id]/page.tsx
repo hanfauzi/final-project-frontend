@@ -21,7 +21,12 @@ export default function OrderDetailPage() {
   const outletDisplay = order?.outlets?.name ?? (order?.outletId ? `Outlet #${order.outletId}` : "-");
   const invoiceDisplay = order?.invoiceNo ?? `#${order?.id ?? ""}`;
 
-  const canPay = !!order && order.status === "WAITING_FOR_PAYMENT";
+  const alreadyPaid = !!order?.isPaid;
+  const canPay =
+  !!order &&
+  !alreadyPaid && 
+  ["ARRIVED_AT_OUTLET","WAITING_FOR_PAYMENT", "WASHING_IN_PROGRESS", "IRONING_IN_PROGRESS", "PACKING_IN_PROGRESS"]
+    .includes(order?.status);
 
   const fmtID = (n: number) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
   const grandTotal  = order?.amount ?? 0;
@@ -94,7 +99,14 @@ export default function OrderDetailPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="text-[12px] text-muted-foreground">Status</div>
+                     <div className="flex items-center gap-2">
+    {order.isPaid && (
+      <span className="rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[11px] font-medium">
+        Lunas
+      </span>
+    )}
                     <StatusBadge status={order.status} />
+                    </div>
                   </div>
 
                   <div className="flex items-start gap-2">
@@ -136,7 +148,7 @@ export default function OrderDetailPage() {
               <Card className="rounded-2xl border border-border bg-card text-card-foreground">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] textforeground font-medium ">Total Harga</span>
+                    <span className="text-[13px] text-foreground font-medium ">Total Harga</span>
                     <span className="text-[15px] font-semibold text-foreground">
                       {fmtID(grandTotal)}
                     </span>
