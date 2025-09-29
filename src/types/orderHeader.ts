@@ -1,5 +1,6 @@
 import { Customer } from "./customer";
 import { Employee } from "./employee";
+import { OrderItemType } from "./orderItem";
 import { OrderStatus } from "./orderStatus";
 import { Outlet } from "./outlet";
 
@@ -18,5 +19,6 @@ export interface OrderHeader {
   
   customers?: Customer
   handledByAdmin?: Employee
-  outlet?: Outlet
+  outlets?: Outlet
+  OrderItem?: OrderItemType[]
 }

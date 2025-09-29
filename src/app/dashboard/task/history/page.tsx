@@ -1,8 +1,9 @@
 "use client";
 
-import useGetEmployee from "../_hooks/useGetEmployee";
-import DriverTasks from "./_components/DriverTasks";
-import WorkerTask from "./_components/WorkerTask";
+import useGetEmployee from "../../_hooks/useGetEmployee";
+import WorkerTaskHistory from "./_components/WorkerTaskHistory";
+// import DriverTaskHistory from "./_components/DriverTaskHistory";
+
 
 const TaskPage = () => {
   const { data: employee, isLoading: employeeLoading, error: employeeError } = useGetEmployee();
@@ -18,13 +19,13 @@ const TaskPage = () => {
 
   switch (employee.role) {
     case "OUTLET_ADMIN":
-      return <div>No tasks available for outlet admin yet</div>;
+      return <div>No tasks history available for outlet admin yet</div>;
     case "DRIVER":
-      return <DriverTasks />;
+      // return <DriverTaskHistory />;
     case "WORKER":
-      return <WorkerTask />;
+      return <WorkerTaskHistory />;
     default:
-      return <div>No tasks available for your role</div>;
+      return <div>You are not supposed to be here 😊</div>;
   }
 }
 

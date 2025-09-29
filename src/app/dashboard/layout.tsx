@@ -18,7 +18,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="hidden md:block">
           {!hideLayout && <DashboardSidebar />}
         </div>
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 min-w-0 overflow-x-hidden">
+          {children}
+        </main>
       </div>
       <div className="block md:hidden">
         {!hideLayout && <Dock />}
