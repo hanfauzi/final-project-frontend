@@ -1,30 +1,29 @@
 "use client";
 
-import { FC } from "react";
-import SidebarItem from "./SidebarItem";
+import EmployeeProfile from "@/components/EmployeeProfile";
 import { Separator } from "@/components/ui/separator";
 import {
-  Users,
-  Home,
   Box,
-  ClipboardList,
   CalendarArrowUp,
   ChartColumnIncreasing,
   ChartPie,
+  ClipboardList,
+  Home,
   Menu,
+  Users,
 } from "lucide-react";
-import EmployeeProfile from "@/components/EmployeeProfile";
+import { FC } from "react";
+import SidebarItem from "./SidebarItem";
 
 // shadcn
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
-  SheetClose,
   SheetHeader,
   SheetTitle,
+  SheetTrigger
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 
 const SuperAdminSidebar: FC = () => {
   return (

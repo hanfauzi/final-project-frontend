@@ -1,9 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { SalesReportsChartOutletAdmin } from "../_components/SalesReportChartOutletAdmin";
 import PageHeader from "@/components/PageHeader";
 import Image from "next/image";
+import { SalesReportsChartOutletAdmin } from "../_components/SalesReportChartOutletAdmin";
 
 
 export default function OutletAdminSalesPage() {

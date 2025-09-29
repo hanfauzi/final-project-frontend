@@ -2,7 +2,7 @@
 
 import { PickUpOrder } from "@/types/pickUpOrder";
 import { format } from "date-fns";
-import { Check, ChevronDown, CircleCheck } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
 type PickUpTimelineCardProps = {
   pickUpOrder: PickUpOrder;

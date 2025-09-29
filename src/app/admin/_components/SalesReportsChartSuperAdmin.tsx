@@ -39,7 +39,6 @@ import {
   YAxis,
 } from "recharts";
 import { useOutlets } from "../_hooks/useOutlets";
-import { Outlet } from "@/types/outlet";
 
 interface ReportChartProps {
   data: { period: string; total: number }[];

@@ -1,14 +1,13 @@
 "use client";
 
-import { FC } from "react";
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { FC } from "react";
 
 interface Outlet {
   id: string;
