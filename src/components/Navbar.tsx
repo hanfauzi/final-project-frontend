@@ -46,12 +46,12 @@ export function Navbar() {
       { label: "Profil", href: "/customer/profile" },
       { label: "Alamat", href: "/customer/address" },
       { label: "Transaksi", href: "/customer/order" },
-      {label: "Buat Pesanan", href: "/customer/order/create" },
+      { label: "Buat Pesanan", href: "/customer/order/create" },
     ] as const;
   }, [loggedIn]);
 
   return (
-  <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50">
       <header
         className={[
           "border-b border-border/60",
@@ -92,11 +92,13 @@ export function Navbar() {
               </Link>
             ))}
 
-             <div className="mx-1 h-6 w-px bg-border" aria-hidden />
-
-            {loggedIn && <BellNotifications loggedIn={loggedIn} />}
-
-            <div className="mx-1 h-6 w-px bg-border" aria-hidden />
+            {loggedIn && (
+              <>
+                <div className="mx-1 h-6 w-px bg-border" aria-hidden />
+                <BellNotifications loggedIn={loggedIn} />
+                <div className="mx-1 h-6 w-px bg-border" aria-hidden />
+              </>
+            )}
             {!loggedIn ? (
               <div className="ml-2 flex items-center gap-2">
                 <Button asChild variant="outline" className="h-10 rounded-xl">
@@ -201,7 +203,9 @@ export function Navbar() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Keluar dari akun?</AlertDialogTitle>
+                            <AlertDialogTitle>
+                              Keluar dari akun?
+                            </AlertDialogTitle>
                             <AlertDialogDescription>
                               Kamu akan keluar dari Laundr di perangkat ini.
                               Pastikan perubahan sudah disimpan.
