@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { useOutlets } from "../_hooks/useOutlets";
+import { Outlet, useOutlets } from "../_hooks/useOutlets";
 import SearchBar from "./SearchBar";
 
 const GetAllEmployees: FC = () => {
@@ -121,7 +121,7 @@ const GetAllEmployees: FC = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="ALL">All Outlets</SelectItem>
-                {outlets?.map((outlet: any) => (
+                {outlets?.map((outlet: Outlet) => (
                   <SelectItem key={outlet.id} value={outlet.id}>
                     {outlet.name}
                   </SelectItem>

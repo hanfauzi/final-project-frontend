@@ -24,9 +24,7 @@ export default function BypassRequestsPage() {
   const acceptMutation = useAcceptBypassRequest();
   const rejectMutation = useRejectBypassRequest();
 
-  const [selectedTaskDetail, setSelectedTaskDetail] =
-    useState<WorkerTask | null>(null);
-  const [showDetail, setShowDetail] = useState(false);
+  
 
   const [selectedTaskReject, setSelectedTaskReject] =
     useState<WorkerTask | null>(null);
@@ -37,10 +35,7 @@ export default function BypassRequestsPage() {
     useState<WorkerTask | null>(null);
   const [showAccept, setShowAccept] = useState(false);
 
-  function openDetail(task: WorkerTask) {
-    setSelectedTaskDetail(task);
-    setShowDetail(true);
-  }
+  
 
   function openReject(task: WorkerTask) {
     setSelectedTaskReject(task);
@@ -51,7 +46,6 @@ export default function BypassRequestsPage() {
   function handleReject(taskId: string, note: string) {
     rejectMutation.mutate({ taskId, adminId: "ADMIN_ID", note });
     setShowReject(false);
-    setShowDetail(false);
   }
 
   function openAcceptModal(task: WorkerTask) {
@@ -66,7 +60,7 @@ export default function BypassRequestsPage() {
       adminId: "ADMIN_ID",
     });
     setShowAccept(false);
-    setShowDetail(false);
+    
   }
 
   if (isLoading) return <p className="p-6">Loading bypass requests...</p>;
@@ -187,7 +181,6 @@ export default function BypassRequestsPage() {
                   note: reviewNote, 
                 });
                 setShowAccept(false);
-                setShowDetail(false);
                 setReviewNote(""); 
               }}
             >

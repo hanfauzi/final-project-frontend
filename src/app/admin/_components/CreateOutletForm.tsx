@@ -15,6 +15,7 @@ import { useCities } from "../_hooks/useCities";
 import { useCreateOutlet } from "../_hooks/useOutlets";
 import { CreateOutletSchema } from "../schema/create-outlet.schema";
 import { MapSelector } from "./MapPicker";
+import { City } from "@/types/city";
 
 const CreateOutletForm: FC = () => {
   const { data: cities = [], isLoading: isCitiesLoading } = useCities();
@@ -116,8 +117,8 @@ const CreateOutletForm: FC = () => {
                     <SelectItem value="loading">Loading...</SelectItem>
                   ) : (
                     cities
-                      ?.filter((city: any) => city.cityId)
-                      .map((city: any) => (
+                      ?.filter((city: City) => city.cityId)
+                      .map((city: City) => (
                         <SelectItem key={city.cityId} value={city.cityId}>
                           {" "}
                           {city.cityName}{" "}

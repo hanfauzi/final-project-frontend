@@ -68,7 +68,7 @@ export function SalesReportsChartSuperAdmin({ data }: ReportChartProps) {
   const today = new Date();
 
   const generateCompleteRange = () => {
-    let range: string[] = [];
+    const range: string[] = [];
 
     if (filterType === "day") {
       const start = startDate ? new Date(startDate) : addDays(today, -6);

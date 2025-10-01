@@ -71,7 +71,7 @@ export default function SuperAdminLoginForm() {
                   login.mutate(values);
                 }}
               >
-                {({ isSubmitting }) => (
+                {() => (
                   <Form className="space-y-4 md:space-y-5">
                     {/* Email */}
                     <div className="space-y-2">
