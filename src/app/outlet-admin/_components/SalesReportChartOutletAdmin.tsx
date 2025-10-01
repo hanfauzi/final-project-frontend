@@ -47,12 +47,11 @@ export function SalesReportsChartOutletAdmin() {
 
   const { data = [] } = useSalesReportsOutletAdmin({ startDate, endDate });
 
-  console.log("data >>>>>>>", data);
   const today = new Date();
 
   // Generate complete range (sama persis dengan superAdmin)
   const generateCompleteRange = () => {
-    let range: string[] = [];
+    const range: string[] = [];
     if (filterType === "day") {
       const start = startDate ? new Date(startDate) : addDays(today, -6);
       const end = endDate ? new Date(endDate) : today;
@@ -79,7 +78,6 @@ export function SalesReportsChartOutletAdmin() {
     return range;
   };
 
-  // Data processing (sama persis dengan superAdmin, tapi tanpa outlet filter)
   const filteredData = data.filter(({ period }) => {
     const date = new Date(period);
     if (startDate && isBefore(date, new Date(startDate))) return false;
