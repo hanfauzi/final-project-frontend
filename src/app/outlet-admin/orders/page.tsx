@@ -29,7 +29,7 @@ export default function OutletOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Ambil filter & pagination dari URL
+  
   const initialStatus = searchParams.get("status") ?? undefined;
   const initialStartDate = searchParams.get("startDate")
     ? new Date(searchParams.get("startDate")!)
@@ -39,10 +39,9 @@ export default function OutletOrdersPage() {
     : null;
   const initialPage = Number(searchParams.get("page") ?? 1);
 
-  // State lokal
   const [status, setStatus] = useState<string | undefined>(initialStatus);
-  const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
-  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
+  const [startDate] = useState<Date | null>(initialStartDate);
+  const [endDate] = useState<Date | null>(initialEndDate);
   const [page, setPage] = useState(initialPage);
   const limit = 10; 
 

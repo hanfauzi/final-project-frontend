@@ -80,7 +80,7 @@ export interface OrderDetail extends OrderHeader {
 }
 
 export function useOutletOrders(
-  params?: Record<string, any>,
+  params?: Record<string, unknown>,
   options?: { enabled?: boolean }
 ) {
   return useQuery<GetOrdersResponse>({
@@ -104,18 +104,6 @@ export const useOrderDetail = (orderId: string) => {
       return data;
     },
     enabled: !!orderId,
-  });
-};
-
-export const usePickupOrders = () => {
-  return useQuery({
-    queryKey: ["pickupOrders"],
-    queryFn: async () => {
-      const res = await axiosInstance.get<GetPickupOrdersResponse>(
-        "/api/admin/orders/pickup-orders"
-      );
-      return res.data.data;
-    },
   });
 };
 

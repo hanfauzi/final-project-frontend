@@ -1,8 +1,15 @@
 "use client";
 
 import { axiosInstance } from "@/lib/axios";
-import { Outlet } from "@/types/outlet";
 import { useQuery } from "@tanstack/react-query";
+
+export enum PickupStatus {
+  WAITING_FOR_DRIVER = "WAITING_FOR_DRIVER",
+  ON_THE_WAY_TO_CUSTOMER = "ON_THE_WAY_TO_CUSTOMER",
+  ON_THE_WAY_TO_OUTLET = "ON_THE_WAY_TO_OUTLET",
+  RECEIVED_BY_OUTLET = "RECEIVED_BY_OUTLET",
+  CANCELLED = "CANCELLED",
+}
 
 export interface PickupOrders {
   id: string;
@@ -13,14 +20,38 @@ export interface PickupOrders {
   customerAddressId: string;
   notes: string;
   price: number;
-  outlet: {
+   createdAt: string;
+  customer?: {
+    id: string;
     name: string;
-  }[];
+    email: string;
+  };
+  driver?: {
+    id: string;
+    name: string;
+    phone: string;
+  };
+  outlet?: {
+    id: string;
+    name: string;
+    address: string;
+  };
+  customerAddress?: {
+    id: string;
+    street: string;
+    city: string;
+    postalCode: string;
+  };
   services: {
     id: string;
     name: string;
     basePrice: number;
     estHours?: number;
+  }[];
+   orderHeaders?: {
+    id: string;
+    totalPrice: number;
+    status: string;
   }[];
 }
 

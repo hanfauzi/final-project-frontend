@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { usePickupOrders } from "../../_hooks/useOrdersOutletAdmin";
+import { usePickupOrders } from "../../_hooks/usePickupOrders";
 
 export default function PickupOrdersList() {
-  const { data, isLoading, isError } = usePickupOrders();
+  const { data: pickupOrders = [], isLoading, isError } = usePickupOrders();
   const router = useRouter();
 
   if (isLoading) return <Loading />;
@@ -49,8 +49,8 @@ export default function PickupOrdersList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data && data.length > 0 ? (
-              data.map((pickup: any) => (
+            {pickupOrders && pickupOrders.length > 0 ? (
+              pickupOrders.map((pickup) => (
                 <TableRow
                   key={pickup.id}
                   className="cursor-pointer hover:bg-muted/50"
@@ -59,7 +59,7 @@ export default function PickupOrdersList() {
                   }
                 >
                   <TableCell className="font-medium">
-                    {pickup.customer.name}
+                    {pickup.customer?.name ?? "-"}
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -74,8 +74,8 @@ export default function PickupOrdersList() {
                       {pickup.status.toUpperCase()}
                     </Badge>
                   </TableCell>
-                  <TableCell>{pickup.outlet.name}</TableCell>
-                  <TableCell>{pickup.orderHeaders.length}</TableCell>
+                  <TableCell>{pickup.outlet?.name ?? "-"}</TableCell>
+                  <TableCell>{pickup.orderHeaders?.length ?? 0}</TableCell>
                   <TableCell>
                     {new Date(pickup.createdAt).toLocaleString()}
                   </TableCell>
@@ -84,7 +84,7 @@ export default function PickupOrdersList() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={4}
+                  colSpan={5}
                   className="text-center text-gray-500 font-medium"
                 >
                   NO PICKUP ORDERS FOUND
