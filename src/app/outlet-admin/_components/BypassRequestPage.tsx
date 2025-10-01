@@ -53,16 +53,6 @@ export default function BypassRequestsPage() {
     setShowAccept(true);
   }
 
-  function confirmAccept() {
-    if (!selectedTaskAccept) return;
-    acceptMutation.mutate({
-      taskId: selectedTaskAccept.id,
-      adminId: "ADMIN_ID",
-    });
-    setShowAccept(false);
-    
-  }
-
   if (isLoading) return <p className="p-6">Loading bypass requests...</p>;
   if (isError)
     return <p className="p-6 text-red-500">Error loading bypass requests</p>;
