@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-interface Outlet {
+export interface Outlet {
   id: string;
   name: string;
   address?: string;
