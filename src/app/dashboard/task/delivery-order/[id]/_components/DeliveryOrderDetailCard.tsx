@@ -1,7 +1,6 @@
 "use client";
 
 import { DeliveryOrder } from "@/types/deliveryOrder";
-import { PickUpOrder } from "@/types/pickUpOrder";
 import { format } from "date-fns";
 import { Copy, MapPinned } from "lucide-react";
 import { useState } from "react";
@@ -69,6 +68,16 @@ export default function DeliveryOrderDetailCard({ deliveryOrder }: DeliveryOrder
             <div className="flex-5/12 font-semibold">Phone Number</div>
             <div className="flex-7/12 text-right">
               {deliveryOrder.customerAddress?.phoneNumber}
+            </div>
+          </div>
+          <div className="flex justify-between w-full">
+            <div className="flex-5/12 font-semibold">Driver</div>
+            <div className="flex-7/12 text-right">
+              {deliveryOrder.driver?.name ? (
+                  deliveryOrder.driver.name
+                ) : (
+                  <span className='text-red-500 font-semibold'>No assigned driver</span>
+                )}
             </div>
           </div>
         </div>

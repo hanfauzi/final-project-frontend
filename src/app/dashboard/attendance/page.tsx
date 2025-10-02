@@ -9,10 +9,10 @@ import { AttendanceCalendar } from "./_components/AttendanceCalendar";
 import AttendanceStatusCard from "./_components/AttendanceStatusCard";
 import ClockOutButton from "./_components/ClockOutButton";
 import useGetAttendanceByEmployee from "./_hooks/useGetAttendanceByEmployee";
-import useGetEmployee from "../_hooks/useGetEmployee";
+import { useEmployee } from "../_context/EmployeeContext";
 
 const AttendancePage = () => {
-  const { data: employee, isLoading: employeeLoading, error: employeeError } = useGetEmployee();
+  const { employee, isLoading: employeeLoading, error: employeeError } = useEmployee();
   const [month, setMonth] = useState(new Date());
   const yearMonth = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, "0")}`;
   const monthlyQuery = useMemo(() => ({ yearMonth }), [yearMonth]);
@@ -40,7 +40,7 @@ const AttendancePage = () => {
     isError: todayAttendanceError,
   } = useGetAttendanceByEmployee(todayQuery);
 
-  const todayAttendance = todayAttendances?.find((a) => {
+  const todayAttendance = todayAttendances?.data.find((a) => {
     const d = new Date(a.date);
     d.setHours(0, 0, 0, 0);
     return d.getTime() === today.getTime();
@@ -57,7 +57,7 @@ const AttendancePage = () => {
           loading={todayAttendanceLoading}
           error={todayAttendanceError ? "Failed to load attendance" : null}
           todayAttendance={todayAttendance ?? null}
-          todayAttendances={todayAttendances}
+          todayAttendances={todayAttendances?.data}
         />
 
         <div className="grid grid-cols-2 gap-4">
@@ -112,7 +112,7 @@ const AttendancePage = () => {
 
         <div className="flex flex-col items-center bg-white border-1 rounded-md shadow-sm">
           <AttendanceCalendar
-            data={attendances ?? []}
+            data={attendances?.data ?? []}
             month={month}
             onMonthChange={setMonth}
             loading={attendanceLoading}
@@ -127,7 +127,7 @@ const AttendancePage = () => {
               {attendancesError?.message ?? "Failed to load attendance"}
             </div>
           )}
-          {!attendanceLoading && !isAttendancesError && (attendances?.length ?? 0) === 0 && (
+          {!attendanceLoading && !isAttendancesError && (attendances?.data.length ?? 0) === 0 && (
             <div className="pb-4 text-center text-gray-500">
               No attendance records found in this month
             </div>

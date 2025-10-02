@@ -3,10 +3,10 @@
 import { Mail, Map, Phone, User } from "lucide-react";
 import Image from "next/image";
 import DashboardLogoutButton from "./_components/DashboardLogoutButton";
-import useGetEmployee from "./_hooks/useGetEmployee";
+import { useEmployee } from "./_context/EmployeeContext";
 
 const DashboardPage = () => {
-  const { data: employee, isLoading: employeeLoading } = useGetEmployee();
+  const { employee, isLoading: employeeLoading } = useEmployee();
 
   return (
     <div className="mx-auto max-w-sm md:max-w-[800px]">

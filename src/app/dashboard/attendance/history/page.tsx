@@ -1,21 +1,61 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { format, parseISO } from 'date-fns';
 import { useMemo, useState } from 'react';
-import useGetEmployee from '../../_hooks/useGetEmployee';
 import useGetAttendanceByEmployee from '../_hooks/useGetAttendanceByEmployee';
+import { useEmployee } from '../../_context/EmployeeContext';
+import { DateRangePicker } from '@/components/DateRangePicker';
+import PaginationSection from '@/components/PaginationSection';
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Attendance = () => {
-  const { data: employee } = useGetEmployee();
+  const { employee } = useEmployee();
+
+  const handleDateChange = (date: { from: string; to: string }) => {
+    if (date.from !== dateRange?.from || date.to !== dateRange?.to) {
+      setYearMonth("");
+      setDateRange(date);
+      setPage(1);
+    }
+  };
+  const [dateRange, setDateRange] = useState<{
+    from: string;
+    to: string;
+  } | null>(null);
+  const [page, setPage] = useState(1);
+
   const now = new Date();
   const defaultYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const [yearMonth, setYearMonth] = useState<string>(defaultYearMonth);
-  const monthlyQuery = useMemo(() => ({ yearMonth }), [yearMonth]);
+
+  const handleMonthChange = (value: string) => {
+    setYearMonth(value || "");
+    setDateRange(null);
+    setPage(1);
+  };
+
+  const monthlyQuery = useMemo(() => ({ yearMonth, page }), [yearMonth, page]);
+
   const {
-    data: attendances = [],
+    data: attendances,
     isLoading: attendanceLoading,
     isError: isAttendancesError,
-  } = useGetAttendanceByEmployee(monthlyQuery);
+  } = useGetAttendanceByEmployee({
+    yearMonth: monthlyQuery.yearMonth, 
+    take: 10, 
+    page,
+    fromDate: dateRange?.from,
+    toDate: dateRange?.to, 
+  });
   
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -31,17 +71,50 @@ const Attendance = () => {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="font-bold text-xl">Attendance history</div>
-          <select 
-            value={yearMonth ?? ""}
-            onChange={(e) => setYearMonth(e.target.value || defaultYearMonth)}
-            className="select bg-white">
-            <option disabled={true} value="">Pick a month</option>
-            {months.map((month, index) => (
-              <option key={index} value={`${new Date().getFullYear()}-${String(index + 1).padStart(2, "0")}`}>
-                {month}
-              </option>
-            ))}
-          </select>
+          <div className="flex gap-2">
+            <DateRangePicker
+              value={dateRange}
+              onChange={handleDateChange}
+            />
+            <Select
+              value={yearMonth ?? ""}
+              onValueChange={handleMonthChange}
+            >
+              <div className="relative w-full">
+                <SelectTrigger
+                  className={cn(
+                  "w-full bg-card shadow-md hover:cursor-pointer hover:bg-primary/10 hover:text-primary",
+                  yearMonth ? "pr-10" : "pr-2"
+                )}
+                >
+                  <SelectValue placeholder="Pick a month" />
+                </SelectTrigger>
+                {yearMonth && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => { 
+                      e.stopPropagation() 
+                      setYearMonth("") 
+                    }}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  >
+                    <X size={16} />
+                  </Button>
+                )}
+              </div>
+              <SelectContent>
+                {months.map((month, index) => (
+                  <SelectItem
+                    key={index}
+                    value={`${new Date().getFullYear()}-${String(index + 1).padStart(2, "0")}`}
+                  >
+                    {month}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="overflow-x-auto">
             <table className="table table-xs table-pin-rows table-pin-cols">
               <thead>
@@ -70,14 +143,14 @@ const Attendance = () => {
                       {isAttendancesError}
                     </td>
                   </tr>
-                ) : attendances.length === 0 ? (
+                ) : !attendances || attendances.data.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="text-center py-6 text-gray-500">
                       No attendance history
                     </td>
                   </tr>
                 ) : (
-                  attendances.map((attendance, index) => (
+                  attendances.data.map((attendance, index) => (
                     <tr
                       key={attendance.id}
                       className={`${
@@ -105,6 +178,13 @@ const Attendance = () => {
               </tbody>
             </table>
           </div>
+          {attendances && (
+            <div className="flex justify-center items-center">
+              <div>
+                <PaginationSection meta={attendances.meta} setPage={setPage} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

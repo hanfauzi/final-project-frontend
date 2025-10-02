@@ -1,16 +1,23 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useGetEmployee from "../../_hooks/useGetEmployee";
 import useGetDeliveryOrderById from "../_hooks/useGetDeliveryOrderById";
 import useGetDeliveryOrdersByDriver from "../_hooks/useGetDeliveryOrdersByDriver";
 import useGetPickUpTaskById from "../_hooks/useGetPickUpOrderById";
 import useGetPickUpOrdersByDriver from "../_hooks/useGetPickUpOrdersByDriver";
 import CurrentActiveTaskCard from "./CurrentActiveTaskCard";
 import OrdersList from "./OrderList";
+import Link from "next/link";
+import { ClipboardClock } from "lucide-react";
+import { useEmployee } from "../../_context/EmployeeContext";
+import { useState } from "react";
+import PaginationSection from "@/components/PaginationSection";
 
 export default function DriverTasks() {
-  const { data: employee, } = useGetEmployee();
+  const { employee, } = useEmployee();
+
+  const [pickUpOrderPage, setPickUpOrderPage] = useState(1);
+  const [deliveryOrderPage, setDeliveryOrderPage] = useState(1);
 
   const {
     data: pickUpOrder,
@@ -27,21 +34,28 @@ export default function DriverTasks() {
   });
 
   const {
-    data: pickUpOrders = [],
+    data: pickUpOrders,
     isLoading: pickUpOrdersLoading,
     isError: pickUpOrdersError,
     error: pickUpOrdersErrorObj,
-  } = useGetPickUpOrdersByDriver();
+  } = useGetPickUpOrdersByDriver({
+    query: { mode: "AVAILABLE_TASK", page: pickUpOrderPage, take: 5 },
+    activeInterval: false,
+    inactiveInterval: false,
+  });
 
   const {
-    data: deliveryOrders = [],
+    data: deliveryOrders,
     isLoading: deliveryOrdersLoading,
     isError: deliveryOrdersError,
     error: deliveryOrdersErrorObj,
-  } = useGetDeliveryOrdersByDriver();
+  } = useGetDeliveryOrdersByDriver({
+    query: { mode: "AVAILABLE_TASK", page: deliveryOrderPage, take: 5 },
+    activeInterval: false,
+    inactiveInterval: false,
+  });
 
   let taskUrl: string | null = null;
-
 
   if (employee?.takenTaskId) {
     switch(employee.takenTaskType) {
@@ -88,39 +102,58 @@ export default function DriverTasks() {
       </div>
       <Tabs defaultValue="pickup">
           <div className="flex justify-between items-center">
-            <div className="text-lg font-bold">Task List</div>
-            <TabsList>
-              <TabsTrigger value="pickup"
-                className="data-[state=active]:bg-primary data-[state=active]:text-white"
-              >
-                Pickup
-              </TabsTrigger>
-              <TabsTrigger value="delivery"
-                className="data-[state=active]:bg-primary data-[state=active]:text-white"
-              >
-                Delivery
-              </TabsTrigger>
-            </TabsList>
+            <div className="text-lg font-bold">Available Task</div>
+            <div className="flex items-center gap-2">
+              <Link href={"/dashboard/task/history"} className="p-2">
+                <ClipboardClock className="size-5"/>
+              </Link>
+              <TabsList className="bg-foreground/5">
+                <TabsTrigger value="pickup"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                >
+                  Pickup
+                </TabsTrigger>
+                <TabsTrigger value="delivery"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                >
+                  Delivery
+                </TabsTrigger>
+              </TabsList>
+            </div>
           </div>
         <TabsContent value="pickup">
           <OrdersList
-            orders={pickUpOrders}
+            orders={pickUpOrders?.data ?? []}
             isLoading={pickUpOrdersLoading}
             isError={pickUpOrdersError}
             error={pickUpOrdersErrorObj as Error | null}
             basePath="/dashboard/task/pickup-order/"
             emptyMessage="No pick-up order available"
           />
+          {pickUpOrders?.meta && (
+            <div className="flex justify-center">
+              <div className="py-2">
+                <PaginationSection meta={pickUpOrders.meta} setPage={setPickUpOrderPage} />
+              </div>
+            </div>
+          )}
         </TabsContent>
         <TabsContent value="delivery">
           <OrdersList
-            orders={deliveryOrders}
+            orders={deliveryOrders?.data ?? []}
             isLoading={deliveryOrdersLoading}
             isError={deliveryOrdersError}
             error={deliveryOrdersErrorObj as Error | null}
             basePath="/dashboard/task/delivery-order/"
             emptyMessage="No delivery order available"
           />
+          {deliveryOrders?.meta && (
+            <div className="flex justify-center">
+              <div className="py-2">
+                <PaginationSection meta={deliveryOrders.meta} setPage={setDeliveryOrderPage} />
+              </div>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

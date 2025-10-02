@@ -2,12 +2,14 @@
 
 import { axiosInstance } from "@/lib/axios";
 import { Attendance } from "@/types/attendance";
-import { PaginationQueries } from "@/types/pagination";
+import { PageableResponse, PaginationQueries } from "@/types/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 interface GetAttendanceQuery extends PaginationQueries {
   yearMonth?: string;
+  fromDate?: string;
+  toDate?: string;
 }
 
 const useGetAttendanceByEmployee = (query?: GetAttendanceQuery) => {
@@ -28,7 +30,7 @@ const useGetAttendanceByEmployee = (query?: GetAttendanceQuery) => {
     setHydrated(true);
   }, []);
 
-  return useQuery<Attendance[], Error>({
+  return useQuery<PageableResponse<Attendance>, Error>({
     queryKey: ["attendances", query],
     queryFn: async () => {
       if (!token) throw new Error("No token available");
@@ -39,7 +41,7 @@ const useGetAttendanceByEmployee = (query?: GetAttendanceQuery) => {
           params: query ?? {},
         }
       );
-      return response.data.data;
+      return response.data;
     },
     enabled: hydrated && !!token,
   });

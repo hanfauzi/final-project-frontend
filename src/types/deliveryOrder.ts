@@ -5,7 +5,7 @@ import { Outlet } from "./outlet";
 
 export interface DeliveryOrder {
   id: string;
-  status: PickUpOrderStatus;
+  status: DeliveryOrderStatus;
   distance: number;
   price: number;
 
@@ -21,7 +21,7 @@ export interface DeliveryOrder {
   orderHeader?: OrderHeader;
 }
 
-export enum PickUpOrderStatus {
+export enum DeliveryOrderStatus {
   NOT_READY_TO_DELIVER = "NOT_READY_TO_DELIVER",
   WAITING_FOR_DRIVER = "WAITING_FOR_DRIVER",
   ON_THE_WAY_TO_OUTLET = "ON_THE_WAY_TO_OUTLET",

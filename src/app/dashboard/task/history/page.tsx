@@ -1,12 +1,11 @@
 "use client";
 
-import useGetEmployee from "../../_hooks/useGetEmployee";
 import WorkerTaskHistory from "./_components/WorkerTaskHistory";
-// import DriverTaskHistory from "./_components/DriverTaskHistory";
-
+import DriverTaskHistory from "./_components/DriverTaskHistory";
+import { useEmployee } from "../../_context/EmployeeContext";
 
 const TaskPage = () => {
-  const { data: employee, isLoading: employeeLoading, error: employeeError } = useGetEmployee();
+  const { employee, isLoading: employeeLoading, error: employeeError } = useEmployee();
 
   if (employeeLoading) return (
     <div className="flex gap-2 items-center justify-center">
@@ -21,7 +20,7 @@ const TaskPage = () => {
     case "OUTLET_ADMIN":
       return <div>No tasks history available for outlet admin yet</div>;
     case "DRIVER":
-      // return <DriverTaskHistory />;
+      return <DriverTaskHistory />;
     case "WORKER":
       return <WorkerTaskHistory />;
     default:
