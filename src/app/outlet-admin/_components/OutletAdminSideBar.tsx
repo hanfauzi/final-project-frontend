@@ -1,8 +1,17 @@
 "use client";
 
 import SidebarItem from "@/app/admin/_components/SidebarItem";
+import DashboardLogoutButton from "@/app/dashboard/_components/DashboardLogoutButton";
 import EmployeeProfile from "@/components/EmployeeProfile";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   Bike,
   CalendarArrowUp,
@@ -14,14 +23,6 @@ import {
 } from "lucide-react";
 import { FC } from "react";
 import { useBypassRequest } from "../_hooks/useBypassRequest";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 const OutletAdminSidebar: FC = () => {
   const { data: bypassRequests } = useBypassRequest();
@@ -104,6 +105,10 @@ const SidebarContent: FC<{ pendingCount: number }> = ({ pendingCount }) => (
         href="/outlet-admin/performances"
         icon={<ChartPie size={18} />}
       />
+    </div>
+
+    <div className="mt-auto mx-auto pb-10">
+      <DashboardLogoutButton />
     </div>
   </>
 );
