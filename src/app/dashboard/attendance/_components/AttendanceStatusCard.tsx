@@ -2,13 +2,13 @@
 
 import { CheckCircle2, Circle, CircleAlert, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AttendanceStatus } from "@/types/attendance";
+import { Attendance, AttendanceStatus } from "@/types/attendance";
 
 interface AttendanceStatusProps {
   loading: boolean;
   error?: string | null;
   todayAttendance?: { status: AttendanceStatus } | null;
-  todayAttendances?: any[];
+  todayAttendances?: Attendance[];
 }
 
 const AttendanceStatusCard = ({

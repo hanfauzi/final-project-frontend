@@ -1,12 +1,11 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import useGetEmployee from "../../_hooks/useGetEmployee";
+import { useEmployee } from "../../_context/EmployeeContext";
 import WorkerTaskDetail from "./_components/WorkerTaskDetail";
 
 
 export default function TaskDetailPage() {
-  const { data: employee, isLoading: employeeLoading, error: employeeError } = useGetEmployee();
+  const { employee, isLoading: employeeLoading, error: employeeError } = useEmployee();
 
   if (employeeLoading) return (
     <div className="flex gap-2 items-center justify-center">

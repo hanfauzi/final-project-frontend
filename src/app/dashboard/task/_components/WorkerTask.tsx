@@ -3,14 +3,14 @@
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import { ClipboardClock } from "lucide-react";
 import Link from "next/link";
-import useGetEmployee from "../../_hooks/useGetEmployee";
+import { useEmployee } from "../../_context/EmployeeContext";
 import useGetWorkerTaskById from "../_hooks/useGetWorkerTaskById";
 import useGetWorkerTasksByWorker from "../_hooks/useGetWorkerTasksByWorker";
 import CurrentActiveTaskCard from "./CurrentActiveTaskCard";
 import OrdersList from "./OrderList";
 
 export default function WorkerTask() {
-  const { data: employee, } = useGetEmployee();
+  const { employee, } = useEmployee();
 
   const {
     data: workerTask,

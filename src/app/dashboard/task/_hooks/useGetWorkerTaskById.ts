@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib/axios";
-import { PickUpOrder } from "@/types/pickUpOrder";
 import { WorkerTask } from "@/types/workerTask";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 

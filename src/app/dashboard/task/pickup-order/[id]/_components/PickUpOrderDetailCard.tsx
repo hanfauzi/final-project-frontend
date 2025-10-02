@@ -70,6 +70,16 @@ export default function PickUpOrderDetailCard({ pickUpOrder }: PickUpOrderDetail
               {pickUpOrder.customerAddress?.phoneNumber}
             </div>
           </div>
+          <div className="flex justify-between w-full">
+            <div className="flex-5/12 font-semibold">Driver</div>
+            <div className="flex-7/12 text-right">
+              {pickUpOrder.driver?.name ? (
+                  pickUpOrder.driver.name
+                ) : (
+                  <span className='text-red-500 font-semibold'>No assigned driver</span>
+                )}
+            </div>
+          </div>
         </div>
 
         <div className="relative flex w-full items-center py-1">
