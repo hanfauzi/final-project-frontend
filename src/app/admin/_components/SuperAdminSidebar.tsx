@@ -16,13 +16,14 @@ import { FC } from "react";
 import SidebarItem from "./SidebarItem";
 
 // shadcn
+import DashboardLogoutButton from "@/app/dashboard/_components/DashboardLogoutButton";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from "@/components/ui/sheet";
 
 const SuperAdminSidebar: FC = () => {
@@ -104,6 +105,10 @@ const SidebarContent = () => (
         href="/admin/performances"
         icon={<ChartPie size={18} />}
       />
+    </div>
+
+    <div className="mt-auto mx-auto pb-10">
+        <DashboardLogoutButton />
     </div>
   </>
 );
