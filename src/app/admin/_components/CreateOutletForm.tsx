@@ -14,8 +14,12 @@ import { FC } from "react";
 import { useCities } from "../_hooks/useCities";
 import { useCreateOutlet } from "../_hooks/useOutlets";
 import { CreateOutletSchema } from "../schema/create-outlet.schema";
-import { MapSelector } from "./MapPicker";
 import { City } from "@/types/city";
+import dynamic from "next/dynamic";
+
+const MapSelector = dynamic(() => import("./MapPicker").then(mod => mod.MapSelector), {
+  ssr: false,
+});
 
 const CreateOutletForm: FC = () => {
   const { data: cities = [], isLoading: isCitiesLoading } = useCities();
