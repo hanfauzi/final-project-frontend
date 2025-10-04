@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Laundr",
   description: "Layanan laundry on-demand: cepat, bersih, terjamin.",
   keywords: ["laundry", "laundry online", "antar jemput", "laundry delivery", "Laundr"],
+  icons: { icon: "/logo-icon.png"},
   openGraph: {
     title: "Laundr",
     description: "Layanan laundry on-demand: cepat, bersih, terjamin.",
