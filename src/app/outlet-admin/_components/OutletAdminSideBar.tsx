@@ -107,7 +107,8 @@ const SidebarContent: FC<{ pendingCount: number }> = ({ pendingCount }) => (
       />
     </div>
 
-    <div className="mt-auto mx-auto pb-10">
+    <Separator className="my-4" />
+    <div className="flex justify-center my-4">
       <DashboardLogoutButton />
     </div>
   </>

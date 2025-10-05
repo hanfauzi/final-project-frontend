@@ -64,7 +64,7 @@ export default function BypassRequestsPage() {
     return <p className="p-6 text-red-500">Error loading bypass requests</p>;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-2 space-y-2">
       <Card>
         <CardHeader>
           <CardTitle>Requests</CardTitle>
@@ -80,7 +80,7 @@ export default function BypassRequestsPage() {
                   <th className="p-3">Reason</th>
                   <th className="p-3">Requested</th>
                   <th className="p-3">Status</th>
-                  <th className="p-3">Actions</th>
+                  <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,7 +124,15 @@ export default function BypassRequestsPage() {
                       </Badge>
                     </td>
                     <td className="p-3 align-top">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 justify-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          title="View Items"
+                          onClick={() => openItemsModal(t)}
+                        >
+                          <Eye size={14} />
+                        </Button>
                         <Button size="sm" onClick={() => openAcceptModal(t)}>
                           <Check size={14} />
                         </Button>
@@ -135,13 +143,7 @@ export default function BypassRequestsPage() {
                         >
                           <X size={14} />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => openItemsModal(t)}
-                        >
-                          <Eye size={14} />
-                        </Button>
+                        
                       </div>
                     </td>
                   </tr>
@@ -225,7 +227,7 @@ export default function BypassRequestsPage() {
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>
-              Laundry Items –{" "}
+              {" "}
               {selectedTaskItems?.orderHeader?.invoiceNo || "No invoice"}
             </DialogTitle>
           </DialogHeader>

@@ -93,7 +93,7 @@ export default function PickupOrdersList() {
                       {pickup.status.replaceAll("_", " ").toUpperCase()}
                     </Badge>
                   </TableCell>
-                  <TableCell>{pickup.outlet?.name ?? "-"}</TableCell>
+                  <TableCell className="py-4">{pickup.outlet?.name ?? "-"}</TableCell>
                   <TableCell>{pickup.orderHeaders?.length ?? 0}</TableCell>
                   <TableCell>
                     {new Date(pickup.createdAt).toLocaleString()}

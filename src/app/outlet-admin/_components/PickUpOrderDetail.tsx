@@ -46,7 +46,7 @@ export default function PickupOrderDetailPage() {
               <p className="text-sm font-medium text-muted-foreground">
                 Status
               </p>
-              <p className="font-semibold">{data.status}</p>
+              <p className="font-semibold">{data.status.replaceAll("_", " ").toUpperCase()}</p>
             </div>
             <div className="md:col-span-2">
               <p className="text-sm font-medium text-muted-foreground">Notes</p>

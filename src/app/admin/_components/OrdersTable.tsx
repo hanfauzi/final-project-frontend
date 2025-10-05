@@ -61,11 +61,11 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
               <TableCell className="py-4">
                 <Badge
                       variant={
-                        order.status === "COMPLETED"
+                        order.status === "ARRIVED_AT_OUTLET"
                           ? "secondary"
-                          : order.status === "cancelled"
-                          ? "destructive"
-                          : "secondary"
+                          : order.status === "COMPLETED"
+                          ? "outline"
+                          : "default"
                       }
                     >
                       {order.status.replaceAll("_", " ").toUpperCase()}
