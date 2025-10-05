@@ -81,9 +81,9 @@ function useAvatar(
   const onFileChange: ChangeHandler = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    const allowed = ["image/png", "image/jpeg", "image/jpg"];
     if (!allowed.includes(file.type)) {
-      alert("File harus berupa gambar (png, jpg, jpeg, webp).");
+      alert("File harus berupa gambar (png, jpg, jpeg,");
       return;
     }
     if (file.size > 1 * 1024 * 1024) {
@@ -429,7 +429,7 @@ export default function CustomerProfilePage() {
 
                           {isEditingProfile && (
                             <p className="text-[11px] text-muted-foreground md:text-xs">
-                              Foto maksimal 1MB • Format: PNG/JPG/JPEG/WEBP
+                              Foto maksimal 1MB || Format: PNG/JPG/JPEG
                             </p>
                           )}
                         </form>
