@@ -1,3 +1,5 @@
+import { OrderItemType } from "./orderItem";
+
 // enums
 export enum TaskStatus {
   PENDING = "PENDING",
@@ -20,6 +22,7 @@ export interface Employee {
 export interface OrderHeader {
   id: string;
   invoiceNo: string;
+  OrderItem?: OrderItemType[];
 }
 
 export interface OrderItem {
