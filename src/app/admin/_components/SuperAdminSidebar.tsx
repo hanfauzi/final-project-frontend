@@ -107,8 +107,9 @@ const SidebarContent = () => (
       />
     </div>
 
-    <div className="mt-auto mx-auto pb-10">
-        <DashboardLogoutButton />
+    <Separator className="my-4" />
+    <div className="flex justify-center my-4">
+      <DashboardLogoutButton />
     </div>
   </>
 );

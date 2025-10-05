@@ -30,7 +30,7 @@ const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
         </div>
         <div className="flex">
           <p className="font-medium w-40">Status:</p>
-          <Badge>{order.status}</Badge>
+          <Badge>{order.status.replaceAll("_", " ").toUpperCase()}</Badge>
         </div>
         <div className="flex">
           <p className="font-medium w-40">Tanggal dibuat:</p>
@@ -39,7 +39,7 @@ const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
         <div className="flex">
           <p className="font-medium w-40">Estimasi:</p>
           {order.estHours ? (
-            <Badge>
+            <Badge variant="outline">
               <Countdown
                 estimatedDoneAt={
                   new Date(

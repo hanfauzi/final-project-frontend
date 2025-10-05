@@ -156,7 +156,7 @@ const GetAllEmployees: FC = () => {
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={() => router.push(`/admin/employees?id=${emp.id}`)}
                   >
-                    <TableCell className="font-medium py-3 px-4 whitespace-nowrap">
+                    <TableCell className="font-medium py-4 px-4 whitespace-nowrap">
                       {emp.name}
                     </TableCell>
                     <TableCell className="py-3 px-4 whitespace-nowrap">

@@ -125,7 +125,7 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
 
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Quantity
+                            Quantity (kg/pcs)
                           </label>
                           <Input
                             type="number"
