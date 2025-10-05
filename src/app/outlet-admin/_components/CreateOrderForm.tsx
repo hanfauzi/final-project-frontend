@@ -1,20 +1,20 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
-import { useFormik, FieldArray, FormikProvider, ErrorMessage } from "formik";
+import { useLaundryItems } from "@/app/admin/_hooks/useLaundryItems";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { createOrderSchema } from "@/features/outlet-admin/order/schema/createOrderSchema";
+import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
+import { FC, useEffect, useState } from "react";
 import { useCreateOrderFromPickup } from "../_hooks/useOrdersOutletAdmin";
-import { useLaundryItems } from "@/app/admin/_hooks/useLaundryItems";
 import { usePickupOrders } from "../_hooks/usePickupOrders";
 
 interface LaundryItem {
@@ -53,7 +53,8 @@ interface Props {
 const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
   const mutation = useCreateOrderFromPickup();
   const { data: laundryItems = [] } = useLaundryItems();
-  const { data: pickupOrders = [] } = usePickupOrders();
+  const { data: pickupOrdersResponse } = usePickupOrders();
+  const pickupOrders = pickupOrdersResponse?.data ?? [];
 
   const [initialItems, setInitialItems] = useState<OrderItemForm[]>([]);
 
@@ -61,7 +62,6 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
     const pickup = pickupOrders.find((p) => p.id === pickupOrderId);
     if (!pickup) return;
 
-    // populate items dari pickup.services
     const itemsFromPickup: OrderItemForm[] = pickup.services.map((service) => ({
       serviceId: service.id,
       service: service,
@@ -79,7 +79,7 @@ const CreateOrderForm: FC<Props> = ({ pickupOrderId }) => {
       notes: "",
       items: initialItems,
     },
-    enableReinitialize: true, // biar initialValues update saat setInitialItems
+    enableReinitialize: true,
     validationSchema: createOrderSchema,
     onSubmit: (values) => mutation.mutate(values),
   });

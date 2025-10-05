@@ -12,15 +12,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { usePickupOrders } from "../../_hooks/usePickupOrders";
+import { Button } from "@/components/ui/button";
 
 export default function PickupOrdersList() {
-  const { data: pickupOrders = [], isLoading, isError } = usePickupOrders();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initialPage = Number(searchParams.get("page") ?? 1);
+  const [page, setPage] = useState(initialPage);
+  const limit = 10;
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set("page", page.toString());
+    params.set("limit", limit.toString());
+    router.replace(`/outlet-admin/orders/pick-up?${params.toString()}`);
+  }, [page, router]);
+
+  const { data, isLoading, isError } = usePickupOrders(page, limit);
 
   if (isLoading) return <Loading />;
-  if (isError) return <p className="text-red-500">Terjadi error</p>;
+  if (isError)
+    return <p className="text-red-500">Terjadi error saat ambil pickup orders.</p>;
+
+  const pickupOrders = data?.data ?? [];
+  const meta = data?.meta;
 
   return (
     <div className="p-6 space-y-6">
@@ -49,7 +68,7 @@ export default function PickupOrdersList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pickupOrders && pickupOrders.length > 0 ? (
+            {pickupOrders.length > 0 ? (
               pickupOrders.map((pickup) => (
                 <TableRow
                   key={pickup.id}
@@ -64,14 +83,14 @@ export default function PickupOrdersList() {
                   <TableCell>
                     <Badge
                       variant={
-                        pickup.status === "completed"
+                        pickup.status === "RECEIVED_BY_OUTLET"
                           ? "secondary"
-                          : pickup.status === "cancelled"
+                          : pickup.status === "CANCELLED"
                           ? "destructive"
                           : "outline"
                       }
                     >
-                      {pickup.status.toUpperCase()}
+                      {pickup.status.replaceAll("_", " ").toUpperCase()}
                     </Badge>
                   </TableCell>
                   <TableCell>{pickup.outlet?.name ?? "-"}</TableCell>
@@ -94,6 +113,29 @@ export default function PickupOrdersList() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      {meta && (
+        <div className="flex justify-center items-center gap-2 mt-4">
+          <Button
+            disabled={page === 1}
+            onClick={() => setPage((prev) => prev - 1)}
+            variant="outline"
+          >
+            Prev
+          </Button>
+          <span>
+            Page {meta.page} of {meta.totalPages}
+          </span>
+          <Button
+            disabled={page >= meta.totalPages}
+            onClick={() => setPage((prev) => prev + 1)}
+            variant="outline"
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

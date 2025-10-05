@@ -40,7 +40,7 @@ const GetAllEmployees: FC = () => {
   const [searchInput, setSearchInput] = useState(
     () => searchParams.get("search") || ""
   );
-  const [limit] = useState(12);
+  const [limit] = useState(10);
   const [page, setPage] = useState(() => Number(searchParams.get("page") || 1));
   const [debouncedSearch, setDebouncedSearch] = useState(searchInput);
 
@@ -79,8 +79,8 @@ const GetAllEmployees: FC = () => {
     <Card className="min-h-screen">
       <CardContent className="flex flex-col gap-4 p-6">
         {/* Header Section */}
-        <div className="flex items-center justify-between  gap-4">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-4 flex-wrap">
             <SearchBar
               value={searchInput}
               onChange={(val) => setSearchInput(val)}
@@ -129,6 +129,7 @@ const GetAllEmployees: FC = () => {
               </SelectContent>
             </Select>
           </div>
+
           <div>
             <Link href="/admin/employees/create">
               <Button className="cursor-pointer">Create New Employee</Button>
@@ -136,9 +137,9 @@ const GetAllEmployees: FC = () => {
           </div>
         </div>
 
-        {/* Employees Table */}
-        <div className="rounded-md border overflow-x-auto">
-          <Table className="min-w-full text-sm">
+        {/* Employees Table (desktop) */}
+        <div className="hidden md:block rounded-md border overflow-x-auto">
+          <Table className="min-w-[700px] text-sm">
             <TableHeader>
               <TableRow>
                 <TableHead className="font-bold px-4 py-2">Name</TableHead>
@@ -172,7 +173,7 @@ const GetAllEmployees: FC = () => {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={3}
+                    colSpan={4}
                     className="text-center text-gray-500 font-medium py-4"
                   >
                     NO EMPLOYEES FOUND
@@ -181,6 +182,28 @@ const GetAllEmployees: FC = () => {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        {/* Employees Card (mobile) */}
+        <div className="block md:hidden space-y-4">
+          {employees.length > 0 ? (
+            employees.map((emp) => (
+              <div
+                key={emp.id}
+                className="p-4 border rounded-lg cursor-pointer hover:bg-muted/50"
+                onClick={() => router.push(`/admin/employees?id=${emp.id}`)}
+              >
+                <p className="font-semibold">{emp.name}</p>
+                <p className="text-sm text-gray-600">{emp.role}</p>
+                <p className="text-sm break-words">{emp.email}</p>
+                <p className="text-sm">{emp.outlet?.name ?? "-"}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 font-medium py-4">
+              NO EMPLOYEES FOUND
+            </p>
+          )}
         </div>
 
         {/* Pagination Section */}

@@ -21,7 +21,7 @@ const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
     <CardHeader>
       <CardTitle>Order Info</CardTitle>
     </CardHeader>
-    <CardContent className="grid grid-cols-2 gap-6">
+    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Kiri: Info Umum */}
       <div className="flex flex-col space-y-3">
         <div className="flex">
@@ -59,7 +59,7 @@ const OrderInfo: FC<{ order: OrderHeader }> = ({ order }) => (
       <div className="flex flex-col space-y-3">
         <div className="flex ">
           <p className="font-medium w-40">Items Total:</p>
-          <p >Rp {order.itemsTotal?.toLocaleString() ?? 0}</p>
+          <p>Rp {order.itemsTotal?.toLocaleString() ?? 0}</p>
         </div>
         <div className="flex">
           <p className="font-medium w-40">Pickup Price:</p>
@@ -119,7 +119,7 @@ const WorkerTasks: FC<{ tasks: WorkerTask[] }> = ({ tasks }) => (
     </CardHeader>
     <CardContent>
       {tasks?.length ? (
-        <div className="space-y-10">
+        <div className="space-y-4 gap-10">
           {tasks.map((task) => (
             <div
               key={task.id}
@@ -129,9 +129,13 @@ const WorkerTasks: FC<{ tasks: WorkerTask[] }> = ({ tasks }) => (
                 <p className="font-medium w-20">Nama:</p>
                 <p>{task.employee?.name || "-"}</p>
               </div>
-              <div className="flex">
+              <div className="flex py-2">
                 <p className="font-medium w-20">Station:</p>
                 <p>{task?.station || "-"}</p>
+              </div>
+              <div className="flex">
+                <p className="font-medium w-20">catatan:</p>
+                <p>{task?.itemPassedNote || "-"}</p>
               </div>
             </div>
           ))}
@@ -152,42 +156,44 @@ const LaundryItemsTable: FC<{ orderItems: OrderItemType[] }> = ({
     </CardHeader>
     <CardContent>
       {orderItems?.length ? (
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-gray-300">
-              <th className="py-2 px-3">Service</th>
-              <th className="py-2 px-3">Laundry Item</th>
-              <th className="py-2 px-3">Qty</th>
-              <th className="py-2 px-3">Catatan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderItems.map((item) =>
-              item.orderItemLaundry?.length ? (
-                item.orderItemLaundry.map((laundry) => (
-                  <tr key={laundry.id} className="border-b border-gray-200">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-gray-300">
+                <th className="py-2 px-3">Service</th>
+                <th className="py-2 px-3">Laundry Item</th>
+                <th className="py-2 px-3">Qty</th>
+                <th className="py-2 px-3">Catatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderItems.map((item) =>
+                item.orderItemLaundry?.length ? (
+                  item.orderItemLaundry.map((laundry) => (
+                    <tr key={laundry.id} className="border-b border-gray-200">
+                      <td className="py-2 px-3">{item.service?.name || "-"}</td>
+                      <td className="py-2 px-3">
+                        {laundry.laundryItem?.name || "-"}
+                      </td>
+                      <td className="py-2 px-3">{laundry.qty}</td>
+                      <td className="py-2 px-3">{item.note || "-"}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr key={item.id} className="border-b border-gray-200">
                     <td className="py-2 px-3">{item.service?.name || "-"}</td>
+                    <td className="py-2 px-3">-</td>
+                    <td className="py-2 px-3">-</td>
                     <td className="py-2 px-3">
-                      {laundry.laundryItem?.name || "-"}
+                      {item.unitPrice ? "Rp" + item.unitPrice : "-"}
                     </td>
-                    <td className="py-2 px-3">{laundry.qty}</td>
                     <td className="py-2 px-3">{item.note || "-"}</td>
                   </tr>
-                ))
-              ) : (
-                <tr key={item.id} className="border-b border-gray-200">
-                  <td className="py-2 px-3">{item.service?.name || "-"}</td>
-                  <td className="py-2 px-3">-</td>
-                  <td className="py-2 px-3">-</td>
-                  <td className="py-2 px-3">
-                    {item.unitPrice ? "Rp" + item.unitPrice : "-"}
-                  </td>
-                  <td className="py-2 px-3">{item.note || "-"}</td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>-</p>
       )}

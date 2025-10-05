@@ -20,7 +20,7 @@ export interface PickupOrders {
   customerAddressId: string;
   notes: string;
   price: number;
-   createdAt: string;
+  createdAt: string;
   customer?: {
     id: string;
     name: string;
@@ -48,16 +48,26 @@ export interface PickupOrders {
     basePrice: number;
     estHours?: number;
   }[];
-   orderHeaders?: {
+  orderHeaders?: {
     id: string;
     totalPrice: number;
     status: string;
   }[];
 }
 
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export interface GetPickupOrdersResponse {
-  data: PickupOrders[];
   message: string;
+  data: {
+    data: PickupOrders[];
+    meta?: PaginationMeta;
+  };
 }
 export interface PickupOrderDetail {
   id: string;
@@ -80,13 +90,19 @@ interface GetPickupOrderDetailResponse {
   message: string;
 }
 
-export const usePickupOrders = () => {
+export const usePickupOrders = (page?: number, limit?: number) => {
   return useQuery({
-    queryKey: ["pickupOrders"],
+    queryKey: ["pickupOrders", page, limit],
     queryFn: async () => {
-      const res = await axiosInstance.get<GetPickupOrdersResponse>(
-        "/api/admin/orders/pickup-orders"
-      );
+      const query = new URLSearchParams();
+      if (page) query.set("page", page.toString());
+      if (limit) query.set("limit", limit.toString());
+
+      const url = `/api/admin/orders/pickup-orders${
+        query.toString() ? `?${query.toString()}` : ""
+      }`;
+
+      const res = await axiosInstance.get<GetPickupOrdersResponse>(url);
       return res.data.data;
     },
   });

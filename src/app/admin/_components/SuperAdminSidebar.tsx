@@ -30,14 +30,14 @@ const SuperAdminSidebar: FC = () => {
   return (
     <>
       {/* 🔹 Mobile: pakai Sheet */}
-      <div className="md:hidden p-2">
+      <div className="md:hidden absolute top-2 left-2 z-50">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
               <Menu size={20} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="p-4 w-64">
+          <SheetContent side="left" className="w-54">
             <SheetHeader>
               <SheetTitle className="sr-only">Sidebar Navigation</SheetTitle>
             </SheetHeader>

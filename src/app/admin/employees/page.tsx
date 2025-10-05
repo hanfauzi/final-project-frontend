@@ -25,18 +25,19 @@ export default function EmployeesPage() {
           />
         }
       />
-      <GetAllEmployees />
+      <div className="overflow-x-auto">
+        <GetAllEmployees />
+      </div>
       <Dialog
         open={!!employeeId}
         onOpenChange={(open) => {
           if (!open) {
-            // Tutup dialog => hapus query id
             router.push("/admin/employees");
           }
         }}
       >
         <DialogContent className="max-w-5xl w-full max-h-[95vh] overflow-hidden p-6">
-          <DialogTitle >Employee Detail</DialogTitle>
+          <DialogTitle>Employee Detail</DialogTitle>
           {employeeId && <EmployeeDetail id={employeeId} />}
         </DialogContent>
       </Dialog>
