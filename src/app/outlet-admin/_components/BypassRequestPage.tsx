@@ -11,20 +11,19 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { WorkerTask } from "@/types/workerTasks";
-import { Check, X } from "lucide-react";
+import { Check, X, Eye } from "lucide-react";
 import { useState } from "react";
 import {
   useAcceptBypassRequest,
   useBypassRequest,
   useRejectBypassRequest,
 } from "../_hooks/useBypassRequest";
+import LaundryItemsTable from "@/components/LaundryItemsTable";
 
 export default function BypassRequestsPage() {
   const { data: tasks = [], isLoading, isError } = useBypassRequest();
   const acceptMutation = useAcceptBypassRequest();
   const rejectMutation = useRejectBypassRequest();
-
-  
 
   const [selectedTaskReject, setSelectedTaskReject] =
     useState<WorkerTask | null>(null);
@@ -35,7 +34,9 @@ export default function BypassRequestsPage() {
     useState<WorkerTask | null>(null);
   const [showAccept, setShowAccept] = useState(false);
 
-  
+  const [selectedTaskItems, setSelectedTaskItems] =
+    useState<WorkerTask | null>(null);
+  const [showItems, setShowItems] = useState(false);
 
   function openReject(task: WorkerTask) {
     setSelectedTaskReject(task);
@@ -51,6 +52,11 @@ export default function BypassRequestsPage() {
   function openAcceptModal(task: WorkerTask) {
     setSelectedTaskAccept(task);
     setShowAccept(true);
+  }
+
+  function openItemsModal(task: WorkerTask) {
+    setSelectedTaskItems(task);
+    setShowItems(true);
   }
 
   if (isLoading) return <p className="p-6">Loading bypass requests...</p>;
@@ -71,7 +77,6 @@ export default function BypassRequestsPage() {
                   <th className="p-3">Station</th>
                   <th className="p-3">Invoice</th>
                   <th className="p-3">Worker</th>
-                  <th className="p-3">Qty</th>
                   <th className="p-3">Reason</th>
                   <th className="p-3">Requested</th>
                   <th className="p-3">Status</th>
@@ -99,9 +104,7 @@ export default function BypassRequestsPage() {
                       <div className="text-sm">{t.orderItem?.name}</div>
                     </td>
                     <td className="p-3 align-top">{t.employee?.name}</td>
-                    <td className="p-3 align-top">
-                      {t.itemQty ?? "-"} {t.itemUnit ?? ""}
-                    </td>
+                   
                     <td
                       className="p-3 align-top truncate max-w-xs"
                       title={t.bypassReqNote ?? ""}
@@ -132,6 +135,13 @@ export default function BypassRequestsPage() {
                         >
                           <X size={14} />
                         </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openItemsModal(t)}
+                        >
+                          <Eye size={14} />
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -153,7 +163,7 @@ export default function BypassRequestsPage() {
             <p>Are you sure you want to accept this bypass request?</p>
             <Textarea
               placeholder="Please make sure before submitting notes for next station..."
-              value={reviewNote} 
+              value={reviewNote}
               onChange={(e) => setReviewNote(e.target.value)}
             />
           </div>
@@ -168,10 +178,10 @@ export default function BypassRequestsPage() {
                 acceptMutation.mutate({
                   taskId: selectedTaskAccept.id,
                   adminId: "ADMIN_ID",
-                  note: reviewNote, 
+                  note: reviewNote,
                 });
                 setShowAccept(false);
-                setReviewNote(""); 
+                setReviewNote("");
               }}
             >
               Accept
@@ -207,6 +217,26 @@ export default function BypassRequestsPage() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Laundry Items Modal */}
+      <Dialog open={showItems} onOpenChange={setShowItems}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>
+              Laundry Items –{" "}
+              {selectedTaskItems?.orderHeader?.invoiceNo || "No invoice"}
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedTaskItems?.orderHeader?.OrderItem?.length ? (
+            <LaundryItemsTable
+              orderItems={selectedTaskItems.orderHeader.OrderItem}
+            />
+          ) : (
+            <p>No laundry items found.</p>
+          )}
         </DialogContent>
       </Dialog>
     </div>
