@@ -71,7 +71,11 @@ const Attendance = () => {
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="font-bold text-xl">Attendance history</div>
-          <div className="flex gap-2">
+          <div className={cn(
+              "flex gap-2", 
+              dateRange?.from && dateRange?.to ? "flex-col" : "flex-row"
+            )}
+          >
             <DateRangePicker
               value={dateRange}
               onChange={handleDateChange}
@@ -126,7 +130,6 @@ const Attendance = () => {
                   <td>Late Minutes</td>
                   <td>Early Leave Minutes</td>
                   <td>Work Minutes</td>
-                  <td>Notes</td>
                   <th className="bg-transparent"></th>
                 </tr>
               </thead>
@@ -170,7 +173,6 @@ const Attendance = () => {
                       <td>{attendance.lateMinutes ?? "-"}</td>
                       <td>{attendance.earlyLeaveMinutes ?? "-"}</td>
                       <td>{attendance.workMinutes ?? "-"}</td>
-                      <td>{attendance.notes ?? "-"}</td>
                       <th className="bg-transparent"></th>
                     </tr>
                   ))

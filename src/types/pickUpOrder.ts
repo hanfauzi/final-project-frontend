@@ -8,6 +8,7 @@ export interface PickUpOrder {
   status: PickUpOrderStatus;
   distance: number;
   price: number;
+  assignByDriverAt: string | null;
   pickedUpAt: string | null;
   arrivedAtOutlet: string | null;
   services: string[]; 

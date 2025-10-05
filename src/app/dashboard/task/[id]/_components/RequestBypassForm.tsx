@@ -1,18 +1,18 @@
 "use client";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Textarea } from "@/components/ui/textarea";
+import { WorkerTask, WorkerTaskStatus } from "@/types/workerTask";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ChevronDown } from "lucide-react";
 import * as Yup from "yup";
 import useReqWorkerTaskBypass from "../../_hooks/useReqWorkerTaskBypass";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { WorkerTask, WorkerTaskStatus } from "@/types/workerTask";
+import RequestBypassButton from "./RequestBypassButton";
 
 interface Props {
   workerTask: WorkerTask;
-  workerTaskId: string;
 }
 
-const RequestBypassForm = ({ workerTask, workerTaskId }: Props) => {
+const RequestBypassForm = ({ workerTask }: Props) => {
   const reqBypass = useReqWorkerTaskBypass();
 
   return (
@@ -35,7 +35,7 @@ const RequestBypassForm = ({ workerTask, workerTaskId }: Props) => {
               })}
               onSubmit={(values, { resetForm }) => {
                 reqBypass.mutate(
-                  { workerTaskId, bypassReqNote: values.bypassReqNote },
+                  { workerTaskId: workerTask.id, bypassReqNote: values.bypassReqNote },
                   {
                     onSuccess: () => {
                       resetForm();
@@ -44,7 +44,7 @@ const RequestBypassForm = ({ workerTask, workerTaskId }: Props) => {
                 );
               }}
             >
-              {({ isSubmitting }) => (
+              {({ handleSubmit }) => (
                 <Form className='flex flex-col gap-2 px-[2px]'>
                   <Field
                     id='bypassReqNote'
@@ -66,26 +66,12 @@ const RequestBypassForm = ({ workerTask, workerTaskId }: Props) => {
                     className='text-red-500 text-sm'
                   />
 
-                  <Button
-                    type='submit'
-                    variant={"outline"}
-                    className='w-full border-destructive'
-                    disabled={
-                      isSubmitting ||
-                      reqBypass.isPending ||
-                      !workerTask.isBypassRequired ||
-                      workerTask.bypassReq ||
-                      workerTask.status === WorkerTaskStatus.DONE
-                    }
-                  >
-                    {reqBypass.isPending
-                      ? "Submitting..."
-                      : !workerTask.isBypassRequired
-                      ? "This task does not require a bypass"
-                      : workerTask.bypassReq
-                      ? "Bypass already requested"
-                      : "Request Bypass"}
-                  </Button>
+                  <RequestBypassButton
+                    workerTask={workerTask}
+                    isPending={reqBypass.isPending}
+                    onProcess={handleSubmit}
+                  />
+
                 </Form>
               )}
             </Formik>
@@ -95,18 +81,35 @@ const RequestBypassForm = ({ workerTask, workerTaskId }: Props) => {
                 className={
                   workerTask.isReqAprooved
                     ? "text-green-700 font-semibold"
+                    : workerTask.isReqAprooved === false
+                    ? "text-red-500 font-semibold"
                     : workerTask.bypassReq
                     ? "text-yellow-500 font-semibold"
                     : ""
                 }
               >
-                {workerTask.isReqAprooved
+                {workerTask.isReqAprooved === true
                   ? "Approved"
+                  : workerTask.isReqAprooved === false
+                  ? "Rejected"
                   : workerTask.bypassReq
                   ? "Waiting for approval"
                   : "Not requested"}
               </div>
             </div>
+            {workerTask.itemPassedNote && (
+              <div className='relative flex flex-col px-1'>
+                <div className="top-2 left-4 absolute font-semibold">Admin Note : </div>
+                <Textarea
+                    readOnly
+                    placeholder={
+                      workerTask.itemPassedNote || ""
+                    }
+                    onFocus={(e) => e.target.blur()}
+                    className='rounded-lg pt-8 text-sm w-full cursor-default'
+                  />
+              </div>
+            )}
           </div>
         </div>
       </div>

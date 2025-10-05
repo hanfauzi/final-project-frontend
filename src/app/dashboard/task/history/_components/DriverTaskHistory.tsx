@@ -49,8 +49,6 @@ export default function DriverTaskHistory() {
       fromDate: pickUpDateRange?.from,
       toDate: pickUpDateRange?.to,
     },
-    activeInterval: false,
-    inactiveInterval: false,
   });
 
   const {
@@ -66,8 +64,6 @@ export default function DriverTaskHistory() {
       fromDate: deliveryDateRange?.from,
       toDate: deliveryDateRange?.to, 
     },
-    activeInterval: false,
-    inactiveInterval: false,
   });
 
   return (

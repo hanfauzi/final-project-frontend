@@ -8,9 +8,13 @@ import useGetWorkerTaskById from "../_hooks/useGetWorkerTaskById";
 import useGetWorkerTasksByWorker from "../_hooks/useGetWorkerTasksByWorker";
 import CurrentActiveTaskCard from "./CurrentActiveTaskCard";
 import OrdersList from "./OrderList";
+import { useState } from "react";
+import PaginationSection from "@/components/PaginationSection";
 
 export default function WorkerTask() {
   const { employee, } = useEmployee();
+
+  const [workerTaskPage, setWorkerTaskPage] = useState(1);
 
   const {
     data: workerTask,
@@ -20,12 +24,12 @@ export default function WorkerTask() {
   });
 
   const {
-    data: workerTasks = [],
+    data: workerTasks,
     isLoading: workerTasksLoading,
     isError: workerTasksError,
     error: workerTasksErrorObj,
   } = useGetWorkerTasksByWorker({
-    mode: "AVAILABLE_TASK",
+    query: { mode: "AVAILABLE_TASK", page: workerTaskPage, take: 10 }
   });
 
   return (
@@ -38,7 +42,7 @@ export default function WorkerTask() {
         <h2 className="text-lg font-bold">Currently Active Tasks</h2>
         {employee?.takenTaskId ? (
           <CurrentActiveTaskCard
-              href={"#"}
+              href={`/dashboard/task/${workerTask?.id}`}
               loading={workerTaskLoading}
               createdAt={workerTask?.createdAt}
               id={workerTask?.id}
@@ -61,16 +65,20 @@ export default function WorkerTask() {
           </div>
         <TabsContent value="pickup">
           <OrdersList
-            orders={workerTasks}
+            orders={workerTasks?.data ?? []}
             isLoading={workerTasksLoading}
             isError={workerTasksError}
             error={workerTasksErrorObj as Error | null}
             basePath="/dashboard/task/"
-            emptyMessage="No pick-up order available"
+            emptyMessage="No worker task available"
           />
-        </TabsContent>
-        <TabsContent value="delivery">
-          This has not yet implemented
+          {workerTasks?.meta && (
+            <div className="flex justify-center">
+              <div className="py-2">
+                <PaginationSection meta={workerTasks.meta} setPage={setWorkerTaskPage} />
+              </div>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

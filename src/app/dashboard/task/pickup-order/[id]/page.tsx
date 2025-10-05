@@ -58,7 +58,12 @@ export default function PickUpOrderDetail() {
             disabled={isUpdating || pickUpOrder.status === "RECEIVED_BY_OUTLET"}
           >
             {isUpdating
-              ? "Loading..."
+              ? (
+                  <>
+                    <div className='loading loading-spinner loading-xs' />
+                    Processing...
+                  </>
+                )
               : pickUpOrder.status === "RECEIVED_BY_OUTLET"
               ? "This pickup order is already completed ✅"
               : "Process this pickup order"}

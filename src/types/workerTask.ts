@@ -6,6 +6,7 @@ import { Outlet } from "./outlet";
 export interface WorkerTask {
   id: string;
   status: WorkerTaskStatus;
+  isItemValidated: boolean;
   isBypassRequired: boolean;
   bypassReq: boolean;
   bypassReqNote?: string;

@@ -14,7 +14,7 @@ export interface Attendance {
   earlyLeaveMinutes: number | null
   notes: string | null;
 
-  employee?: Employee;
+  employees?: Employee;
   shift?: Shift;
   outlet?: Outlet;
 }

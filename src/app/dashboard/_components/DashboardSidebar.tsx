@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { Separator } from "@/components/ui/separator";
-import { Home, NotebookPen, CalendarClock, Settings } from "lucide-react";
 import SidebarItem from "@/app/admin/_components/SidebarItem";
+import { Separator } from "@/components/ui/separator";
+import { CalendarClock, Home, NotebookPen } from "lucide-react";
+import { FC } from "react";
 
 const DashboardSidebar: FC = () => {
   return (
@@ -13,10 +13,6 @@ const DashboardSidebar: FC = () => {
       </div>
 
       <Separator className="my-4" />
-
-      <div className="flex flex-col gap-1">
-        <SidebarItem title="Setting" href="#setting" icon={<Settings size={18} />} />
-      </div>
     </div>
   );
 };
