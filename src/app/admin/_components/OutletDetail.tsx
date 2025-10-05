@@ -60,12 +60,12 @@ const OutletDetail: FC<OutletDetailProps> = ({ id }) => {
 
   return (
     <div className="space-y-6">
-      <Card className="max-w-md mx-auto mt-6 w-full">
+      <Card className="max-w-5xl mx-auto mt-6 w-full">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">{outlet.name}</CardTitle>
           <CardDescription>{outlet.address}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col items-center gap-2">
+        <CardContent className="flex flex-col items-center gap-2 w-full">
           {isEditing ? (
             <UpdateOutletForm
               initialValues={initialValues}

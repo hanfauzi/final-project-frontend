@@ -20,7 +20,7 @@ const GetAllOrders: FC = () => {
 
   const { data, isLoading, isError, refetch } = useOrders({
     page: currentPage,
-    limit: 12,
+    limit: 10,
     outletId,
     sortBy: "createdAt",
     sortOrder: "desc",
@@ -47,7 +47,7 @@ const GetAllOrders: FC = () => {
   };
 
   const handleOutletChange = (id: string | undefined) => {
-    updateSearchParams({ outletId: id, page: "1" }); // reset ke page 1 saat ganti outlet
+    updateSearchParams({ outletId: id, page: "1" }); 
   };
 
   if (isLoading) return <Loading />;

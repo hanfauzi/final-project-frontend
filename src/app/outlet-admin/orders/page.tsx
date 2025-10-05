@@ -29,7 +29,6 @@ export default function OutletOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  
   const initialStatus = searchParams.get("status") ?? undefined;
   const initialStartDate = searchParams.get("startDate")
     ? new Date(searchParams.get("startDate")!)
@@ -43,12 +42,13 @@ export default function OutletOrdersPage() {
   const [startDate] = useState<Date | null>(initialStartDate);
   const [endDate] = useState<Date | null>(initialEndDate);
   const [page, setPage] = useState(initialPage);
-  const limit = 10; 
+  const limit = 10;
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (status) params.set("status", status);
-    if (startDate) params.set("startDate", startDate.toISOString().split("T")[0]);
+    if (startDate)
+      params.set("startDate", startDate.toISOString().split("T")[0]);
     if (endDate) params.set("endDate", endDate.toISOString().split("T")[0]);
     params.set("page", page.toString());
     router.replace(`/outlet-admin/orders?${params.toString()}`);
@@ -69,6 +69,7 @@ export default function OutletOrdersPage() {
   const orders = data?.data ?? [];
   const totalPages = data?.meta?.totalPages ?? 1;
 
+
   return (
     <div className="p-6 space-y-6">
       <PageHeader
@@ -88,13 +89,20 @@ export default function OutletOrdersPage() {
       <div className="flex gap-4 items-end flex-wrap">
         <div>
           <label className="block text-sm font-medium mb-1">Status</label>
-          <Select onValueChange={(v) => { setStatus(v); setPage(1); }} value={status}>
-            <SelectTrigger className="w-[200px]">
+          <Select
+            onValueChange={(v) => {
+              setStatus(v === "ALL" ? undefined : v);
+              setPage(1);
+            }}
+            value={status ?? "ALL"}
+          >
+            <SelectTrigger className="w-[200px] cursor-pointer">
               <SelectValue placeholder="Pilih status" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="ALL" className="cursor-pointer">ALL STATUS</SelectItem>
               {Object.values(OrderStatus).map((statusValue) => (
-                <SelectItem key={statusValue} value={statusValue}>
+                <SelectItem key={statusValue} value={statusValue} className="cursor-pointer">
                   {statusValue.replaceAll("_", " ").toUpperCase()}
                 </SelectItem>
               ))}
@@ -108,9 +116,9 @@ export default function OutletOrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Invoice</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead>Invoice</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
@@ -121,12 +129,18 @@ export default function OutletOrdersPage() {
                 <TableRow
                   key={order.id}
                   className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => router.push(`/outlet-admin/orders/${order.id}`)}
+                  onClick={() =>
+                    router.push(`/outlet-admin/orders/${order.id}`)
+                  }
                 >
-                  <TableCell className="font-medium">{order.customers.name}</TableCell>
+                  <TableCell className="font-medium">
+                    {order.invoiceNo}
+                  </TableCell>
+                  <TableCell>{order.customers.name}</TableCell>
                   <TableCell>{order.customers.phoneNumber}</TableCell>
-                  <TableCell>{order.invoiceNo}</TableCell>
-                  <TableCell>Rp {order.totalPrice.toLocaleString("id-ID")}</TableCell>
+                  <TableCell>
+                    Rp {order.totalPrice.toLocaleString("id-ID")}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant={
@@ -144,7 +158,10 @@ export default function OutletOrdersPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-gray-500 font-medium">
+                <TableCell
+                  colSpan={5}
+                  className="text-center text-gray-500 font-medium"
+                >
                   NO ORDERS FOUND IN THIS STATUS
                 </TableCell>
               </TableRow>
@@ -162,7 +179,9 @@ export default function OutletOrdersPage() {
         >
           Prev
         </Button>
-        <span>Page {page} of {totalPages}</span>
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <Button
           disabled={page >= totalPages}
           onClick={() => setPage((prev) => prev + 1)}

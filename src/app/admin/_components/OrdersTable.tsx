@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -58,7 +59,17 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
                 {order.outlets?.name ?? "-"}
               </TableCell>
               <TableCell className="py-4">
-                {order.status}
+                <Badge
+                      variant={
+                        order.status === "COMPLETED"
+                          ? "secondary"
+                          : order.status === "cancelled"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+                      {order.status.replaceAll("_", " ").toUpperCase()}
+                    </Badge>
               </TableCell>
             </TableRow>
           ))}

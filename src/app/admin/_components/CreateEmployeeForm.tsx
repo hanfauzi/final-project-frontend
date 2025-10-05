@@ -196,7 +196,7 @@ const CreateEmployeeForm: FC<EmployeeFormProps> = ({
               disabled={loadingShifts}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select Shift" />
+                <SelectValue placeholder="Pilih Shift" />
               </SelectTrigger>
               <SelectContent>
                 {shifts.map((s) => (

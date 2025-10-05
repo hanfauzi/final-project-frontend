@@ -23,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCities } from "../_hooks/useCities";
+import dynamic from "next/dynamic";
 
 interface UpdateOutletFormProps {
   initialValues: UpdateOutletFormValues;
@@ -34,6 +35,10 @@ interface City {
   cityId: string;
   cityName: string;
 }
+
+const MapSelector = dynamic(() => import("./MapPicker").then(mod => mod.MapSelector), {
+  ssr: false,
+});
 
 export const UpdateOutletForm: FC<UpdateOutletFormProps> = ({
   initialValues,
@@ -50,7 +55,7 @@ const { data: cities = [], isLoading: isCitiesLoading } = useCities();
       onSubmit={(values) => onSubmit(values)}
     >
       {({ values, setFieldValue }) => (
-        <Form className="flex flex-col gap-4">
+        <Form className="flex flex-col gap-4 w-full">
           <div>
             <label className="block font-semibold mb-1">Name</label>
             <Field as={Input} name="name" placeholder="Outlet name" />
@@ -119,6 +124,26 @@ const { data: cities = [], isLoading: isCitiesLoading } = useCities();
               component="p"
               className="text-red-500 text-sm"
             />
+          </div>
+
+           {/* Map Picker */}
+          <div>
+            <p className="mb-2 text-sm text-gray-600">
+              Click map to update coordinates
+            </p>
+            <MapSelector
+              onPick={({ lat, lng }) => {
+                setFieldValue("latitude", lat);
+                setFieldValue("longitude", lng);
+              }}
+              initialLat={Number(values.latitude)}
+              initialLng={Number(values.longitude)}
+            />
+            {values.latitude && values.longitude && (
+              <p className="mt-2 text-sm">
+                Lat: {values.latitude}, Lng: {values.longitude}
+              </p>
+            )}
           </div>
 
           {/* Latitude */}
