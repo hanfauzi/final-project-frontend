@@ -39,9 +39,7 @@ export default function DriverTasks() {
     isError: pickUpOrdersError,
     error: pickUpOrdersErrorObj,
   } = useGetPickUpOrdersByDriver({
-    query: { mode: "AVAILABLE_TASK", page: pickUpOrderPage, take: 5 },
-    activeInterval: false,
-    inactiveInterval: false,
+    query: { mode: "AVAILABLE_TASK", page: pickUpOrderPage, take: 10 }
   });
 
   const {
@@ -50,9 +48,7 @@ export default function DriverTasks() {
     isError: deliveryOrdersError,
     error: deliveryOrdersErrorObj,
   } = useGetDeliveryOrdersByDriver({
-    query: { mode: "AVAILABLE_TASK", page: deliveryOrderPage, take: 5 },
-    activeInterval: false,
-    inactiveInterval: false,
+    query: { mode: "AVAILABLE_TASK", page: deliveryOrderPage, take: 10 }
   });
 
   let taskUrl: string | null = null;

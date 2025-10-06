@@ -15,6 +15,7 @@ import {
 import {
   Bike,
   CalendarArrowUp,
+  CalendarClock,
   ChartPie,
   ClipboardList,
   Home,
@@ -104,6 +105,11 @@ const SidebarContent: FC<{ pendingCount: number }> = ({ pendingCount }) => (
         title="Employee Performance"
         href="/outlet-admin/performances"
         icon={<ChartPie size={18} />}
+      />
+      <SidebarItem
+        title="Employee Attendance"
+        href="/outlet-admin/employee-attendance"
+        icon={<CalendarClock size={18} />}
       />
     </div>
 

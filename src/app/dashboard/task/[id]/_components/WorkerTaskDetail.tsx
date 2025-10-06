@@ -16,6 +16,10 @@ export default function WorkerTaskDetailCard() {
 
   const [copied, setCopied] = useState(false);
 
+  const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
+  const toggleItem = (itemId: string) => setVisibleItems((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  const maskQty = () => "•••";
+
   const {
     data: workerTask,
     isLoading,
@@ -49,23 +53,6 @@ export default function WorkerTaskDetailCard() {
       setTimeout(() => setCopied(false), 2000);
     });
   };
-
-  const initialValues = {
-    workerTaskId: workerTask.id,
-    items:
-      workerTask.orderHeader?.OrderItem?.flatMap((orderItem) =>
-        (orderItem.orderItemLaundry ?? []).map((laundry) => ({
-          laundryItemId: laundry.laundryItem?.id ?? "",
-          expectedQty: laundry.qty,
-          qty: 0,
-        }))
-      ) || [],
-  };
-
-  const laundryNames =
-    workerTask.orderHeader?.OrderItem?.flatMap((oi) =>
-      oi.orderItemLaundry?.map((laundry) => laundry.laundryItem?.name ?? "")
-    ) || [];
 
   return (
     <div className='bg-card border-1 rounded-md p-3'>
@@ -112,12 +99,6 @@ export default function WorkerTaskDetailCard() {
             </div>
           </div>
           <div className='flex justify-between w-full'>
-            <div className='flex-5/12 font-semibold'>Order Header ID</div>
-            <div className='flex-7/12 text-right'>
-              {workerTask.orderHeader?.id}
-            </div>
-          </div>
-          <div className='flex justify-between w-full'>
             <div className='flex-5/12 font-semibold'>Station</div>
             <div className='flex-7/12 text-right'>{workerTask.station}</div>
           </div>
@@ -145,12 +126,23 @@ export default function WorkerTaskDetailCard() {
           <div className='font-semibold'>Order Item Details</div>
           <div className='flex flex-col gap-2'>
             {workerTask.orderHeader?.OrderItem?.map((orderItem, i) =>
-              orderItem.orderItemLaundry?.map((laundry, j) => (
-                <div key={`${i}-${j}`} className='flex justify-between'>
-                  <span>{laundry.laundryItem?.name}</span>
-                  <span>{laundry.qty}</span>
-                </div>
-              ))
+              orderItem.orderItemLaundry?.map((laundry, j) => {
+                const itemId = `${i}-${j}`;
+                const isVisible = visibleItems[itemId] ?? false;
+
+                return (
+                  <div
+                    key={itemId}
+                    className="flex justify-between items-center cursor-pointer py-1 px-2 rounded hover:bg-muted"
+                    onClick={() => toggleItem(itemId)}
+                  >
+                    <span className="truncate">{laundry.laundryItem?.name}</span>
+                    <span className="font-semibold">
+                      {isVisible ? laundry.qty : maskQty()}
+                    </span>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>
@@ -161,15 +153,10 @@ export default function WorkerTaskDetailCard() {
 
         <div className="w-full flex flex-col gap-1">
           <WorkerReCountForm
-            initialValues={initialValues}
-            laundryNames={laundryNames}
-            workerTaskStatus={workerTask.status}
-            isTakenByWorker={workerTask.employee}
+            workerTask={workerTask}
           />
-
           <RequestBypassForm 
             workerTask={workerTask}
-            workerTaskId={workerTask.id}
           />
         </div>
 

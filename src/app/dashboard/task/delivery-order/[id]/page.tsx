@@ -57,11 +57,16 @@ export default function DeliveryOrderDetail() {
             className="shadow-lg hover:cursor-pointer"
             disabled={isUpdating || deliveryOrder.status === "RECEIVED_BY_CUSTOMER"}
           >
-            {isUpdating
-              ? "Loading..."
-              : deliveryOrder.status === "RECEIVED_BY_CUSTOMER"
-              ? "This pickup order is already completed ✅"
-              : "Process this pickup order"}
+            {isUpdating ? (
+              <>
+                <div className='loading loading-spinner loading-xs' />
+                Processing...
+              </>
+            ) : deliveryOrder.status === "RECEIVED_BY_CUSTOMER" ? (
+              "This pickup order is already completed ✅"
+            ) : (
+              "Process this pickup order"
+            )}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

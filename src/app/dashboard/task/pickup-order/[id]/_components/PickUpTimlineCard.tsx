@@ -27,7 +27,7 @@ export default function PickUpTimelineCard({ pickUpOrder }: PickUpTimelineCardPr
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(pickUpOrder.arrivedAtOutlet), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.arrivedAtOutlet), "hh:mm")}</div>
+                  <div>{format(new Date(pickUpOrder.arrivedAtOutlet), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Arrived At Outlet</div>
               </div>
@@ -41,9 +41,23 @@ export default function PickUpTimelineCard({ pickUpOrder }: PickUpTimelineCardPr
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(pickUpOrder.pickedUpAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.pickedUpAt), "hh:mm")}</div>
+                  <div>{format(new Date(pickUpOrder.pickedUpAt), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Picked Up By Driver</div>
+              </div>
+            </li>
+          )}
+          {pickUpOrder.assignByDriverAt && (
+            <li className="mb-10 ml-6">
+              <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                <Check className="h-4 w-4 text-white" />
+              </span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between gap-2">
+                  <div>{format(new Date(pickUpOrder.assignByDriverAt), "EEE, dd MMMM yyyy")}</div>
+                  <div>{format(new Date(pickUpOrder.assignByDriverAt), "HH:mm")}</div>
+                </div>
+                <div className="font-semibold text-[16px]">On The Way To Customer</div>
               </div>
             </li>
           )}
@@ -55,7 +69,7 @@ export default function PickUpTimelineCard({ pickUpOrder }: PickUpTimelineCardPr
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(pickUpOrder.createdAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(pickUpOrder.createdAt), "hh:mm")}</div>
+                  <div>{format(new Date(pickUpOrder.createdAt), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Pick-up Order Requested</div>
               </div>

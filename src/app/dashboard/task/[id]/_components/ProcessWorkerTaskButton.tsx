@@ -26,7 +26,7 @@ export default function ProcessWorkerTaskButton({
   const isButtonDisabled =
     isProcessing ||
     workerTask.status === WorkerTaskStatus.DONE ||
-    (workerTask.isBypassRequired && !workerTask.isReqAprooved);
+    (workerTask.isBypassRequired && workerTask.isReqAprooved !== true);
 
   return (
     <AlertDialog>
@@ -35,17 +35,30 @@ export default function ProcessWorkerTaskButton({
           type='button'
           className={`h-10 w-full rounded-md 
             ${
-              workerTask.isBypassRequired && !workerTask.isReqAprooved
+              workerTask.isBypassRequired && workerTask.isReqAprooved === true
+                ? ""
+                : workerTask.isBypassRequired &&
+                  (workerTask.isReqAprooved !== false ||
+                    workerTask.isReqAprooved !== null)
                 ? "bg-red-400 hover:bg-red-500 text-white"
                 : ""
             }`}
           disabled={isButtonDisabled}
         >
           {isProcessing
-            ? "Processing..."
+            ? (
+                <>
+                  <div className='loading loading-spinner loading-xs' />
+                  Processing...
+                </>
+              )
             : workerTask.status === WorkerTaskStatus.DONE
             ? "This task is already completed! ✅"
-            : workerTask.isBypassRequired && !workerTask.isReqAprooved
+            : workerTask.isBypassRequired && workerTask.isReqAprooved === true
+            ? "Process Task"
+            : workerTask.isBypassRequired && workerTask.isReqAprooved === false
+            ? "Please re-validate the item"
+            : workerTask.isBypassRequired && workerTask.isReqAprooved === null
             ? "Bypass Required!"
             : "Process Task"}
         </Button>

@@ -9,6 +9,7 @@ export interface DeliveryOrder {
   distance: number;
   price: number;
 
+  assignByDriverAt: string | null;
   takenByDriverAt: string | null;
   deliveredAt: string | null;
 

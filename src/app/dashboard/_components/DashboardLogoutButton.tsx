@@ -33,15 +33,15 @@ export default function DashboardLogoutButton() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Keluar dari akun?</AlertDialogTitle>
+          <AlertDialogTitle>Logout ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Kamu akan keluar dari Laundr di perangkat ini. Pastikan perubahan sudah disimpan.
+            Are you sure want to logout from your account?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Batal</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleLogout} className="bg-destructive hover:bg-destructive/90">
-            Keluar
+            Continue
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

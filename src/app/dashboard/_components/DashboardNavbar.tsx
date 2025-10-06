@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEmployee } from "../_context/EmployeeContext";
 import dynamic from "next/dynamic";
+import WorkerNotification from "./WorkerNotification";
 
 export default function DashboardNavbar() {
   const DriverNotification = dynamic(() => import("./DriverNotification"), { ssr: false });
@@ -52,6 +53,7 @@ export default function DashboardNavbar() {
           {employee && (
             <div className="absolute right-4">
               {employee.role === "DRIVER" && <DriverNotification />}
+              {employee.role === "WORKER" && <WorkerNotification />}
             </div>
           )}
         </div>

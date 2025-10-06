@@ -12,7 +12,9 @@ export interface OrderItemType {
   service: {
     id: string;
     name: string;
+    unit: string;
   } | null;
+  qty: number;
   unitPrice?: number;
   note?: string;
   orderItemLaundry?: LaundryItemType[];

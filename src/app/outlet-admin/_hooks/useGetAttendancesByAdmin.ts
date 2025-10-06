@@ -1,31 +1,21 @@
 "use client";
 
 import { axiosInstance } from "@/lib/axios";
+import { Attendance } from "@/types/attendance";
 import { PageableResponse, PaginationQueries } from "@/types/pagination";
-import { WorkerTask } from "@/types/workerTask";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-interface GetWorkerTasksQuery extends PaginationQueries {
-  mode: "HISTORY" | "AVAILABLE_TASK";
+interface GetAttendanceQuery extends PaginationQueries {
+  yearMonth?: string;
   fromDate?: string;
   toDate?: string;
+  search?: string;
 }
 
-interface HookOptions {
-  query?: GetWorkerTasksQuery;
-  activeInterval?: number | false;
-  inactiveInterval?: number | false;
-}
-
-const useGetWorkerTasksByWorker = ({
-  query,
-  activeInterval = false,
-  inactiveInterval = false,
-}: HookOptions = {}) => {
+const useGetAttendanceByAdmin = (query?: GetAttendanceQuery) => {
   const [token, setToken] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const raw = localStorage.getItem("laundr-store");
@@ -41,22 +31,12 @@ const useGetWorkerTasksByWorker = ({
     setHydrated(true);
   }, []);
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      setIsVisible(document.visibilityState === "visible");
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
-
-  return useQuery<PageableResponse<WorkerTask>, Error>({
-    queryKey: ["worker-task", query],
+  return useQuery<PageableResponse<Attendance>, Error>({
+    queryKey: ["attendances", query],
     queryFn: async () => {
       if (!token) throw new Error("No token available");
       const response = await axiosInstance.get(
-        "/api/worker-task/get-worker-tasks-by-worker",
+        "/api/attendance/get-attendance-by-admin",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: query ?? {},
@@ -65,8 +45,7 @@ const useGetWorkerTasksByWorker = ({
       return response.data;
     },
     enabled: hydrated && !!token,
-    refetchInterval: isVisible ? activeInterval : inactiveInterval,
   });
 };
 
-export default useGetWorkerTasksByWorker;
+export default useGetAttendanceByAdmin;

@@ -51,10 +51,12 @@ export default function DeliveryOrderDetailCard({ deliveryOrder }: DeliveryOrder
             </div>
           </div>
           <div className="flex justify-between w-full">
-            <div className="flex-5/12 font-semibold">Assigned By</div>
+            <div className="flex-5/12 font-semibold">Request Time</div>
             <div className="flex-7/12 text-right overflow-hidden">
               <div className="whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 hover:overflow-x-auto">
-                {deliveryOrder.assignedByAdmin?.name ?? "-"}
+                {deliveryOrder.createdAt
+                  ? format(new Date(deliveryOrder.createdAt), "HH : mm")
+                  : "N/A"}
               </div>
             </div>
           </div>

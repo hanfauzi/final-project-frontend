@@ -27,7 +27,7 @@ export default function DeliveryTimelineCard({ deliveryOrder }: DeliveryTimeline
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(deliveryOrder.deliveredAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(deliveryOrder.deliveredAt), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.deliveredAt), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Delivered To The Customer</div>
               </div>
@@ -41,9 +41,23 @@ export default function DeliveryTimelineCard({ deliveryOrder }: DeliveryTimeline
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(deliveryOrder.takenByDriverAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(deliveryOrder.takenByDriverAt), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.takenByDriverAt), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Picked Up By Driver</div>
+              </div>
+            </li>
+          )}
+          {deliveryOrder.assignByDriverAt && (
+            <li className="mb-10 ml-6">
+              <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                <Check className="h-4 w-4 text-white" />
+              </span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between gap-2">
+                  <div>{format(new Date(deliveryOrder.assignByDriverAt), "EEE, dd MMMM yyyy")}</div>
+                  <div>{format(new Date(deliveryOrder.assignByDriverAt), "HH:mm")}</div>
+                </div>
+                <div className="font-semibold text-[16px]">Assigned To Driver</div>
               </div>
             </li>
           )}
@@ -55,7 +69,7 @@ export default function DeliveryTimelineCard({ deliveryOrder }: DeliveryTimeline
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-2">
                   <div>{format(new Date(deliveryOrder.createdAt), "EEE, dd MMMM yyyy")}</div>
-                  <div>{format(new Date(deliveryOrder.createdAt), "hh:mm")}</div>
+                  <div>{format(new Date(deliveryOrder.createdAt), "HH:mm")}</div>
                 </div>
                 <div className="font-semibold text-[16px]">Delivery Order Requested</div>
               </div>
