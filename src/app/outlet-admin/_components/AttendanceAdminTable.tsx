@@ -57,7 +57,11 @@ const AttendanceAdminTable = ({ attendances, loading, error }: AttendanceTablePr
                 </td>
                 <td>{attendance.status}</td>
                 <td>{attendance.employees?.email}</td>
-                <td>{format(parseISO(attendance.clockInAt), "HH:mm:ss")}</td>
+                <td>
+                  {attendance.clockInAt
+                    ? format(parseISO(attendance.clockInAt), "HH:mm:ss")
+                    : "-"}
+                </td>
                 <td>
                   {attendance.clockOutAt
                     ? format(parseISO(attendance.clockOutAt), "HH:mm:ss")
