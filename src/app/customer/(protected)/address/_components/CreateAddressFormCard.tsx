@@ -29,6 +29,31 @@ type Props = {
   coordsReady: boolean;
 };
 
+function useFieldError<K extends keyof AddressFormValues>(
+  formik: FormikContextType<AddressFormValues>,
+  name: K
+): string | undefined {
+  const touched = formik.touched[name];
+  const error = formik.errors[name];
+
+  const isTouched = typeof touched === "boolean" ? touched : false;
+  const message = typeof error === "string" ? error : undefined;
+
+  return isTouched ? message : undefined;
+}
+
+function FieldError<K extends keyof AddressFormValues>({
+  formik,
+  name,
+}: {
+  formik: FormikContextType<AddressFormValues>;
+  name: K;
+}) {
+  const msg = useFieldError(formik, name);
+  if (!msg) return null;
+  return <p className="text-[12px] text-destructive mt-1">{msg}</p>;
+}
+
 export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
   return (
     <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-[0_8px_30px_rgba(0,0,0,.06)]">
@@ -53,25 +78,32 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-foreground">Label Alamat</UILabel>
-          <LabelChips
-            value={formik.values.label}
-            onChange={(v) => formik.setFieldValue("label", v)}
-          />
+  <UILabel className="text-foreground">Label Alamat</UILabel>
+<LabelChips
+  value={formik.values.label}
+  onChange={(v) => {
+    formik.setFieldValue("label", v);
+    formik.setFieldTouched("label", true, false);
+  }}
+/>
+<FieldError formik={formik} name="label" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Alamat Lengkap</UILabel>
-          <Textarea
-            placeholder="Tulis alamat lengkap anda di sini"
-            value={formik.values.address}
-            onChange={(e) => formik.setFieldValue("address", e.target.value)}
-            className="min-h-24 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
-            maxLength={200}
-          />
-          <div className="text-xs text-muted-foreground text-right">
-            {formik.values.address.length}/200
-          </div>
+<Textarea
+  name="address"
+  placeholder="Tulis alamat lengkap anda di sini"
+  value={formik.values.address}
+  onChange={(e) => formik.setFieldValue("address", e.target.value)}
+  onBlur={() => formik.setFieldTouched("address", true)}
+  className="min-h-24 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
+  maxLength={200}
+/>
+<div className="text-xs text-muted-foreground text-right">
+  {formik.values.address.length}/200
+</div>
+<FieldError formik={formik} name="address" />
         </div>
 
         <div className="space-y-2">
@@ -92,55 +124,69 @@ export default function CreateAddressFormCard({ formik, coordsReady }: Props) {
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Kota/Kabupaten</UILabel>
-          <Input
-            value={formik.values.city}
-            onChange={(e) => formik.setFieldValue("city", e.target.value)}
-            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
-          />
+         <Input
+  name="city"
+  value={formik.values.city}
+  onChange={(e) => formik.setFieldValue("city", e.target.value)}
+  onBlur={() => formik.setFieldTouched("city", true)}
+  className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
+/>
+<FieldError formik={formik} name="city" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Kode Pos</UILabel>
-          <Input
-            value={formik.values.postalCode}
-            onChange={(e) => formik.setFieldValue("postalCode", e.target.value)}
-            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
-          />
+         <Input
+  name="postalCode"
+  inputMode="numeric"
+  value={formik.values.postalCode}
+  onChange={(e) => {
+    const onlyDigits = e.target.value.replace(/\D+/g, "").slice(0, 5);
+    formik.setFieldValue("postalCode", onlyDigits);
+  }}
+  onBlur={() => formik.setFieldTouched("postalCode", true)}
+  className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
+/>
+<FieldError formik={formik} name="postalCode" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Nomor HP</UILabel>
-          <Input
-            value={formik.values.phoneNumber}
-            onChange={(e) => formik.setFieldValue("phoneNumber", e.target.value)}
-            className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
-          />
+         <Input
+  name="phoneNumber"
+  inputMode="tel"
+  value={formik.values.phoneNumber}
+  onChange={(e) => formik.setFieldValue("phoneNumber", e.target.value)}
+  onBlur={() => formik.setFieldTouched("phoneNumber", true)}
+  className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
+/>
+<FieldError formik={formik} name="phoneNumber" />
         </div>
 
-          <CardMap
-          initial={{
-            lat: formik.values.latitude,
-            lng: formik.values.longitude,
-            addressLine: formik.values.pinpoint,
-            city: formik.values.city,
-            postalCode: formik.values.postalCode,
-          }}
-          onLocationSelect={(loc) => {
-            formik.setFieldValue("latitude", loc.latitude);
-            formik.setFieldValue("longitude", loc.longitude);
-            formik.setFieldValue("pinpoint", loc.addressLine ?? "");
-             if (!formik.values.postalCode?.trim()) {
-    formik.setFieldValue("postalCode", loc.postalCode ?? "");
-  }
-            if (!formik.values.city?.trim()) {
-    formik.setFieldValue("city", loc.city ?? "");
-  }
+        <CardMap
+  initial={{
+    lat: formik.values.latitude,
+    lng: formik.values.longitude,
+    addressLine: formik.values.pinpoint,
+    city: formik.values.city,
+    postalCode: formik.values.postalCode,
+  }}
+  onLocationSelect={(loc) => {
+    formik.setFieldValue("latitude", loc.latitude);
+    formik.setFieldValue("longitude", loc.longitude);
+    formik.setFieldTouched("latitude", true, false);
+    formik.setFieldTouched("longitude", true, false);
 
-  if (!formik.values.address?.trim()) {
-    formik.setFieldValue("address", loc.addressLine ?? "");
-  }
-          }}
-        />
+    formik.setFieldValue("pinpoint", loc.addressLine ?? "");
+    if (!formik.values.postalCode?.trim()) formik.setFieldValue("postalCode", loc.postalCode ?? "");
+    if (!formik.values.city?.trim()) formik.setFieldValue("city", loc.city ?? "");
+    if (!formik.values.address?.trim()) formik.setFieldValue("address", loc.addressLine ?? "");
+  }}
+/>
+<div className="grid grid-cols-2 gap-2">
+  <FieldError formik={formik} name="latitude" />
+  <FieldError formik={formik} name="longitude" />
+</div>
 
         <div className="pt-1">
           <div className="flex items-center gap-2">

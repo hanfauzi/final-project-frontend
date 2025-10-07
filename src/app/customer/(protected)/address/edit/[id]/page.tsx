@@ -45,6 +45,7 @@ function EditAddressPage() {
       latitude: 0, longitude: 0, pinpoint: "", makePrimary: false,
     },
     validationSchema: EditAddressCustomerSchema,
+      validateOnMount: true,  
     onSubmit: async (values) => {
       try {
         await editAddressMutation.mutateAsync({
@@ -120,7 +121,7 @@ function EditAddressPage() {
               type="submit"
               onClick={() => formik.handleSubmit()}
               className="h-12 rounded-xl disabled:opacity-60 md:h-11"
-              disabled={!formik.isValid || !coordsReady || pending}
+              disabled={!formik.isValid || !formik.dirty || !coordsReady || pending}
             >
               Simpan
             </Button>
