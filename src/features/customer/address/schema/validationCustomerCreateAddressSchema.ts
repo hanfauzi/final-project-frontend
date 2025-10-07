@@ -1,7 +1,7 @@
 import { LabelEnum } from "@/app/customer/(protected)/address/_hooks/useEditAddress";
 import * as Yup from "yup";
 
-export const EditAddressCustomerSchema = Yup.object({
+export const CreateAddressCustomerSchema = Yup.object({
   label: Yup.mixed<LabelEnum>()
     .oneOf(["HOME", "OFFICE", "APARTMENT", "OTHER"])
     .required("Wajib dipilih"),

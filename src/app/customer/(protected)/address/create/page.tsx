@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { EditAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerEditAddressSchema";
 import { useFormik } from "formik";
 import { ChevronLeft, LoaderCircle } from "lucide-react";
 import Head from "next/head";
@@ -9,6 +8,7 @@ import { useRouter } from "next/navigation";
 import useCreateCustomerAddress from "../_hooks/useCreateAddress";
 import type { LabelEnum } from "../_hooks/useEditAddress";
 import CreateAddressFormCard from "../_components/CreateAddressFormCard";
+import { CreateAddressCustomerSchema } from "@/features/customer/address/schema/validationCustomerCreateAddressSchema";
 
 function CreateAddressPage() {
   const router = useRouter();
@@ -22,7 +22,8 @@ function CreateAddressPage() {
       label: "HOME", address: "", notes: "", city: "", postalCode: "",
       phoneNumber: "", latitude: 0, longitude: 0, pinpoint: "", makePrimary: false,
     },
-    validationSchema: EditAddressCustomerSchema,
+    validationSchema: CreateAddressCustomerSchema,
+    validateOnMount: true,
     onSubmit: async (values) => {
       try {
         await createAddressMutation.mutateAsync({
@@ -75,7 +76,7 @@ function CreateAddressPage() {
               type="submit"
               onClick={() => formik.handleSubmit()}
               className="h-12 rounded-xl disabled:opacity-60 md:h-11"
-              disabled={!formik.isValid || !coordsReady || pending}
+              disabled={!formik.isValid || !formik.dirty || !coordsReady || pending}
             >
               {pending ? (
                 <span className="inline-flex items-center gap-2">

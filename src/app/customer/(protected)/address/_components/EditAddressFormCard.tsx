@@ -32,6 +32,29 @@ type Props = {
   isError?: boolean;
 };
 
+function getFieldError<K extends keyof AddressFormValues>(
+  formik: FormikContextType<AddressFormValues>,
+  name: K
+): string | undefined {
+  const touched = formik.touched[name];
+  const error = formik.errors[name];
+  const isTouched = typeof touched === "boolean" ? touched : false;
+  const message = typeof error === "string" ? error : undefined;
+  return isTouched ? message : undefined;
+}
+
+function FieldError<K extends keyof AddressFormValues>({
+  formik,
+  name,
+}: {
+  formik: FormikContextType<AddressFormValues>;
+  name: K;
+}) {
+  const msg = getFieldError(formik, name);
+  if (!msg) return null;
+  return <p className="text-[12px] text-destructive mt-1">{msg}</p>;
+}
+
 export default function EditAddressFormCard({
   formik,
   coordsReady,
@@ -48,9 +71,7 @@ export default function EditAddressFormCard({
           </div>
         )}
         {isError && (
-          <div className="text-sm text-destructive">
-            Gagal mengambil alamat.
-          </div>
+          <div className="text-sm text-destructive">Gagal mengambil alamat.</div>
         )}
 
         <div className="flex items-center gap-2 text-xs">
@@ -66,9 +87,7 @@ export default function EditAddressFormCard({
             {coordsReady ? "Koordinat tersimpan" : "Pilih titik di peta"}
           </span>
           {!coordsReady && (
-            <span className="text-muted-foreground">
-              (wajib untuk simpan alamat)
-            </span>
+            <span className="text-muted-foreground">(wajib untuk simpan alamat)</span>
           )}
         </div>
 
@@ -76,77 +95,89 @@ export default function EditAddressFormCard({
           <UILabel className="text-foreground">Label Alamat</UILabel>
           <LabelChips
             value={formik.values.label}
-            onChange={(v) => formik.setFieldValue("label", v)}
+            onChange={(v) => {
+              formik.setFieldValue("label", v);
+              formik.setFieldTouched("label", true, false);
+            }}
           />
-          {formik.touched.label && formik.errors.label && (
-            <p className="text-xs text-destructive">
-              {String(formik.errors.label)}
-            </p>
-          )}
+          <FieldError formik={formik} name="label" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Alamat Lengkap</UILabel>
           <Textarea
+            name="address"
             placeholder="Nama jalan, nomor rumah, RT/RW, dsb"
             value={formik.values.address}
             onChange={(e) => formik.setFieldValue("address", e.target.value)}
+            onBlur={() => formik.setFieldTouched("address", true)}
             className="min-h-24 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
             maxLength={200}
           />
           <div className="text-xs text-muted-foreground text-right">
             {formik.values.address.length}/200
           </div>
-          {formik.touched.address && formik.errors.address && (
-            <p className="text-xs text-destructive">
-              {String(formik.errors.address)}
-            </p>
-          )}
+          <FieldError formik={formik} name="address" />
         </div>
 
         <div className="space-y-2">
-          <UILabel className="text-foreground">
-            Catatan Untuk Kurir (Opsional)
-          </UILabel>
+          <UILabel className="text-foreground">Catatan Untuk Kurir (Opsional)</UILabel>
           <Input
+            name="notes"
             placeholder="Warna rumah, patokan, pesan khusus, dll."
             value={formik.values.notes ?? ""}
             onChange={(e) => formik.setFieldValue("notes", e.target.value)}
+            onBlur={() => formik.setFieldTouched("notes", true)}
             className="h-11 rounded-xl bg-card border-border placeholder:text-muted-foreground focus-visible:ring-ring"
             maxLength={200}
           />
           <div className="text-xs text-muted-foreground text-right">
             {formik.values.notes?.length ?? 0}/200
           </div>
+          <FieldError formik={formik} name="notes" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Kota/Kabupaten</UILabel>
           <Input
+            name="city"
             value={formik.values.city}
             onChange={(e) => formik.setFieldValue("city", e.target.value)}
+            onBlur={() => formik.setFieldTouched("city", true)}
             className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
+          <FieldError formik={formik} name="city" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Kode Pos</UILabel>
           <Input
+            name="postalCode"
+            inputMode="numeric"
             value={formik.values.postalCode}
-            onChange={(e) => formik.setFieldValue("postalCode", e.target.value)}
+            onChange={(e) =>
+              formik.setFieldValue(
+                "postalCode",
+                e.target.value.replace(/\D+/g, "").slice(0, 5)
+              )
+            }
+            onBlur={() => formik.setFieldTouched("postalCode", true)}
             className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
+          <FieldError formik={formik} name="postalCode" />
         </div>
 
         <div className="space-y-2">
           <UILabel className="text-foreground">Nomor HP</UILabel>
           <Input
+            name="phoneNumber"
+            inputMode="tel"
             value={formik.values.phoneNumber}
-            onChange={(e) =>
-              formik.setFieldValue("phoneNumber", e.target.value)
-            }
+            onChange={(e) => formik.setFieldValue("phoneNumber", e.target.value)}
+            onBlur={() => formik.setFieldTouched("phoneNumber", true)}
             className="h-11 rounded-xl bg-card border-border focus-visible:ring-ring"
           />
+          <FieldError formik={formik} name="phoneNumber" />
         </div>
 
         <CardMap
@@ -160,21 +191,26 @@ export default function EditAddressFormCard({
           onLocationSelect={(loc) => {
             formik.setFieldValue("latitude", loc.latitude);
             formik.setFieldValue("longitude", loc.longitude);
+            formik.setFieldTouched("latitude", true, false);
+            formik.setFieldTouched("longitude", true, false);
+
             formik.setFieldValue("pinpoint", loc.addressLine ?? "");
-            if (!formik.values.postalCode?.trim()) {
+
+            if (!formik.touched.postalCode && !formik.values.postalCode?.trim()) {
               formik.setFieldValue("postalCode", loc.postalCode ?? "");
             }
-
             if (!formik.touched.city && !formik.values.city?.trim()) {
               formik.setFieldValue("city", loc.city ?? "");
             }
-
             if (!formik.touched.address && !formik.values.address?.trim()) {
               formik.setFieldValue("address", loc.addressLine ?? "");
             }
-
           }}
         />
+        <div className="grid grid-cols-2 gap-2">
+          <FieldError formik={formik} name="latitude" />
+          <FieldError formik={formik} name="longitude" />
+        </div>
 
         <div className="pt-1">
           <div className="flex items-center gap-2">
@@ -182,17 +218,13 @@ export default function EditAddressFormCard({
               id="makePrimary"
               checked={formik.values.makePrimary}
               disabled={isInitialPrimary === true}
-              onCheckedChange={(v) =>
-                formik.setFieldValue("makePrimary", Boolean(v))
-              }
+              onCheckedChange={(v) => formik.setFieldValue("makePrimary", Boolean(v))}
             />
             <UILabel htmlFor="makePrimary" className="text-sm">
               Jadikan alamat utama
             </UILabel>
             {isInitialPrimary && (
-              <span className="text-xs text-muted-foreground">
-                (Alamat ini sudah utama)
-              </span>
+              <span className="text-xs text-muted-foreground">(Alamat ini sudah utama)</span>
             )}
           </div>
         </div>
