@@ -33,7 +33,7 @@ const OutletDetail: FC<OutletDetailProps> = ({ id }) => {
   const [showAssignForm, setShowAssignForm] = useState(false);
 
   if (isLoading) return <Loading />;
-  if (error || !outlet) return <p>Outlet not found</p>;
+  if (error || !outlet) return <p className="text-red-500 text-center mt-4">Outlet not found</p>;
 
   const initialValues: UpdateOutletFormValues = {
     name: outlet.name,
@@ -59,13 +59,14 @@ const OutletDetail: FC<OutletDetailProps> = ({ id }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="max-w-5xl mx-auto mt-6 w-full">
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">{outlet.name}</CardTitle>
-          <CardDescription>{outlet.address}</CardDescription>
+    <div className="p-6 space-y-6">
+      <Card className="max-w-5xl mx-auto w-full">
+        <CardHeader>
+          <CardTitle className="text-lg font-bold">Outlet Detail</CardTitle>
+          <CardDescription>{outlet.name}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col items-center gap-2 w-full">
+
+        <CardContent>
           {isEditing ? (
             <UpdateOutletForm
               initialValues={initialValues}
@@ -75,45 +76,84 @@ const OutletDetail: FC<OutletDetailProps> = ({ id }) => {
             />
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-y-2 text-sm">
-                <span className="font-semibold">Phone</span>
-                <span>{outlet.phoneNumber}</span>
-
-                <span className="font-semibold">City</span>
-                <span>{outlet.cityName}</span>
-
-                <span className="font-semibold">Status</span>
-                <span>{outlet.isActive ? "Active" : "Inactive"}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Outlet Name
+                  </p>
+                  <p className="font-semibold">{outlet.name}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Phone Number
+                  </p>
+                  <p className="font-semibold">{outlet.phoneNumber}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">City</p>
+                  <p className="font-semibold">{outlet.cityName}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Postal Code
+                  </p>
+                  <p className="font-semibold">{outlet.postalCode}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Coverage Area (km)
+                  </p>
+                  <p className="font-semibold">{outlet.coverageArea}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Status
+                  </p>
+                  <p
+                    className={`font-semibold ${
+                      outlet.isActive ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {outlet.isActive ? "Active" : "Inactive"}
+                  </p>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-sm font-medium text-muted-foreground">Address</p>
+                  <p className="font-semibold">{outlet.address}</p>
+                </div>
               </div>
 
-              <div className="flex justify-end gap-2 mt-4">
+              <div className="flex justify-end gap-2 mt-6">
                 <ConfirmDeleteDialog
                   itemName="Outlet"
                   onConfirm={() => deleteMutation.mutate(outlet.id)}
                   isPending={deleteMutation.isPending}
                 />
-
-                <Button
-                  className="cursor-pointer"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit
-                </Button>
+                <Button onClick={() => setIsEditing(true)}>Edit</Button>
               </div>
             </>
           )}
         </CardContent>
       </Card>
 
-      <Button
-        className="mt-4 cursor-pointer"
-        onClick={() => setShowAssignForm((prev) => !prev)}
-      >
-        {showAssignForm ? "Cancel" : "Assign Employee to this Outlet"}
-      </Button>
+      <div className="max-w-5xl mx-auto w-full">
+        <Button
+          className="mt-4 cursor-pointer"
+          onClick={() => setShowAssignForm((prev) => !prev)}
+        >
+          {showAssignForm ? "Cancel" : "Assign Employee to this Outlet"}
+        </Button>
 
-      {showAssignForm && <AssignEmployeeForm outletId={id} />}
-      <AssignedEmployeesTable outletId={id} />
+        {showAssignForm && (
+          <div className="mt-4">
+            <AssignEmployeeForm outletId={id} />
+          </div>
+        )}
+
+        <div className="mt-6">
+          <AssignedEmployeesTable outletId={id} />
+        </div>
+      </div>
     </div>
   );
 };
