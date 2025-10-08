@@ -22,7 +22,7 @@ export default function CreateEmployeePage() {
   };
 
   return (
-    <Card className="max-w-xl mx-auto mt-6">
+    <Card className="max-w-4xl mx-auto mt-6">
       <CardHeader>
         <CardTitle>Create New Employee</CardTitle>
       </CardHeader>

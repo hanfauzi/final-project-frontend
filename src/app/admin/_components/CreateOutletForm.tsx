@@ -60,6 +60,7 @@ const CreateOutletForm: FC = () => {
           <Form className="space-y-4">
             {/* Name */}
             <div>
+              <label className="block font-semibold mb-1">Name</label>
               <Field as={Input} name="name" placeholder="Outlet Name" />
               <ErrorMessage
                 name="name"
@@ -68,6 +69,7 @@ const CreateOutletForm: FC = () => {
               />
             </div>
             <div>
+              <label className="block font-semibold mb-1">Code</label>
               <Field
                 as={Input}
                 name="code"
@@ -82,6 +84,7 @@ const CreateOutletForm: FC = () => {
 
             {/* Address */}
             <div>
+              <label className="block font-semibold mb-1">Address</label>
               <Field
                 as={Textarea}
                 name="address"
@@ -96,6 +99,7 @@ const CreateOutletForm: FC = () => {
 
             {/* Phone Number */}
             <div>
+              <label className="block font-semibold mb-1">Phone Number</label>
               <Field as={Input} name="phoneNumber" placeholder="Phone Number" />
               <ErrorMessage
                 name="phoneNumber"
@@ -105,6 +109,7 @@ const CreateOutletForm: FC = () => {
             </div>
 
             {/* City */}
+            <label className="block font-semibold mb-1">City</label>
             <div>
               <Select
                 onValueChange={(val) => setFieldValue("cityId", val)}
@@ -140,6 +145,7 @@ const CreateOutletForm: FC = () => {
 
             {/* Postal Code */}
             <div>
+              <label className="block font-semibold mb-1">Postal Code</label>
               <Field as={Input} name="postalCode" placeholder="Postal Code" />
               <ErrorMessage
                 name="postalCode"
@@ -199,6 +205,7 @@ const CreateOutletForm: FC = () => {
 
             {/* Coverage Area */}
             <div>
+              <label className="block font-semibold mb-1">Coverage Area</label>
               <Field
                 as={Input}
                 name="coverageArea"

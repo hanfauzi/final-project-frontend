@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import LaundryItemsTable from "@/components/LaundryItemsTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,14 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { WorkerTask } from "@/types/workerTasks";
-import { Check, X, Eye } from "lucide-react";
+import { Check, Eye, X } from "lucide-react";
 import { useState } from "react";
 import {
   useAcceptBypassRequest,
   useBypassRequest,
   useRejectBypassRequest,
 } from "../_hooks/useBypassRequest";
-import LaundryItemsTable from "@/components/LaundryItemsTable";
 
 export default function BypassRequestsPage() {
   const { data: tasks = [], isLoading, isError } = useBypassRequest();
@@ -34,8 +33,9 @@ export default function BypassRequestsPage() {
     useState<WorkerTask | null>(null);
   const [showAccept, setShowAccept] = useState(false);
 
-  const [selectedTaskItems, setSelectedTaskItems] =
-    useState<WorkerTask | null>(null);
+  const [selectedTaskItems, setSelectedTaskItems] = useState<WorkerTask | null>(
+    null
+  );
   const [showItems, setShowItems] = useState(false);
 
   function openReject(task: WorkerTask) {
@@ -79,7 +79,6 @@ export default function BypassRequestsPage() {
                   <th className="p-3">Worker</th>
                   <th className="p-3">Reason</th>
                   <th className="p-3">Requested</th>
-                  <th className="p-3">Status</th>
                   <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
@@ -104,24 +103,17 @@ export default function BypassRequestsPage() {
                       <div className="text-sm">{t.orderItem?.name}</div>
                     </td>
                     <td className="p-3 align-top">{t.employee?.name}</td>
-                   
+
                     <td
-                      className="p-3 align-top truncate max-w-xs"
+                      className="p-3 align-top max-w-xs"
                       title={t.bypassReqNote ?? ""}
                     >
-                      {t.bypassReqNote}
+                      <div className="max-h-24 overflow-y-auto text-sm">
+                        {t.bypassReqNote}
+                      </div>
                     </td>
                     <td className="p-3 align-top text-sm">
                       {new Date(t.createdAt).toLocaleString()}
-                    </td>
-                    <td className="p-3 align-top">
-                      <Badge
-                        variant={
-                          t.status === "PENDING" ? "outline" : "secondary"
-                        }
-                      >
-                        {t.status}
-                      </Badge>
                     </td>
                     <td className="p-3 align-top">
                       <div className="flex gap-2 justify-center">
@@ -143,7 +135,6 @@ export default function BypassRequestsPage() {
                         >
                           <X size={14} />
                         </Button>
-                        
                       </div>
                     </td>
                   </tr>
@@ -224,7 +215,7 @@ export default function BypassRequestsPage() {
 
       {/* Laundry Items Modal */}
       <Dialog open={showItems} onOpenChange={setShowItems}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {" "}

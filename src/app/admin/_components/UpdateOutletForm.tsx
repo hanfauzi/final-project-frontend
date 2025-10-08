@@ -154,6 +154,7 @@ const { data: cities = [], isLoading: isCitiesLoading } = useCities();
               name="latitude"
               placeholder="Latitude. ex: -6.12345"
               type="number"
+              disabled
             />
             <ErrorMessage
               name="latitude"
@@ -170,6 +171,7 @@ const { data: cities = [], isLoading: isCitiesLoading } = useCities();
               name="longitude"
               placeholder="Longitude. ex: 106.12345"
               type="number"
+              disabled
             />
             <ErrorMessage
               name="longitude"
