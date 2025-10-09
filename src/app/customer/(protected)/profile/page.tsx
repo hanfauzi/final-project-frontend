@@ -222,7 +222,7 @@ export default function CustomerProfilePage() {
                   <div className="grid place-items-center">
                     <div className="relative h-24 w-24 rounded-full overflow-hidden border border-border bg-card md:h-28 md:w-28 md:ring-1 md:ring-border/70">
                       <Image
-                        src={avatarSrc || "/profile-default.jpg"}
+                        src={avatarSrc || "/profile.png"}
                         alt="Foto Profil"
                         fill
                         className="object-cover"

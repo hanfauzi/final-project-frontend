@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -29,6 +36,7 @@ import {
   Truck,
   User,
   Phone,
+  Info,
 } from "lucide-react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
@@ -203,7 +211,6 @@ export default function CreateOrderPage() {
         <main className="mx-auto w-full max-w-sm px-4 py-6 md:max-w-5xl md:px-6 md:py-8">
           <Card className="rounded-2xl border border-border bg-card text-card-foreground shadow-sm">
             <CardContent className="space-y-5">
-              {/* Alamat */}
               <div className="space-y-2">
                 <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
@@ -396,9 +403,52 @@ export default function CreateOrderPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Package className="h-4 w-4 text-muted-foreground" />
-                  Pilih Layanan
+                <Label className="flex w-full items-center text-sm font-medium text-foreground">
+                  <span className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-muted-foreground" />
+                    Pilih Layanan
+                  </span>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="ml-auto h-6 w-6 text-muted-foreground"
+                        aria-label="Info layanan"
+                      >
+                        <Info className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent align="end" className="w-64">
+                      <DropdownMenuLabel>Estimasi Layanan</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <div className="px-2 py-1.5 text-sm space-y-2">
+                        <div className="flex items-start justify-between">
+                          <span>Reguler (kiloan)</span>
+                          <span className="text-muted-foreground">2 hari</span>
+                        </div>
+                        <div className="flex items-start justify-between">
+                          <span>Reguler (satuan)</span>
+                          <span className="text-muted-foreground">1 hari</span>
+                        </div>
+                        <div className="flex items-start justify-between">
+                          <span>Express</span>
+                          <span className="text-muted-foreground">1 hari</span>
+                        </div>
+                        <div className="flex items-start justify-between">
+                          <span>Ekonomis (satuan)</span>
+                          <span className="text-muted-foreground">2 hari</span>
+                        </div>
+                        <div className="flex items-start justify-between">
+                          <span>Ekonomis (kiloan)</span>
+                          <span className="text-muted-foreground">3 hari</span>
+                        </div>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </Label>
 
                 <div className="grid gap-3">
