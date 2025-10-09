@@ -55,7 +55,7 @@ const useValidateWorkerReCount = () => {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ["worker-task", data.updatedWorkerTask.id] });
       if (data.mismatches.length > 0) {
-        toast.warning("Validation failed — mismatches found ⚠️");
+        toast.warning("Validation failed - mismatches found!");
       } else {
         toast.success("Validation success!");
       }

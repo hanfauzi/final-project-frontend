@@ -135,7 +135,7 @@ export default function DeliveryOrderDetailCard({ deliveryOrder }: DeliveryOrder
 
           <div className="flex justify-between w-full">
             <div className="font-semibold">Distance</div>
-            <div>{deliveryOrder.distance} m</div>
+            <div>&plusmn; {deliveryOrder.distance} km</div>
           </div>
         </div>
 

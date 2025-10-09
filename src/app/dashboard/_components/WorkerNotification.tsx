@@ -22,8 +22,8 @@ export default function WorkerNotification() {
       take: 10,
       page: 1,
     },
-    activeInterval: 30000,
-    inactiveInterval: 300000,
+    activeInterval: 15000,
+    inactiveInterval: 150000,
   });
 
   const allNotifications = useMemo(() => {

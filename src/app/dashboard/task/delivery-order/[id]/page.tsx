@@ -47,6 +47,26 @@ export default function DeliveryOrderDetail() {
   }
   if (!deliveryOrder) return <div>No order found</div>;
 
+  const buttonLabel = (status: string, isUpdating: boolean) => {
+    if (isUpdating) return (
+      <>
+        <div className="loading loading-spinner loading-xs" />
+        Processing...
+      </>
+    );
+
+    switch (status) {
+      case "ON_THE_WAY_TO_OUTLET":
+        return "Confirm pickup from outlet";
+      case "ON_THE_WAY_TO_CUSTOMER":
+        return "Mark as delivered";
+      case "RECEIVED_BY_CUSTOMER":
+        return "This delivery order is already completed ✅";
+      default:
+        return "Process this pickup order";
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 pb-14">
       <DeliveryOrderDetailCard deliveryOrder={deliveryOrder} />
@@ -57,16 +77,7 @@ export default function DeliveryOrderDetail() {
             className="shadow-lg hover:cursor-pointer"
             disabled={isUpdating || deliveryOrder.status === "RECEIVED_BY_CUSTOMER"}
           >
-            {isUpdating ? (
-              <>
-                <div className='loading loading-spinner loading-xs' />
-                Processing...
-              </>
-            ) : deliveryOrder.status === "RECEIVED_BY_CUSTOMER" ? (
-              "This pickup order is already completed ✅"
-            ) : (
-              "Process this pickup order"
-            )}
+            {buttonLabel(deliveryOrder.status, isUpdating)}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

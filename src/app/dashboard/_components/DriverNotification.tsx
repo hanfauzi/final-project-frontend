@@ -18,8 +18,8 @@ export default function DriverNotification() {
     error: pickUpOrdersError,
   } = useGetPickUpOrdersByDriver({
     query: { mode: "AVAILABLE_TASK" },
-    activeInterval: 30000,
-    inactiveInterval: 300000,
+    activeInterval: 15000,
+    inactiveInterval: 150000,
   });
 
   const {
@@ -28,8 +28,8 @@ export default function DriverNotification() {
     error: deliveryOrdersError,
   } = useGetDeliveryOrdersByDriver({
     query: { mode: "AVAILABLE_TASK" },
-    activeInterval: 30000,
-    inactiveInterval: 300000,
+    activeInterval: 15000,
+    inactiveInterval: 150000,
   });
 
   const allNotifications = useMemo(() => {
