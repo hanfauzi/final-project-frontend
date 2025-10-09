@@ -42,6 +42,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
             <TableHead>Customer</TableHead>
             <TableHead>Outlet</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -71,6 +72,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ data, meta }) => {
                       {order.status.replaceAll("_", " ").toUpperCase()}
                     </Badge>
               </TableCell>
+              <TableCell className="py-4">{new Date(order.createdAt).toLocaleDateString("id-ID")}</TableCell>
             </TableRow>
           ))}
         </TableBody>

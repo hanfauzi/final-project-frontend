@@ -113,7 +113,7 @@ export default function BypassRequestsPage() {
                       </div>
                     </td>
                     <td className="p-3 align-top text-sm">
-                      {new Date(t.createdAt).toLocaleString()}
+                      {new Date(t.createdAt).toLocaleString("id-ID")}
                     </td>
                     <td className="p-3 align-top">
                       <div className="flex gap-2 justify-center">

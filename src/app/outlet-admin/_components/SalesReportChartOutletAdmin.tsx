@@ -49,7 +49,6 @@ export function SalesReportsChartOutletAdmin() {
 
   const today = new Date();
 
-  // Generate complete range (sama persis dengan superAdmin)
   const generateCompleteRange = () => {
     const range: string[] = [];
     if (filterType === "day") {

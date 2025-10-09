@@ -64,7 +64,7 @@ export default function PickupOrdersList() {
               <TableHead>Status</TableHead>
               <TableHead>Outlet</TableHead>
               <TableHead>Total Invoice</TableHead>
-              <TableHead>Waktu</TableHead>
+              <TableHead>Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

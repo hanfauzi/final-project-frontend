@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { endOfMonth, format, startOfMonth } from "date-fns";
 import DonutChart from "@/app/admin/_components/DonutChart";
 import { useOutletAdminPerformance } from "../_hooks/usePerformanceOutletAdmin";
 
@@ -21,15 +21,14 @@ const OutletAdminPerformanceDashboard: FC = () => {
   const [startDate, setStartDate] = useState(
     searchParams.get("startDate")
       ? new Date(searchParams.get("startDate")!)
-      : new Date("2025-09-01")
+      : startOfMonth(new Date().toLocaleString())
   );
   const [endDate, setEndDate] = useState(
     searchParams.get("endDate")
       ? new Date(searchParams.get("endDate")!)
-      : new Date("2025-09-25")
+      : endOfMonth(new Date())
   );
 
-  // Update URL ketika filter tanggal berubah
   useEffect(() => {
     const params = new URLSearchParams();
     params.set("startDate", startDate.toISOString().slice(0, 10));
