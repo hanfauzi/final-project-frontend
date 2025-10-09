@@ -47,6 +47,26 @@ export default function PickUpOrderDetail() {
   }
   if (!pickUpOrder) return <div>No order found</div>;
 
+  const buttonLabel = (status: string, isUpdating: boolean) => {
+    if (isUpdating) return (
+      <>
+        <div className="loading loading-spinner loading-xs" />
+        Processing...
+      </>
+    );
+
+    switch (status) {
+      case "ON_THE_WAY_TO_CUSTOMER":
+        return "Confirm pickup from customer";
+      case "ON_THE_WAY_TO_OUTLET":
+        return "Complete this pickup order";
+      case "RECEIVED_BY_OUTLET":
+        return "This pickup order is already completed ✅";
+      default:
+        return "Process this pickup order";
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 pb-14">
       <PickUpOrderDetailCard pickUpOrder={pickUpOrder} />
@@ -57,16 +77,7 @@ export default function PickUpOrderDetail() {
             className="shadow-lg hover:cursor-pointer"
             disabled={isUpdating || pickUpOrder.status === "RECEIVED_BY_OUTLET"}
           >
-            {isUpdating
-              ? (
-                  <>
-                    <div className='loading loading-spinner loading-xs' />
-                    Processing...
-                  </>
-                )
-              : pickUpOrder.status === "RECEIVED_BY_OUTLET"
-              ? "This pickup order is already completed ✅"
-              : "Process this pickup order"}
+            {buttonLabel(pickUpOrder.status, isUpdating)}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

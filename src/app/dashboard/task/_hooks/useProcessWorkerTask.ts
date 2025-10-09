@@ -25,7 +25,10 @@ const useProcessWorkerTask = () => {
       );
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["worker-task"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["worker-task"] }),
+        queryClient.invalidateQueries({ queryKey: ["employee"] }),
+      ]);
       toast.success("Worker task processed successfully!");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {

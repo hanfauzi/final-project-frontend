@@ -25,7 +25,10 @@ const useProcessPickUpOrder = () => {
       );
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["pickup-order"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["pickup-order"] }),
+        queryClient.invalidateQueries({ queryKey: ["employee"] }),
+      ]);
       toast.success("Pick-up order processed successfully!");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {

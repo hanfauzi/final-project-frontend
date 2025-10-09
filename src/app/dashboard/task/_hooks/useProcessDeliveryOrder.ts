@@ -25,7 +25,10 @@ const useProcessDeliveryOrder = () => {
       );
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["delivery-order"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["delivery-order"] }),
+        queryClient.invalidateQueries({ queryKey: ["employee"] }),
+      ]);
       toast.success("Delivery order processed successfully!");
     },
     onError: (error: AxiosError<{ message: string; code: number }>) => {

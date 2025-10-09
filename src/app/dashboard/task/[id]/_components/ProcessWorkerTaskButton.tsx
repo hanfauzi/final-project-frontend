@@ -28,6 +28,36 @@ export default function ProcessWorkerTaskButton({
     workerTask.status === WorkerTaskStatus.DONE ||
     (workerTask.isBypassRequired && workerTask.isReqAprooved !== true);
 
+  const buttonLabel = (workerTask: WorkerTask, isProcessing: boolean) => {
+    if (isProcessing) {
+      return (
+        <>
+          <div className="loading loading-spinner loading-xs" />
+          Processing...
+        </>
+      );
+    }
+
+    if (workerTask.isBypassRequired) {
+      if (workerTask.isReqAprooved === true) return "Process Task";
+      if (workerTask.isReqAprooved === false) return "Please re-validate the item";
+      if (workerTask.isReqAprooved === null) return "Bypass Required!";
+    }
+
+    switch (workerTask.status) {
+      case "PENDING":
+        return "Assign Task";
+      case "ASSIGNED":
+        return "Start task";
+      case "IN_PROGRESS":
+        return "Mark as done";
+      case "DONE":
+        return "This task is already completed! ✅";
+      default:
+        return "Process Task";
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -45,22 +75,7 @@ export default function ProcessWorkerTaskButton({
             }`}
           disabled={isButtonDisabled}
         >
-          {isProcessing
-            ? (
-                <>
-                  <div className='loading loading-spinner loading-xs' />
-                  Processing...
-                </>
-              )
-            : workerTask.status === WorkerTaskStatus.DONE
-            ? "This task is already completed! ✅"
-            : workerTask.isBypassRequired && workerTask.isReqAprooved === true
-            ? "Process Task"
-            : workerTask.isBypassRequired && workerTask.isReqAprooved === false
-            ? "Please re-validate the item"
-            : workerTask.isBypassRequired && workerTask.isReqAprooved === null
-            ? "Bypass Required!"
-            : "Process Task"}
+          {buttonLabel(workerTask, isProcessing)}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -135,7 +135,7 @@ export default function PickUpOrderDetailCard({ pickUpOrder }: PickUpOrderDetail
 
           <div className="flex justify-between w-full">
             <div className="font-semibold">Distance</div>
-            <div>{pickUpOrder.distance} m</div>
+            <div>&plusmn; {pickUpOrder.distance} km</div>
           </div>
         </div>
 
