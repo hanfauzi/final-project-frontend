@@ -29,7 +29,7 @@ export const updateOutletValidationSchema = Yup.object().shape({
   longitude: Yup.number().required("Longitude is required. ex: 106.12345"),
   coverageArea: Yup.number()
     .min(1, "Coverage area must be at least 1 km")
-    .max(3, "Coverage area must not be more than 3 km")
+    .max(5, "Coverage area must not be more than 5 km")
     .required("Coverage area is required"),
   isActive: Yup.boolean().required("Active status is required"),
 });
