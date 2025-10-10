@@ -353,7 +353,7 @@ export default function CustomerProfilePage() {
                                   type="text"
                                   disabled={pendingProfile}
                                   {...profileFormik.getFieldProps("name")}
-                                  placeholder="Nama kamu"
+                                  placeholder="Nama"
                                   className={`h-11 rounded-xl md:h-12 ${
                                     hasErr("name") ? "border-destructive" : ""
                                   }`}
@@ -408,7 +408,7 @@ export default function CustomerProfilePage() {
                                   {...profileFormik.getFieldProps(
                                     "phoneNumber"
                                   )}
-                                  placeholder="08xxxxxxxxxx"
+                                  placeholder="08xx-xxxx-xxxx"
                                   className={`h-11 rounded-xl md:h-12 ${
                                     hasErr("phoneNumber")
                                       ? "border-destructive"
