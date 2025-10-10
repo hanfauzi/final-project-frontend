@@ -87,7 +87,7 @@ export default function useEmployeeLogin() {
           ? window.localStorage.getItem(STORAGE_LAST_EMPLOYEE_ID)
           : null;
 
-        const isSameEmployee = prevId && prevId === employee.id;
+        isSameEmployee = !!(prevId && prevId === employee.id);
 
         if (isSameEmployee && isSafeNext(next)) {
           destination = next!;
